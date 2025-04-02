@@ -53,7 +53,7 @@ st.image('carbon_image.jpg', use_container_width=True)
 # User details
 name = st.text_input("Enter your name:")
 age = st.slider("Select your age:", min_value=1, max_value=120, value=25)
-gender = st.selectbox("Select your gender:", ["Prefer not to say", "Female", "Male", "Other"])
+gender = st.selectbox("Select your gender:", ["-- Select Gender --", "Prefer not to say", "Female", "Male", "Other"])
 
 if not name or not age or not gender:
     st.warning("Please enter your name and age, and choose your gender before proceeding.")
