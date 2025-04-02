@@ -52,13 +52,13 @@ st.image('carbon_image.jpg', use_container_width=True)
 
 # Input fields
 name = st.text_input("Enter your name *")
-age = st.slider("Select your age *", min_value=1, max_value=120, value=25)
+age = st.number_input("Enter your age *", min_value=1, max_value=120, step=1)
 gender = st.selectbox("Select your gender *", ["-- Select Gender --", "Female", "Male", "Other", "Prefer not to say"])
 mood = st.selectbox("How do you feel today?", ["-- Select Mood --", "Happy 😊", "Neutral 😐", "Concerned 😟"])
 
 # Continue button
 if st.button("Continue"):
-    if not name or gender == "-- Select Gender --":
+    if not name or gender == "-- Select Gender --" or age == 0:
         st.warning("Please fill in all required fields: name, age, and gender.")
     else:
         st.session_state.info_complete = True
