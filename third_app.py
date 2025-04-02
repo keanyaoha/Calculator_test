@@ -52,7 +52,7 @@ st.image('carbon_image.jpg', use_container_width=True)
 
 # Input fields
 name = st.text_input("Enter your name *")
-age = st.number_input("Enter your age *", min_value=1, max_value=120, step=1)
+age = st.number_input("Enter your age *", min_value=0, max_value=120, step=1)
 gender = st.selectbox("Select your gender *", ["-- Select Gender --", "Female", "Male", "Other", "Prefer not to say"])
 mood = st.selectbox("How do you feel today?", ["-- Select Mood --", "Happy 😊", "Neutral 😐", "Concerned 😟"])
 
