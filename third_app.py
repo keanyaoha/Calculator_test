@@ -50,13 +50,11 @@ st.title("Carbon Footprint Calculator")
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 st.image('carbon_image.jpg', use_container_width=True)
 
-st.header("👤 Your Info")
-
 # Input fields
 name = st.text_input("Enter your name *")
 age = st.slider("Select your age *", min_value=1, max_value=120, value=25)
 gender = st.selectbox("Select your gender *", ["-- Select Gender --", "Female", "Male", "Other", "Prefer not to say"])
-mood = st.selectbox("How do you feel today?", ["Happy 😊", "Neutral 😐", "Concerned 😟"])
+mood = st.selectbox("How do you feel today?", ["-- Select Mood --", "Happy 😊", "Neutral 😐", "Concerned 😟"])
 
 # Continue button
 if st.button("Continue"):
@@ -64,9 +62,9 @@ if st.button("Continue"):
         st.warning("Please fill in all required fields: name, age, and gender.")
     else:
         st.session_state.info_complete = True
-        st.success(f"Welcome {name} ({gender}, {age} years old)! Let's calculate your Carbon Footprint.")
+        st.success(f"Welcome {name}! Let's calculate your Carbon Footprint.")
 
-# 👇 Only show next section if info_complete is True
+# Only show next section if info_complete is True
 if st.session_state.get("info_complete"):
     st.subheader("Now let's continue with your carbon activity input:")
     # Continue with the rest of your app here
