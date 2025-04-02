@@ -115,7 +115,7 @@ else:
                 ]
 
                 fig, ax = plt.subplots()
-                bars = ax.bar(labels, values)
+                bars = ax.bar(labels, values, color= colors, width=0.4)
 
                 # Determine user bar color based on comparison to world average
                 user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'  # green if less, red if more
