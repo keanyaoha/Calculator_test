@@ -121,7 +121,7 @@ else:
                 # Define colors for all bars
                 colors = [user_color, '#4682B4', '#2E8B57', '#FFA500']  # You, Country, EU, World
 
-                fig, ax = plt.subplots()
+                fig, ax = plt.subplots(figsize=(8, 5))
                 bars = ax.bar(labels, values, color= colors, width=0.4)
 
                 for bar in bars:
