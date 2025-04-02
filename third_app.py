@@ -63,7 +63,13 @@ if st.button("Continue"):
         st.warning("Please fill in all required fields: name, age, and gender.")
     else:
         st.success(f"Welcome {name}! Let's calculate your Carbon Footprint.")
-        # Continue to next section here
+    
+    # Only show the next section if info is complete
+if st.session_state.info_complete:
+    # Your next Streamlit code starts here
+    st.subheader("Now let's continue with your carbon activity input:")
+    # For example:
+    st.write("👉 Select your country and activities...")
 
     # Validate dataframe structure
     if "Activity" not in df.columns or "Country" not in df1.columns:
