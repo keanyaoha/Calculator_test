@@ -58,7 +58,7 @@ gender = st.selectbox("Select your gender:", ["Prefer not to say", "Female", "Ma
 if not name or not age or not gender:
     st.warning("Please enter your name and age, and choose your gender before proceeding.")
 else:
-    st.write(f"Welcome {name} ({gender}, {age} years old)! Let's calculate your Carbon Footprint.")
+    st.write(f"Welcome {name}! Let's calculate your Carbon Footprint.")
 
     # Validate dataframe structure
     if "Activity" not in df.columns or "Country" not in df1.columns:
