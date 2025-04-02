@@ -10,7 +10,7 @@ csv_url_1 = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/
 try:
     df = pd.read_csv(csv_url)
     df1 = pd.read_csv(csv_url_1)
-    st.success("Datasets Loaded Successfully")
+    # st.success("Datasets Loaded Successfully")
 except Exception as e:
     st.error(f"Error loading data: {e}")
 
