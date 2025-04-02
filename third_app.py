@@ -124,6 +124,9 @@ else:
                 fig, ax = plt.subplots(figsize=(8, 5))
                 bars = ax.bar(labels, values, color= colors, width=0.4)
 
+                plt.tight_layout()
+                plt.text(x, y, label, ha='center', va='bottom', bbox=dict(facecolor='white', alpha=0.5))
+
                 for bar in bars:
                     height = bar.get_height()
                     ax.annotate(f'{height:.2f}', xy=(bar.get_x() + bar.get_width() / 2, height),
