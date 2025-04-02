@@ -122,17 +122,22 @@ else:
                 colors = [user_color, '#4682B4', '#2E8B57', '#FFA500']  # You, Country, EU, World
 
                 fig, ax = plt.subplots(figsize=(8, 5))
-                bars = ax.bar(labels, values, color= colors, width=0.4)
+                bars = ax.bar(labels, values, color=colors, width=0.4)
 
-                plt.tight_layout()
-                plt.text(x, y, label, ha='center', va='bottom', bbox=dict(facecolor='white', alpha=0.5))
+                # Increase y-limit to give space for top labels
+                ax.set_ylim(0, max(values) + 20)
 
+                # Annotate each bar with its value
                 for bar in bars:
-                    height = bar.get_height()
-                    ax.annotate(f'{height:.2f}', xy=(bar.get_x() + bar.get_width() / 2, height),
-                                xytext=(0, 5), textcoords='offset points',
-                                ha='center', va='bottom')
+                  height = bar.get_height()
+                  ax.annotate(f'{height:.2f}',
+                              xy=(bar.get_x() + bar.get_width() / 2, height),
+                              xytext=(0, 5),  # Offset above the bar
+                              textcoords='offset points',
+                              ha='center', va='bottom')
 
-                ax.set_ylabel("Tons CO₂ per year")
-                ax.set_title("Your Carbon Footprint vs. Averages")
-                st.pyplot(fig)
+               ax.set_ylabel("Tons CO₂ per year")
+               ax.set_title("Your Carbon Footprint vs. Averages")
+
+               plt.tight_layout()
+               st.pyplot(fig)
