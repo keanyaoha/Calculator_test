@@ -122,7 +122,7 @@ if st.session_state.get("info_complete"):
                 values = values[::-1]
                 colors = colors[::-1]
 
-                fig, ax = plt.subplots(figsize=(8, 5))
+                fig, ax = plt.subplots(figsize=(8, 3))
                 bars = ax.barh(labels, values, color=colors, height=0.4)
 
                 max_value = max(values)
