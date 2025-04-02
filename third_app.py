@@ -115,7 +115,7 @@ if st.session_state.get("info_complete"):
                 st.markdown("<br><br>", unsafe_allow_html=True)
 
                 # Create comparison bar chart
-                labels = ['You', country, 'EU (27)', 'World']
+                labels = ['You', country, 'EU', 'World']
                 values = [
                     total_emission,
                     country_avg if country_avg is not None else 0,
@@ -127,7 +127,8 @@ if st.session_state.get("info_complete"):
                 user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'  # green if less, red if more
 
                 # Define colors for all bars
-                colors = [user_color, '#4682B4', '#2E8B57', '#FFA500']  # You, Country, EU, World
+                shared_color = '#4682B4'  # You can change this to any color you prefer
+                colors = [user_color] + [shared_color] * 3
 
                 fig, ax = plt.subplots(figsize=(8, 5))
                 bars = ax.bar(labels, values, color=colors, width=0.4)
