@@ -134,7 +134,8 @@ if st.session_state.get("info_complete"):
                 bars = ax.bar(labels, values, color=colors, width=0.4)
 
                 # Increase y-limit to give space for top labels
-                ax.set_ylim(0, max(values) + 20)
+                max_height = max(values)
+                ax.set_ylim(0, max_height + 0.1 * max_height)  # 10% padding
 
                 # Annotate each bar with its value
                 for bar in bars:
