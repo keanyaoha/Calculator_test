@@ -93,7 +93,6 @@ else:
                 eu_avg = get_per_capita_emission("European Union (27)")
                 world_avg = get_per_capita_emission("World")
 
-
                 # Display comparison if data exists
                 if country_avg is not None:
                     st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
@@ -102,7 +101,7 @@ else:
                 if world_avg is not None:
                     st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
 
-                 # Add space before the chart
+                # Add space before the chart
                 st.markdown("<br><br>", unsafe_allow_html=True)
 
                 # Create comparison bar chart
@@ -113,7 +112,6 @@ else:
                     eu_avg if eu_avg is not None else 0,
                     world_avg if world_avg is not None else 0
                 ]
-
 
                 # Determine user bar color based on comparison to world average
                 user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'  # green if less, red if more
@@ -129,15 +127,15 @@ else:
 
                 # Annotate each bar with its value
                 for bar in bars:
-                  height = bar.get_height()
-                  ax.annotate(f'{height:.2f}',
-                              xy=(bar.get_x() + bar.get_width() / 2, height),
-                              xytext=(0, 5),  # Offset above the bar
-                              textcoords='offset points',
-                              ha='center', va='bottom')
+                    height = bar.get_height()
+                    ax.annotate(f'{height:.2f}',
+                                xy=(bar.get_x() + bar.get_width() / 2, height),
+                                xytext=(0, 5),  # Offset above the bar
+                                textcoords='offset points',
+                                ha='center', va='bottom')
 
-               ax.set_ylabel("Tons CO₂ per year")
-               ax.set_title("Your Carbon Footprint vs. Averages")
+                ax.set_ylabel("Tons CO₂ per year")
+                ax.set_title("Your Carbon Footprint vs. Averages")
 
-               plt.tight_layout()
-               st.pyplot(fig)
+                plt.tight_layout()
+                st.pyplot(fig)
