@@ -149,4 +149,4 @@ if st.session_state.get("info_complete"):
 
                 plt.tight_layout()
                 st.pyplot(fig)
-                 st.caption("Comparison of your estimated annual carbon footprint with national and global averages.")
+                st.caption("Comparison of your estimated annual carbon footprint with national and global averages.")
