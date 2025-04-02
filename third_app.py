@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
+
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
 csv_url_1 = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/per_capita_filtered.csv"
@@ -114,6 +115,7 @@ if st.session_state.get("info_complete"):
                 # Add space before the chart
                 st.markdown("<br><br>", unsafe_allow_html=True)
 
+                
                 # Create comparison bar chart
                 labels = ['You', country, 'EU', 'World']
                 values = [
@@ -130,30 +132,33 @@ if st.session_state.get("info_complete"):
                 shared_color = '#4682B4'  # You can change this to any color you prefer
                 colors = [user_color] + [shared_color] * 3
 
+                # Create horizontal bar chart
                 fig, ax = plt.subplots(figsize=(8, 5))
-                bars = ax.bar(labels, values, color=colors, width=0.4)
+                bars = ax.barh(labels, values, color=colors, height=0.4)
 
-                # Increase y-limit to give space for top labels
+                # Set x-axis limit with 10% padding above the max value
                 max_height = max(values)
-                ax.set_ylim(0, max_height + 0.1 * max_height)  # 10% padding
+                ax.set_xlim(0, max_height + 0.1 * max_height)
 
                 # Annotate each bar with its value
                 for bar in bars:
-                    height = bar.get_height()
-                    ax.annotate(f'{height:.2f}',
-                                xy=(bar.get_x() + bar.get_width() / 2, height),
-                                xytext=(0, 5),  # Offset above the bar
+                    width = bar.get_width()
+                    ax.annotate(f'{width:.2f}',
+                                xy=(width, bar.get_y() + bar.get_height() / 2),
+                                xytext=(5, 0),  # Offset to the right
                                 textcoords='offset points',
-                                ha='center', va='bottom')
+                                ha='left', va='center')
 
-                ax.set_ylabel("Tons CO₂ per year")
-                ax.yaxis.grid(True, linestyle='--', alpha=0.3)
+                ax.set_xlabel("Tons CO₂ per year")
+                ax.xaxis.grid(True, linestyle='--', alpha=0.3)
 
                 plt.tight_layout()
                 st.pyplot(fig)
+
+                # Caption centered below chart
                 st.markdown(
-                "<div style='text-align: center; color: gray;'>"
-                "Comparison of your estimated annual carbon footprint with national and global averages."
-                "</div>",
-                unsafe_allow_html=True
-                 )
+                    "<div style='text-align: center; color: gray;'>"
+                    "Comparison of your estimated annual carbon footprint with national and global averages."
+                    "</div>",
+                    unsafe_allow_html=True
+                )
