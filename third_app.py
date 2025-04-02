@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
 csv_url_1 = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/per_capita_filtered.csv"
@@ -38,7 +37,7 @@ def format_activity_name(activity):
         "processed_rice_consumed": "How much processed rice consumed in kg the last month",
         "sugar_consumed": "How much sugar have you consumed in kg the last month",
         "vegetable_oils_fats_consumed": "How much vegetable oils and fats consumed in kg the last month",
-        "other_meat_products_consumed":  "How much other meat products consumed in kg the last month",
+        "other_meat_products_consumed": "How much other meat products consumed in kg the last month",
         "dairy_products_consumed": "How much dairy products consumed in kg the last month",
         "fish_products_consumed": "How much fish products consumed in kg the last month",
         "other_food_products_consumed": "How much other food products have you consumed in kg the last month",
@@ -68,34 +67,27 @@ if st.button("Continue"):
 # Only show next section if info_complete is True
 if st.session_state.get("info_complete"):
     st.subheader("Now let's continue with your carbon activity input:")
-    # Continue with the rest of your app here
 
-    # Validate dataframe structure
     if "Activity" not in df.columns or "Country" not in df1.columns:
         st.error("Error: Missing required columns in dataset!")
     else:
-        # Extract available countries
         available_countries = [col for col in df.columns if col != "Activity"]
         country = st.selectbox("Select a country:", available_countries)
 
         if country:
-            # Initialize session state
             if "emission_values" not in st.session_state:
                 st.session_state.emission_values = {}
 
-            # User input for activities
             for activity in df["Activity"]:
                 factor = df.loc[df["Activity"] == activity, country].values[0]
                 activity_description = format_activity_name(activity)
                 user_input = st.number_input(f"{activity_description}:", min_value=0.0, step=0.1, key=activity)
                 st.session_state.emission_values[activity] = user_input * factor
 
-            # Calculate total emissions
             if st.button("Calculate Carbon Footprint"):
                 total_emission = sum(st.session_state.emission_values.values())
                 st.subheader(f"Your Carbon Footprint: {total_emission:.4f} tons CO₂")
 
-                # Fetch per capita emissions safely
                 def get_per_capita_emission(country_name):
                     match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
                     return match.iloc[0] if not match.empty else None
@@ -104,7 +96,6 @@ if st.session_state.get("info_complete"):
                 eu_avg = get_per_capita_emission("European Union (27)")
                 world_avg = get_per_capita_emission("World")
 
-                # Display comparison if data exists
                 if country_avg is not None:
                     st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
                 if eu_avg is not None:
@@ -112,11 +103,9 @@ if st.session_state.get("info_complete"):
                 if world_avg is not None:
                     st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
 
-                # Add space before the chart
                 st.markdown("<br><br>", unsafe_allow_html=True)
 
-                
-                # Create comparison bar chart
+                # Comparison chart (horizontal)
                 labels = ['You', country, 'EU', 'World']
                 values = [
                     total_emission,
@@ -125,27 +114,21 @@ if st.session_state.get("info_complete"):
                     world_avg if world_avg is not None else 0
                 ]
 
-                # Determine user bar color based on comparison to world average
-                user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'  # green if less, red if more
-
-                # Define colors for all bars
-                shared_color = '#4682B4'  # You can change this to any color you prefer
+                user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'
+                shared_color = '#4682B4'
                 colors = [user_color] + [shared_color] * 3
 
-                # Create horizontal bar chart
                 fig, ax = plt.subplots(figsize=(8, 5))
                 bars = ax.barh(labels, values, color=colors, height=0.4)
 
-                # Set x-axis limit with 10% padding above the max value
-                max_height = max(values)
-                ax.set_xlim(0, max_height + 0.1 * max_height)
+                max_value = max(values)
+                ax.set_xlim(0, max_value + 0.1 * max_value)
 
-                # Annotate each bar with its value
                 for bar in bars:
                     width = bar.get_width()
                     ax.annotate(f'{width:.2f}',
                                 xy=(width, bar.get_y() + bar.get_height() / 2),
-                                xytext=(5, 0),  # Offset to the right
+                                xytext=(5, 0),
                                 textcoords='offset points',
                                 ha='left', va='center')
 
@@ -155,7 +138,6 @@ if st.session_state.get("info_complete"):
                 plt.tight_layout()
                 st.pyplot(fig)
 
-                # Caption centered below chart
                 st.markdown(
                     "<div style='text-align: center; color: gray;'>"
                     "Comparison of your estimated annual carbon footprint with national and global averages."
