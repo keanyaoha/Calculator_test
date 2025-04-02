@@ -93,6 +93,10 @@ else:
                 eu_avg = get_per_capita_emission("European Union (27)")
                 world_avg = get_per_capita_emission("World")
 
+
+                # Add space before the chart
+                st.markdown("<br><br>", unsafe_allow_html=True)
+
                 # Display comparison if data exists
                 if country_avg is not None:
                     st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
