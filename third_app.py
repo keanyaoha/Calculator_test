@@ -59,7 +59,7 @@ mood = st.selectbox("How do you feel today?", ["Happy 😊", "Neutral 😐", "Co
 if not name or not mood:
     st.warning("Please enter your name and select your mood before proceeding.")
 else:
-    st.write(f"Welcome {name}! Let's calculate your Carbon Footprint.")
+    st.write(f"Welcome {name} ({gender}, {age} years old)! Let's calculate your Carbon Footprint.")
 
     # Validate dataframe structure
     if "Activity" not in df.columns or "Country" not in df1.columns:
