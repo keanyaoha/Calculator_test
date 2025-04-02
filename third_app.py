@@ -54,10 +54,9 @@ st.image('carbon_image.jpg', use_container_width=True)
 name = st.text_input("Enter your name:")
 age = st.number_input("Enter your age:", min_value=1, max_value=120, step=1)
 gender = st.selectbox("Select your gender:", ["Prefer not to say", "Female", "Male", "Other"])
-mood = st.selectbox("How do you feel today?", ["Happy 😊", "Neutral 😐", "Concerned 😟"])
 
 if not name or not mood:
-    st.warning("Please enter your name and select your mood before proceeding.")
+    st.warning("Please enter your name and age, and choose your gender before proceeding.")
 else:
     st.write(f"Welcome {name} ({gender}, {age} years old)! Let's calculate your Carbon Footprint.")
 
