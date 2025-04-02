@@ -52,6 +52,8 @@ st.image('carbon_image.jpg', use_container_width=True)
 
 # User details
 name = st.text_input("Enter your name:")
+age = st.number_input("Enter your age:", min_value=1, max_value=120, step=1)
+gender = st.selectbox("Select your gender:", ["Prefer not to say", "Female", "Male", "Other"])
 mood = st.selectbox("How do you feel today?", ["Happy 😊", "Neutral 😐", "Concerned 😟"])
 
 if not name or not mood:
