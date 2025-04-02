@@ -1,4 +1,4 @@
-%%writefile app.py
+%%writefile second_app.py
 import pandas as pd
 import streamlit as st
 
