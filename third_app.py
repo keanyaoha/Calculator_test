@@ -51,17 +51,19 @@ st.markdown("Calculate your carbon footprint and compare it to national and glob
 st.image('carbon_image.jpg', use_container_width=True)
 
 # User details
-name = st.text_input("Enter your name:")
-age = st.slider("Select your age:", min_value=1, max_value=120, value=25)
-gender = st.selectbox("Select your gender:", ["-- Select Gender --", "Prefer not to say", "Female", "Male", "Other"])
+st.header("👤 Your Info")
 
-if gender == "-- Select Gender --":
-    st.warning("Please select your gender to continue.")
+name = st.text_input("Enter your name *")
+age = st.slider("Select your age *", min_value=1, max_value=120, value=25)
+gender = st.selectbox("Select your gender *", ["-- Select Gender --", "Female", "Male", "Other", "Prefer not to say"])
+mood = st.selectbox("How do you feel today?", ["Happy 😊", "Neutral 😐", "Concerned 😟"])
 
-if not name or not age or not gender:
-    st.warning("Please enter your name and age, and choose your gender before proceeding.")
-else:
-    st.write(f"Welcome {name}! Let's calculate your Carbon Footprint.")
+if st.button("Continue"):
+    if not name or gender == "-- Select Gender --":
+        st.warning("Please fill in all required fields: name, age, and gender.")
+    else:
+        st.success(f"Welcome {name}! Let's calculate your Carbon Footprint.")
+        # Continue to next section here
 
     # Validate dataframe structure
     if "Activity" not in df.columns or "Country" not in df1.columns:
