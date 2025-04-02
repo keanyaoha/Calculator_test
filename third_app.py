@@ -47,10 +47,7 @@ def format_activity_name(activity):
 
 # Streamlit UI
 st.title("Carbon Footprint Calculator")
-
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
-
-# Display an image
 st.image('carbon_image.jpg', use_container_width=True)
 
 # User details
@@ -62,76 +59,69 @@ if not name or not mood:
 else:
     st.write(f"Welcome {name}! Let's calculate your Carbon Footprint.")
 
-# Validate dataframe structure
-if "Activity" not in df.columns or "Country" not in df1.columns:
-    st.error("Error: Missing required columns in dataset!")
-else:
-    # Extract available countries
-    available_countries = [col for col in df.columns if col != "Activity"]
-    country = st.selectbox("Select a country:", available_countries)
-
-    if country:
-        # Initialize session state
-        if "emission_values" not in st.session_state:
-            st.session_state.emission_values = {}
-
-        # User input for activities
-        for activity in df["Activity"]:
-            factor = df.loc[df["Activity"] == activity, country].values[0]
-            activity_description = format_activity_name(activity)  # Use the formatting function
-            user_input = st.number_input(f"{activity_description}:", min_value=0.0, step=0.1, key=activity)
-            st.session_state.emission_values[activity] = user_input * factor
-
-        # Calculate total emissions
-        if st.button("Calculate Carbon Footprint"):
-            total_emission = sum(st.session_state.emission_values.values())
-            st.subheader(f"Your Carbon Footprint: {total_emission:.4f} tons CO₂")
-            
-
-            # Fetch per capita emissions safely
-            def get_per_capita_emission(country_name):
-                match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
-                return match.iloc[0] if not match.empty else None
-
-            country_avg = get_per_capita_emission(country)
-            eu_avg = get_per_capita_emission("European Union (27)")
-            world_avg = get_per_capita_emission("World")
-
-            # Display comparison if data exists
-            if country_avg is not None:
-                st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
-            if eu_avg is not None:
-                st.subheader(f"Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
-            if world_avg is not None:
-                st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
+    # Validate dataframe structure
+    if "Activity" not in df.columns or "Country" not in df1.columns:
+        st.error("Error: Missing required columns in dataset!")
     else:
-        st.warning("Please select a country.")
+        # Extract available countries
+        available_countries = [col for col in df.columns if col != "Activity"]
+        country = st.selectbox("Select a country:", available_countries)
 
-        # Prepare data for the plot
-labels = ['You', f'{country}', 'EU (27)', 'World']
-values = [
-    total_emission,
-    country_avg if country_avg is not None else 0,
-    eu_avg if eu_avg is not None else 0,
-    world_avg if world_avg is not None else 0
-]
+        if country:
+            # Initialize session state
+            if "emission_values" not in st.session_state:
+                st.session_state.emission_values = {}
 
-# Create the bar chart
-fig, ax = plt.subplots()
-bars = ax.bar(labels, values)
+            # User input for activities
+            for activity in df["Activity"]:
+                factor = df.loc[df["Activity"] == activity, country].values[0]
+                activity_description = format_activity_name(activity)
+                user_input = st.number_input(f"{activity_description}:", min_value=0.0, step=0.1, key=activity)
+                st.session_state.emission_values[activity] = user_input * factor
 
-# Highlight user's bar with a different color
-bars[0].set_color('#FF4B4B')  # Red for the user
+            # Calculate total emissions
+            if st.button("Calculate Carbon Footprint"):
+                total_emission = sum(st.session_state.emission_values.values())
+                st.subheader(f"Your Carbon Footprint: {total_emission:.4f} tons CO₂")
 
-# Add value labels above bars
-for bar in bars:
-    height = bar.get_height()
-    ax.annotate(f'{height:.2f}', xy=(bar.get_x() + bar.get_width() / 2, height),
-                xytext=(0, 5), textcoords='offset points',
-                ha='center', va='bottom')
+                # Fetch per capita emissions safely
+                def get_per_capita_emission(country_name):
+                    match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
+                    return match.iloc[0] if not match.empty else None
 
-ax.set_ylabel("Tons CO₂ per year")
-ax.set_title("Your Carbon Footprint vs. Averages")
+                country_avg = get_per_capita_emission(country)
+                eu_avg = get_per_capita_emission("European Union (27)")
+                world_avg = get_per_capita_emission("World")
 
-# Display in Streamlit
-st.pyplot(fig)
+                # Display comparison if data exists
+                if country_avg is not None:
+                    st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
+                if eu_avg is not None:
+                    st.subheader(f"Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
+                if world_avg is not None:
+                    st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
+
+                # Create comparison bar chart
+                labels = ['You', country, 'EU (27)', 'World']
+                values = [
+                    total_emission,
+                    country_avg if country_avg is not None else 0,
+                    eu_avg if eu_avg is not None else 0,
+                    world_avg if world_avg is not None else 0
+                ]
+
+                fig, ax = plt.subplots()
+                bars = ax.bar(labels, values)
+
+                # Highlight user's bar
+                bars[0].set_color('#FF4B4B')  # Red for user
+
+                for bar in bars:
+                    height = bar.get_height()
+                    ax.annotate(f'{height:.2f}', xy=(bar.get_x() + bar.get_width() / 2, height),
+                                xytext=(0, 5), textcoords='offset points',
+                                ha='center', va='bottom')
+
+                ax.set_ylabel("Tons CO₂ per year")
+                ax.set_title("Your Carbon Footprint vs. Averages")
+                st.pyplot(fig)
