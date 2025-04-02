@@ -145,7 +145,7 @@ if st.session_state.get("info_complete"):
                                 ha='center', va='bottom')
 
                 ax.set_ylabel("Tons CO₂ per year")
-                ax.set_title("Your Carbon Footprint vs. Averages")
+                ax.yaxis.grid(True, linestyle='--', alpha=0.3)
 
                 plt.tight_layout()
                 st.pyplot(fig)
