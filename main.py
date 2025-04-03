@@ -76,8 +76,8 @@ def input_sections():
         with tab:
             for activity in activities:
                 formatted = format_activity_name(activity)
-                value = st.number_input(formatted, min_value=0.0, key=activity)
-                st.session_state[activity] = value
+                st.number_input(formatted, min_value=0.0, key=activity)
+                
 
 # Streamlit UI
 st.title("Carbon Footprint Calculator")
