@@ -45,6 +45,40 @@ def format_activity_name(activity):
     }
     return activity_mappings.get(activity, activity.replace("_", " ").capitalize())
 
+def input_sections():
+    travel = [
+        "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled",
+        "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled",
+        "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled",
+        "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
+    ]
+
+    food = [
+        "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+        "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
+        "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed",
+        "other_food_products_consumed", "beverages_consumed"
+    ]
+
+    energy = ["electricity_used", "water_consumed"]
+    other = ["hotel_stay"]
+
+    tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "\u26A1 Energy & Water", "\U0001F3E8 Other"])
+
+    categories = {
+        tabs[0]: travel,
+        tabs[1]: food,
+        tabs[2]: energy,
+        tabs[3]: other
+    }
+
+    for tab, activities in categories.items():
+        with tab:
+            for activity in activities:
+                formatted = format_activity_name(activity)
+                value = st.number_input(formatted, min_value=0.0, key=activity)
+                st.session_state[activity] = value
+
 # Streamlit UI
 st.title("Carbon Footprint Calculator")
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
@@ -54,7 +88,7 @@ st.image('carbon_image.jpg', use_container_width=True)
 name = st.text_input("Enter your name *")
 age = st.number_input("Enter your age *", min_value=0, max_value=120, step=1)
 gender = st.selectbox("Select your gender *", ["-- Select Gender --", "Female", "Male", "Other", "Prefer not to say"])
-mood = st.selectbox("How do you feel today?", ["-- Select Mood --", "Happy 😊", "Neutral 😐", "Concerned 😟"])
+mood = st.selectbox("How do you feel today?", ["-- Select Mood --", "Happy \U0001F60A", "Neutral 😐", "Concerned 😟"])
 
 # Continue button
 if st.button("Continue"):
@@ -78,10 +112,11 @@ if st.session_state.get("info_complete"):
             if "emission_values" not in st.session_state:
                 st.session_state.emission_values = {}
 
+            input_sections()
+
             for activity in df["Activity"]:
                 factor = df.loc[df["Activity"] == activity, country].values[0]
-                activity_description = format_activity_name(activity)
-                user_input = st.number_input(f"{activity_description}:", min_value=0.0, step=0.1, key=activity)
+                user_input = st.session_state.get(activity, 0.0)
                 st.session_state.emission_values[activity] = user_input * factor
 
             if st.button("Calculate Carbon Footprint"):
@@ -105,7 +140,6 @@ if st.session_state.get("info_complete"):
 
                 st.markdown("<br><br>", unsafe_allow_html=True)
 
-                # Comparison chart (horizontal with "You" on top)
                 labels = ['You', country, 'EU', 'World']
                 values = [
                     total_emission,
@@ -117,7 +151,6 @@ if st.session_state.get("info_complete"):
                 shared_color = '#4682B4'
                 colors = [user_color] + [shared_color] * 3
 
-                # Reverse to place "You" at the top
                 labels = labels[::-1]
                 values = values[::-1]
                 colors = colors[::-1]
