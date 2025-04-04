@@ -16,18 +16,18 @@ st.markdown(
             background-color: #e8f8f5;
         }
 
-        /* ✅ Force green styling for ALL primary buttons */
-        div.stButton > button:first-child {
+        /* ✅ Force green styling for ALL buttons */
+        button[kind="primary"] {
             background-color: #2ecc71 !important;
             color: white !important;
             border: none !important;
-            border-radius: 5px;
-            padding: 0.5rem 1.5rem;
-            font-weight: bold;
-            font-size: 1rem;
+            border-radius: 5px !important;
+            padding: 0.5rem 1.5rem !important;
+            font-weight: bold !important;
+            font-size: 1rem !important;
         }
 
-        div.stButton > button:first-child:hover {
+        button[kind="primary"]:hover {
             background-color: #27ae60 !important;
             color: white !important;
         }
