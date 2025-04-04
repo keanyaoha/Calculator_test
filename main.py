@@ -3,6 +3,8 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
+page = st.sidebar.radio("Navigate", ["Home", "Profile", "Calculator", "Breakdown"])
+
 
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
@@ -14,8 +16,6 @@ try:
     # st.success("Datasets Loaded Successfully")
 except Exception as e:
     st.error(f"Error loading data: {e}")
-
-page = st.sidebar.radio("Navigate", ["Home", "Profile", "Calculator", "Breakdown"])
 
 
 st.set_page_config(
