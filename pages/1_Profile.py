@@ -16,19 +16,20 @@ st.markdown(
             background-color: #e8f8f5;
         }
 
-        /* Target the form submit button specifically */
-        form button[type="submit"] {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
+        /* ✅ Force green styling for ALL primary buttons */
+        div.stButton > button:first-child {
+            background-color: #2ecc71 !important;
+            color: white !important;
+            border: none !important;
             border-radius: 5px;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            font-weight: bold;
+            font-size: 1rem;
         }
 
-        form button[type="submit"]:hover {
-            background-color: #27ae60;
-            color: white;
+        div.stButton > button:first-child:hover {
+            background-color: #27ae60 !important;
+            color: white !important;
         }
     </style>
     """,
