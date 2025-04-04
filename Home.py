@@ -3,6 +3,13 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
+# 🟢 Set page config BEFORE using any Streamlit commands
+st.set_page_config(
+    page_title="Green Tomorrow",
+    page_icon="🌿",
+    layout="centered"
+)
+
 
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
