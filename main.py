@@ -10,6 +10,20 @@ st.set_page_config(
     layout="centered"
 )
 
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: #d5f5e3;
+        }
+        .stApp {
+            background-color: #d5f5e3;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
