@@ -77,49 +77,91 @@ def input_sections():
             for activity in activities:
                 formatted = format_activity_name(activity)
                 st.number_input(formatted, min_value=0.0, key=activity)
-                
 
 # Streamlit UI
 st.title("Carbon Footprint Calculator")
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 st.image('carbon_image.jpg', use_container_width=True)
 
+if "Activity" not in df.columns or "Country" not in df1.columns:
+    st.error("Error: Missing required columns in dataset!")
+else:
+    available_countries = [col for col in df.columns if col != "Activity"]
+    country = st.selectbox("Select a country:", available_countries)
 
-    if "Activity" not in df.columns or "Country" not in df1.columns:
-        st.error("Error: Missing required columns in dataset!")
-    else:
-        available_countries = [col for col in df.columns if col != "Activity"]
-        country = st.selectbox("Select a country:", available_countries)
+    if country:
+        if "emission_values" not in st.session_state:
+            st.session_state.emission_values = {}
 
-        if country:
-            if "emission_values" not in st.session_state:
-                st.session_state.emission_values = {}
+        input_sections()
 
-            input_sections()
+        for activity in df["Activity"]:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            user_input = st.session_state.get(activity, 0.0)
+            st.session_state.emission_values[activity] = user_input * factor
 
-            for activity in df["Activity"]:
-                factor = df.loc[df["Activity"] == activity, country].values[0]
-                user_input = st.session_state.get(activity, 0.0)
-                st.session_state.emission_values[activity] = user_input * factor
+        if st.button("Calculate Carbon Footprint"):
+            total_emission = sum(st.session_state.emission_values.values())
+            st.subheader(f"Your Carbon Footprint: {total_emission:.4f} tons CO₂")
 
-            if st.button("Calculate Carbon Footprint"):
-                total_emission = sum(st.session_state.emission_values.values())
-                st.subheader(f"Your Carbon Footprint: {total_emission:.4f} tons CO₂")
+            def get_per_capita_emission(country_name):
+                match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
+                return match.iloc[0] if not match.empty else None
 
-                def get_per_capita_emission(country_name):
-                    match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
-                    return match.iloc[0] if not match.empty else None
+            country_avg = get_per_capita_emission(country)
+            eu_avg = get_per_capita_emission("European Union (27)")
+            world_avg = get_per_capita_emission("World")
 
-                country_avg = get_per_capita_emission(country)
-                eu_avg = get_per_capita_emission("European Union (27)")
-                world_avg = get_per_capita_emission("World")
+            if country_avg is not None:
+                st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
+            if eu_avg is not None:
+                st.subheader(f"Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
+            if world_avg is not None:
+                st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
 
-                if country_avg is not None:
-                    st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
-                if eu_avg is not None:
-                    st.subheader(f"Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
-                if world_avg is not None:
-                    st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
+            st.markdown("<br><br>", unsafe_allow_html=True)
+
+            labels = ['You', country, 'EU', 'World']
+            values = [
+                total_emission,
+                country_avg if country_avg is not None else 0,
+                eu_avg if eu_avg is not None else 0,
+                world_avg if world_avg is not None else 0
+            ]
+            user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'
+            shared_color = '#4682B4'
+            colors = [user_color] + [shared_color] * 3
+
+            labels = labels[::-1]
+            values = values[::-1]
+            colors = colors[::-1]
+
+            fig, ax = plt.subplots(figsize=(8, 3.2))
+            bars = ax.barh(labels, values, color=colors, height=0.6)
+
+            max_value = max(values)
+            ax.set_xlim(0, max_value + 0.1 * max_value)
+
+            for bar in bars:
+                width = bar.get_width()
+                ax.annotate(f'{width:.2f}',
+                            xy=(width, bar.get_y() + bar.get_height() / 2),
+                            xytext=(5, 0),
+                            textcoords='offset points',
+                            ha='left', va='center')
+
+            ax.set_xlabel("Tons CO₂ per year")
+            ax.xaxis.grid(True, linestyle='--', alpha=0.3)
+
+            plt.tight_layout()
+            st.pyplot(fig)
+
+            st.markdown(
+                "<div style='text-align: center; color: gray;'>"
+                "Comparison of your estimated annual carbon footprint with national and global averages."
+                "</div>",
+                unsafe_allow_html=True
+            )
 
                 st.markdown("<br><br>", unsafe_allow_html=True)
 
