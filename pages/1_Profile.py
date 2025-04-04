@@ -33,16 +33,12 @@ with st.form("profile_form"):
 
     st.markdown(required_label("Age"), unsafe_allow_html=True)
     age = st.number_input("", min_value=0, max_value=120, step=1, key="age")
-
     st.markdown(required_label("Gender"), unsafe_allow_html=True)
     gender = st.selectbox("", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"], key="gender")
-
     st.markdown(required_label("Email Address"), unsafe_allow_html=True)
     email = st.text_input("", key="email")
-
     st.markdown(required_label("Country"), unsafe_allow_html=True)
     country = st.selectbox("", ["-- Select --", "Germany", "France", "Italy", "Spain", "Poland", "Other"], key="country")
-
     consent = st.checkbox("I agree to participate in the carbon footprint analysis and share anonymous data for research.", key="consent")
 
     # ✅ Submit Button inside form
