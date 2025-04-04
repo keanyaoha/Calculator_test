@@ -84,23 +84,6 @@ st.title("Carbon Footprint Calculator")
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 st.image('carbon_image.jpg', use_container_width=True)
 
-# Input fields
-name = st.text_input("Enter your name *")
-age = st.number_input("Enter your age *", min_value=0, max_value=120, step=1)
-gender = st.selectbox("Select your gender *", ["-- Select Gender --", "Female", "Male", "Other", "Prefer not to say"])
-mood = st.selectbox("How do you feel today?", ["-- Select Mood --", "Happy \U0001F60A", "Neutral 😐", "Concerned 😟"])
-
-# Continue button
-if st.button("Continue"):
-    if not name or gender == "-- Select Gender --" or age == 0:
-        st.warning("Please fill in all required fields: name, age, and gender.")
-    else:
-        st.session_state.info_complete = True
-        st.success(f"Welcome {name}! Let's calculate your Carbon Footprint.")
-
-# Only show next section if info_complete is True
-if st.session_state.get("info_complete"):
-    st.subheader("Now let's continue with your carbon activity input:")
 
     if "Activity" not in df.columns or "Country" not in df1.columns:
         st.error("Error: Missing required columns in dataset!")
