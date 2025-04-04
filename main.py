@@ -15,6 +15,8 @@ try:
 except Exception as e:
     st.error(f"Error loading data: {e}")
 
+page = st.sidebar.radio("Navigate", ["Home", "Profile", "Calculator", "Breakdown"])
+
 
 st.set_page_config(
     page_title="Carbon Footprint Calculator",  # This appears in the browser tab AND sidebar
