@@ -3,25 +3,19 @@ import streamlit as st
 # Set page config (optional)
 st.set_page_config(page_title="Profile", page_icon="👤")
 
-# Custom CSS styling for green/environmental theme
-st.markdown("""
+st.markdown(
+    """
     <style>
-    .title {
-        font-size: 32px;
-        color: #2E8B57;
-        font-weight: 600;
-    }
-    .subtitle {
-        font-size: 20px;
-        color: #4CAF50;
-        margin-bottom: 20px;
-    }
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-    }
+        .stApp {
+            background-color: white;  /* main content area */
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #e8f8f5;  /* soft green sidebar */
+        }
     </style>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 # Title
 st.markdown('<div class="title">👤 Create Your Profile</div>', unsafe_allow_html=True)
