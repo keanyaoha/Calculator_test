@@ -14,6 +14,15 @@ st.markdown(
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
         }
+        button[kind="primary"] {
+            background-color: #2ecc71 !important;
+            color: white !important;
+            border: none;
+            border-radius: 5px;
+        }
+        button[kind="primary"]:hover {
+            background-color: #27ae60 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True
@@ -25,7 +34,7 @@ def is_valid_email(email):
     return re.match(pattern, email)
 
 # --- Title ---
-st.title("👤 Create Your Profile")
+st.title("Create Your Profile")
 st.write("Let us know a bit about you so we can personalize your carbon footprint journey")
 
 # --- Profile Form ---
