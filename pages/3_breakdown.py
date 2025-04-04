@@ -1,6 +1,20 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 
+st.markdown(
+    """
+    <style>
+        .stApp {
+            background-color: white;  /* main content area */
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #e8f8f5;  /* soft green sidebar */
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("📊 Emission Breakdown")
 st.write("Here is how your estimated carbon footprint breaks down by activity.")
 
