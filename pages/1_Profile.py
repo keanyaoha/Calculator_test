@@ -3,6 +3,7 @@ import streamlit as st
 # Set page config (optional)
 st.set_page_config(page_title="Profile", page_icon="👤")
 
+
 st.markdown(
     """
     <style>
@@ -17,14 +18,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Title
-st.markdown('<div class="title">👤 Create Your Profile</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Let us know a bit about you so we can personalize your carbon footprint journey 🌍</div>', unsafe_allow_html=True)
+# --- Title ---
+st.title("👤 Create Your Profile")
+st.subheader("Let us know a bit about you so we can personalize your carbon footprint journey 🌍")
 
 # Inputs
 with st.form("profile_form"):
     name = st.text_input("Full Name")
-    age = st.number_input("Age", min_value=1, max_value=120, step=1)
+    age = st.number_input("Age", min_value=0, max_value=120, step=1)
     gender = st.selectbox("Gender", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"])
     email = st.text_input("Email Address")
     country = st.selectbox("Country", ["-- Select --", "Germany", "France", "Italy", "Spain", "Poland", "Other"])
