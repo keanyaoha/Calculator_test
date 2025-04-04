@@ -6,12 +6,14 @@ st.set_page_config(
     layout="centered"
 )
 
-# Optional: light green background
 st.markdown(
     """
     <style>
         .stApp {
-            background-color: #ccffcc;
+            background-color: white;  /* main content area */
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #b2f2bb;  /* soft green sidebar */
         }
     </style>
     """,
