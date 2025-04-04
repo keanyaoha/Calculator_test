@@ -23,11 +23,6 @@ except Exception as e:
     st.error(f"Error loading data: {e}")
 
 
-st.set_page_config(
-    page_title="Carbon Footprint Calculator",  # This appears in the browser tab AND sidebar
-    page_icon="🌍",                            # Optional: Adds an icon to the sidebar title
-)
-
 # Function to format activity names
 def format_activity_name(activity):
     activity_mappings = {
