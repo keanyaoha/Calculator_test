@@ -1,4 +1,5 @@
 import streamlit as st
+import re  # for email validation
 
 # --- Page config ---
 st.set_page_config(page_title="Profile", page_icon="🌿")
@@ -17,6 +18,11 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# --- Email validation function ---
+def is_valid_email(email):
+    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    return re.match(pattern, email)
 
 # --- Title ---
 st.title("👤 Create Your Profile")
@@ -41,6 +47,8 @@ with st.form("profile_form"):
 if submitted:
     if not name or not email or gender == "-- Select --":
         st.warning("⚠️ Please fill in all required fields.")
+    elif not is_valid_email(email):
+        st.warning("⚠️ Please enter a valid email address.")
     else:
         st.success(f"Thank you, {name}! Your profile has been saved.")
         st.session_state["user_profile"] = {
