@@ -14,20 +14,25 @@ st.markdown(
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
         }
-        button[kind="primary"] {
-            background-color: #2ecc71 !important;
-            color: white !important;
+
+        /* Make the primary button green */
+        div.stButton > button {
+            background-color: #2ecc71;
+            color: white;
             border: none;
             border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
         }
-        button[kind="primary"]:hover {
-            background-color: #27ae60 !important;
+
+        div.stButton > button:hover {
+            background-color: #27ae60;
+            color: white;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
-
 # --- Email validation function ---
 def is_valid_email(email):
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
