@@ -1,24 +1,24 @@
 import streamlit as st
 
-# Set page config (optional)
+# Set page config
 st.set_page_config(page_title="Profile", page_icon="🌿")
 
-
+# Custom style: green sidebar, white main
 st.markdown(
     """
     <style>
         .stApp {
-            background-color: white;  /* main content area */
+            background-color: white;
         }
         section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;  /* soft green sidebar */
+            background-color: #e8f8f5;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Helper function for required labels
+# Helper function for required field labels
 def required_label(label):
     return f'<span style="color:black">{label}</span><span style="color:red">*</span>'
 
@@ -26,7 +26,7 @@ def required_label(label):
 st.title("👤 Create Your Profile")
 st.write("Let us know a bit about you so we can personalize your carbon footprint journey")
 
-# Inputs
+# --- Form ---
 with st.form("profile_form"):
     st.markdown(required_label("Full Name"), unsafe_allow_html=True)
     name = st.text_input("")
@@ -45,18 +45,20 @@ with st.form("profile_form"):
 
     consent = st.checkbox("I agree to participate in the carbon footprint analysis and share anonymous data for research.")
 
+    # ✅ THIS must be inside the form!
     submitted = st.form_submit_button("Save Profile")
 
-    if submitted:
-        if not name or not email or gender == "-- Select --" or country == "-- Select --":
-            st.warning("⚠️ Please fill in all required fields.")
-        else:
-            st.success(f"Thank you, {name}! Your profile has been saved.")
-            st.session_state["user_profile"] = {
-                "name": name,
-                "age": age,
-                "gender": gender,
-                "email": email,
-                "country": country,
-                "consent": consent
-            }
+# --- Handle submission ---
+if submitted:
+    if not name or not email or gender == "-- Select --" or country == "-- Select --":
+        st.warning("⚠️ Please fill in all required fields.")
+    else:
+        st.success(f"Thank you, {name}! Your profile has been saved.")
+        st.session_state["user_profile"] = {
+            "name": name,
+            "age": age,
+            "gender": gender,
+            "email": email,
+            "country": country,
+            "consent": consent
+        }
