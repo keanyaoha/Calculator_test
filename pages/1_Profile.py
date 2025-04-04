@@ -56,6 +56,8 @@ with st.form("profile_form"):
 if submitted:
     if not name or not email or gender == "-- Select --":
         st.warning("⚠️ Please fill in all required fields.")
+    elif age == 0:
+        st.warning("⚠️ Please enter a valid age.")
     elif not is_valid_email(email):
         st.warning("⚠️ Please enter a valid email address.")
     else:
