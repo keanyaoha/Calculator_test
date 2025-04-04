@@ -20,7 +20,7 @@ st.markdown(
 
 # --- Title ---
 st.title("👤 Create Your Profile")
-st.subheader("Let us know a bit about you so we can personalize your carbon footprint journey")
+st.write("Let us know a bit about you so we can personalize your carbon footprint journey")
 
 # Inputs
 with st.form("profile_form"):
