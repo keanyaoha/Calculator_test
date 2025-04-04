@@ -3,6 +3,20 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
+st.markdown(
+    """
+    <style>
+        .stApp {
+            background-color: white;  /* main content area */
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #e8f8f5;  /* soft green sidebar */
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
 csv_url_1 = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/per_capita_filtered.csv"
