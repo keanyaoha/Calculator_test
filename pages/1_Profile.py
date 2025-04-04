@@ -11,12 +11,13 @@ st.markdown(
         .stApp {
             background-color: white;
         }
+
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
         }
 
-        /* Make the primary button green */
-        div.stButton > button {
+        /* Target the form submit button specifically */
+        form button[type="submit"] {
             background-color: #2ecc71;
             color: white;
             border: none;
@@ -25,7 +26,7 @@ st.markdown(
             font-weight: 600;
         }
 
-        div.stButton > button:hover {
+        form button[type="submit"]:hover {
             background-color: #27ae60;
             color: white;
         }
