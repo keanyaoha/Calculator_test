@@ -4,7 +4,7 @@ import re  # for email validation
 # --- Page config ---
 st.set_page_config(page_title="Profile", page_icon="🌿")
 
-# --- Custom CSS for styling ---
+# --- Custom CSS for styling (without button color override) ---
 st.markdown(
     """
     <style>
@@ -15,26 +15,11 @@ st.markdown(
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
         }
-
-        /* ✅ Force green styling for ALL buttons */
-        button[kind="primary"] {
-            background-color: #2ecc71 !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 5px !important;
-            padding: 0.5rem 1.5rem !important;
-            font-weight: bold !important;
-            font-size: 1rem !important;
-        }
-
-        button[kind="primary"]:hover {
-            background-color: #27ae60 !important;
-            color: white !important;
-        }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 # --- Email validation function ---
 def is_valid_email(email):
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
