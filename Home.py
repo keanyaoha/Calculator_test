@@ -13,7 +13,7 @@ st.markdown(
             background-color: white;  /* main content area */
         }
         section[data-testid="stSidebar"] {
-            background-color: #d5f5e3;  /* soft green sidebar */
+            background-color: #e8f8f5;  /* soft green sidebar */
         }
     </style>
     """,
