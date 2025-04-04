@@ -3,10 +3,6 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-st.set_page_config(
-    page_title="Carbon Footprint Calculator",  # This appears in the browser tab AND sidebar
-    page_icon="🌍",                            # Optional: Adds an icon to the sidebar title
-)
 
 # Load DataFrames from GitHub
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
@@ -18,6 +14,12 @@ try:
     # st.success("Datasets Loaded Successfully")
 except Exception as e:
     st.error(f"Error loading data: {e}")
+
+
+st.set_page_config(
+    page_title="Carbon Footprint Calculator",  # This appears in the browser tab AND sidebar
+    page_icon="🌍",                            # Optional: Adds an icon to the sidebar title
+)
 
 # Function to format activity names
 def format_activity_name(activity):
