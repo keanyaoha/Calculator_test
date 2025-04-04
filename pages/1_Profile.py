@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Set page config (optional)
-st.set_page_config(page_title="Profile", page_icon="👤")
+st.set_page_config(page_title="Profile", page_icon="🌿")
 
 
 st.markdown(
@@ -20,7 +20,7 @@ st.markdown(
 
 # --- Title ---
 st.title("👤 Create Your Profile")
-st.subheader("Let us know a bit about you so we can personalize your carbon footprint journey 🌍")
+st.subheader("Let us know a bit about you so we can personalize your carbon footprint journey")
 
 # Inputs
 with st.form("profile_form"):
@@ -29,7 +29,7 @@ with st.form("profile_form"):
     gender = st.selectbox("Gender", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"])
     email = st.text_input("Email Address")
     country = st.selectbox("Country", ["-- Select --", "Germany", "France", "Italy", "Spain", "Poland", "Other"])
-    mood = st.selectbox("How are you feeling today?", ["😊 Happy", "😐 Neutral", "😟 Concerned"])
+    
 
     consent = st.checkbox("I agree to participate in the carbon footprint analysis and share anonymous data for research.")
 
