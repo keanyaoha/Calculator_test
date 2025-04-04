@@ -26,29 +26,29 @@ def required_label(label):
 st.title("👤 Create Your Profile")
 st.write("Let us know a bit about you so we can personalize your carbon footprint journey")
 
-# --- Form ---
+# --- Profile Form ---
 with st.form("profile_form"):
     st.markdown(required_label("Full Name"), unsafe_allow_html=True)
-    name = st.text_input("")
+    name = st.text_input("", key="name")
 
     st.markdown(required_label("Age"), unsafe_allow_html=True)
-    age = st.number_input("", min_value=0, max_value=120, step=1)
+    age = st.number_input("", min_value=0, max_value=120, step=1, key="age")
 
     st.markdown(required_label("Gender"), unsafe_allow_html=True)
-    gender = st.selectbox("", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"])
+    gender = st.selectbox("", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"], key="gender")
 
     st.markdown(required_label("Email Address"), unsafe_allow_html=True)
-    email = st.text_input("")
+    email = st.text_input("", key="email")
 
     st.markdown(required_label("Country"), unsafe_allow_html=True)
-    country = st.selectbox("", ["-- Select --", "Germany", "France", "Italy", "Spain", "Poland", "Other"])
+    country = st.selectbox("", ["-- Select --", "Germany", "France", "Italy", "Spain", "Poland", "Other"], key="country")
 
-    consent = st.checkbox("I agree to participate in the carbon footprint analysis and share anonymous data for research.")
+    consent = st.checkbox("I agree to participate in the carbon footprint analysis and share anonymous data for research.", key="consent")
 
-    # ✅ THIS must be inside the form!
+    # ✅ Submit Button inside form
     submitted = st.form_submit_button("Save Profile")
 
-# --- Handle submission ---
+# --- Handle Form Submission ---
 if submitted:
     if not name or not email or gender == "-- Select --" or country == "-- Select --":
         st.warning("⚠️ Please fill in all required fields.")
