@@ -133,7 +133,7 @@ if calculate:
             st.session_state.emission_values[activity] = user_input * factor
 
     total_emission = sum(st.session_state.emission_values.values())
-    st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.4f} tons CO₂")
+    st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.4f} kg CO₂")
 
     # 🌳 Convert CO₂ to "trees cut" equivalent
     kg_co2 = total_emission * 1000
@@ -148,12 +148,6 @@ if calculate:
     eu_avg = get_per_capita_emission("European Union (27)")
     world_avg = get_per_capita_emission("World")
 
-    if country_avg is not None:
-        st.subheader(f"\U0001F1EB\U0001F1F7 Avg emission for {country}: {country_avg:.4f} tons CO₂")
-    if eu_avg is not None:
-        st.subheader(f"\U0001F1EA\U0001F1FA Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
-    if world_avg is not None:
-        st.subheader(f"\U0001F30D Avg emission for World: {world_avg:.4f} tons CO₂")
 
     # 📊 Horizontal bar chart comparison
     labels = ['You', country, 'EU', 'World']
