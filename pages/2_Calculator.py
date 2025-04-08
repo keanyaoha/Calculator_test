@@ -52,7 +52,7 @@ def format_activity_name(activity):
 
 # --- UI Layout ---
 st.title("Carbon Footprint Calculator")
-st.image('carbon_image.jpg', use_container_width=True)
+# st.image('carbon_image.jpg', use_container_width=True)
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 
 # --- Country Selection ---
