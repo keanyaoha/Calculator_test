@@ -1,4 +1,4 @@
-mport pandas as pd
+import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
@@ -61,6 +61,7 @@ st.markdown("### \U0001F30D Select your country of residence:")
 def_country = "-- Select --"
 country = st.selectbox(" ", [def_country] + available_countries)
 
+# Continue only if valid country is selected
 if country != def_country:
     st.success(
         "✅ **Next steps:**\n"
@@ -69,7 +70,7 @@ if country != def_country:
     )
 
     # --- Tabs ---
-    tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "\u26A1 Energy & Water", "\U0001F3E8 Other"])
+    tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "⚡ Energy & Water", "\U0001F3E8 Other"])
 
     # --- Travel Tab ---
     with tabs[0]:
@@ -82,7 +83,7 @@ if country != def_country:
         for activity in travel_activities:
             st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
 
-    # --- Food Tab (Simplified) ---
+    # --- Food Tab ---
     with tabs[1]:
         diet_type = st.selectbox("\U0001F957 What is your diet type?", [
             "Select...", "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"])
@@ -108,7 +109,7 @@ if country != def_country:
             food_activities = base_foods + diet_foods.get(diet_type, [])
             for activity in food_activities:
                 label = activity.replace("_", " ").replace("products", "").replace("consumed", "").strip().capitalize()
-                value = st.number_input(f"{label}", min_value=0.0, key=activity, label_visibility="visible")
+                value = st.number_input(f"{label}", min_value=0.0, key=activity, format="%.1f")
                 st.markdown(f"<div class='unit-label'>kg</div>", unsafe_allow_html=True)
 
     # --- Energy & Water Tab ---
@@ -138,7 +139,7 @@ if country != def_country:
         total_emission = sum(st.session_state.emission_values.values())
         st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.1f} kg CO₂")
 
-        # 🌳 Convert CO₂ to "trees cut" equivalent
+        # Tree equivalent
         kg_co2 = total_emission * 1000
         trees_cut = kg_co2 / 21.77
         st.markdown(f"\U0001F333 **That’s equivalent to cutting down ~{trees_cut:.0f} trees!**")
@@ -151,7 +152,6 @@ if country != def_country:
         eu_avg = get_per_capita_emission("European Union (27)")
         world_avg = get_per_capita_emission("World")
 
-        # 📊 Horizontal bar chart comparison
         labels = ['You', country, 'EU', 'World']
         values = [
             total_emission,
@@ -163,26 +163,21 @@ if country != def_country:
         shared_color = '#4682B4'
         colors = [user_color] + [shared_color] * 3
 
-        labels = labels[::-1]
-        values = values[::-1]
-        colors = colors[::-1]
+        labels, values, colors = labels[::-1], values[::-1], colors[::-1]
 
         fig, ax = plt.subplots(figsize=(8, 3.2))
         bars = ax.barh(labels, values, color=colors, height=0.6)
-        max_value = max(values)
-        ax.set_xlim(0, max_value + 0.1 * max_value)
+        ax.set_xlim(0, max(values) + 0.1 * max(values))
 
         for bar in bars:
             width = bar.get_width()
             ax.annotate(f'{width:.1f}',
                         xy=(width, bar.get_y() + bar.get_height() / 2),
-                        xytext=(5, 0),
-                        textcoords='offset points',
+                        xytext=(5, 0), textcoords='offset points',
                         ha='left', va='center')
 
         ax.set_xlabel("Tons CO₂ per year")
         ax.xaxis.grid(True, linestyle='--', alpha=0.3)
-
         plt.tight_layout()
         st.pyplot(fig)
 
