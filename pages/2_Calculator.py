@@ -117,13 +117,10 @@ with tabs[2]:
 with tabs[3]:
     st.number_input(format_activity_name("hotel_stay"), min_value=0.0, key="hotel_stay")
 
-# --- Validate all fields are filled ---
-required_keys = [k for k in df["Activity"] if k in st.session_state]
-all_filled = all(st.session_state.get(k, 0.0) > 0 for k in required_keys)
-
-# --- Button (conditionally enabled) ---
+# --- Confirmation Checkbox ---
 st.markdown("---")
-calculate = st.button("Calculate My Carbon Footprint", disabled=not all_filled)
+confirmed = st.checkbox("✅ I have reviewed all fields and want to calculate my footprint")
+calculate = st.button("Calculate My Carbon Footprint", disabled=not confirmed)
 
 if calculate:
     if "emission_values" not in st.session_state:
