@@ -60,7 +60,7 @@ if "Activity" not in df.columns or "Country" not in df1.columns:
     st.stop()
 
 available_countries = [col for col in df.columns if col != "Activity"]
-country = st.selectbox("\U0001F30D Select your country:", available_countries)
+country = st.selectbox("🌍 Select your country of residence:", available_countries)
 
 # --- Tabs ---
 tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "\u26A1 Energy & Water", "\U0001F3E8 Other"])
