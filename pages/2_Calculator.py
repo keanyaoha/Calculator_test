@@ -2,22 +2,39 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-# --- Styling ---
-st.markdown("""
+# --- App Config ---
+st.set_page_config(
+    page_title="Green Tomorrow",
+    page_icon="🌿",
+    layout="centered"
+)
+
+# --- Force Logo to Appear at Top of Sidebar ---
+st.markdown(
+    """
     <style>
-        .stApp { background-color: white; }
-        section[data-testid="stSidebar"] { background-color: #e8f8f5; }
-        .unit-input input {
-            padding-right: 40px !important;
+        [data-testid="stSidebar"]::before {
+            content: "";
+            display: block;
+            background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
+            background-size: 90% auto;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 140px;
+            margin: 1.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
         }
-        .unit-label {
-            position: relative;
-            left: -35px;
-            top: -34px;
-            color: gray;
+
+        section[data-testid="stSidebar"] {
+            background-color: #d6f5ec;
+        }
+
+        .stApp {
+            background-color: white;
         }
     </style>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 # --- Load Data ---
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
