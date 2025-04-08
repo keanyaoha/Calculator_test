@@ -20,7 +20,7 @@ st.markdown(
             background-repeat: no-repeat;
             background-position: center;
             height: 140px; /* Less than before */
-            margin: 0.5rem auto 0.2rem auto; /* Reduced bottom margin */
+            margin: 0.5rem auto 0rem auto; /* Reduced bottom margin */
         }
 
         /* Sidebar background */
