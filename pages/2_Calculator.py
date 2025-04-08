@@ -7,6 +7,15 @@ st.markdown("""
     <style>
         .stApp { background-color: white; }
         section[data-testid="stSidebar"] { background-color: #e8f8f5; }
+        .unit-input input {
+            padding-right: 40px !important;
+        }
+        .unit-label {
+            position: relative;
+            left: -35px;
+            top: -34px;
+            color: gray;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -96,11 +105,8 @@ with tabs[1]:
         food_activities = base_foods + diet_foods.get(diet_type, [])
         for activity in food_activities:
             label = activity.replace("_", " ").replace("products", "").replace("consumed", "").strip().capitalize()
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                st.number_input(f"{label}", min_value=0.0, key=activity)
-            with col2:
-                st.markdown("kg")
+            value = st.number_input(f"{label}", min_value=0.0, key=activity, label_visibility="visible")
+            st.markdown(f"<div class='unit-label'>kg</div>", unsafe_allow_html=True)
 
 # --- Energy & Water Tab ---
 with tabs[2]:
@@ -110,3 +116,79 @@ with tabs[2]:
 # --- Other Tab ---
 with tabs[3]:
     st.number_input(format_activity_name("hotel_stay"), min_value=0.0, key="hotel_stay")
+
+# --- Calculate Button ---
+st.markdown("---")
+if st.button("Calculate My Carbon Footprint"):
+    if "emission_values" not in st.session_state:
+        st.session_state.emission_values = {}
+
+    for activity in df["Activity"]:
+        if activity in st.session_state:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            user_input = st.session_state.get(activity, 0.0)
+            st.session_state.emission_values[activity] = user_input * factor
+
+    total_emission = sum(st.session_state.emission_values.values())
+    st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.4f} tons CO₂")
+
+    # 🌳 Convert CO₂ to "trees cut" equivalent
+    kg_co2 = total_emission * 1000
+    trees_cut = kg_co2 / 21.77
+    st.markdown(f"\U0001F333 **That’s equivalent to cutting down ~{trees_cut:.0f} trees!**")
+
+    def get_per_capita_emission(country_name):
+        match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
+        return match.iloc[0] if not match.empty else None
+
+    country_avg = get_per_capita_emission(country)
+    eu_avg = get_per_capita_emission("European Union (27)")
+    world_avg = get_per_capita_emission("World")
+
+    if country_avg is not None:
+        st.subheader(f"\U0001F1EB\U0001F1F7 Avg emission for {country}: {country_avg:.4f} tons CO₂")
+    if eu_avg is not None:
+        st.subheader(f"\U0001F1EA\U0001F1FA Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
+    if world_avg is not None:
+        st.subheader(f"\U0001F30D Avg emission for World: {world_avg:.4f} tons CO₂")
+
+    # 📊 Horizontal bar chart comparison
+    labels = ['You', country, 'EU', 'World']
+    values = [
+        total_emission,
+        country_avg if country_avg is not None else 0,
+        eu_avg if eu_avg is not None else 0,
+        world_avg if world_avg is not None else 0
+    ]
+    user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'
+    shared_color = '#4682B4'
+    colors = [user_color] + [shared_color] * 3
+
+    labels = labels[::-1]
+    values = values[::-1]
+    colors = colors[::-1]
+
+    fig, ax = plt.subplots(figsize=(8, 3.2))
+    bars = ax.barh(labels, values, color=colors, height=0.6)
+    max_value = max(values)
+    ax.set_xlim(0, max_value + 0.1 * max_value)
+
+    for bar in bars:
+        width = bar.get_width()
+        ax.annotate(f'{width:.2f}',
+                    xy=(width, bar.get_y() + bar.get_height() / 2),
+                    xytext=(5, 0),
+                    textcoords='offset points',
+                    ha='left', va='center')
+
+    ax.set_xlabel("Tons CO₂ per year")
+    ax.xaxis.grid(True, linestyle='--', alpha=0.3)
+
+    plt.tight_layout()
+    st.pyplot(fig)
+
+    st.markdown("""
+        <div style='text-align: center; color: gray;'>
+        Comparison of your estimated annual carbon footprint with national and global averages.
+        </div>
+    """, unsafe_allow_html=True)
