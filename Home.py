@@ -1,5 +1,5 @@
-from PIL import Image
 import streamlit as st
+from PIL import Image
 
 # --- App Config ---
 st.set_page_config(
@@ -8,31 +8,36 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Custom Sidebar Styling ---
+# --- Custom Sidebar Styling + Remove Top Padding ---
 st.markdown(
     """
     <style>
         .stApp {
             background-color: white;
         }
+
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
-            padding-top: 1rem;
+            padding-top: 0.5rem !important;
+        }
+
+        [data-testid="stImage"] {
+            margin-top: -1rem;
+            margin-bottom: 0.5rem;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# --- Sidebar Logo (Top, No Extra Text) ---
+# --- Sidebar Logo (Top, No Extra Text or Separator) ---
 try:
-    logo = Image.open("GreenPrint_logo.png")  # Adjust filename if needed
+    logo = Image.open("GreenPrint_logo.png")  # Make sure this file exists in your project folder
     st.sidebar.image(logo, use_container_width=True)
-    st.sidebar.markdown("---")  # Optional separator
 except Exception as e:
     st.sidebar.warning("⚠️ Logo not found or failed to load.")
 
-# --- App Overview Content ---
+# --- Main App Content ---
 st.title("🌍 Welcome to Green Tomorrow")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
