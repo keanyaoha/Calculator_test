@@ -35,7 +35,7 @@ st.markdown(
 )
 
 # --- Main App Content ---
-st.title("🌍 Welcome to Green Tomorrow")
+st.title("🌍 Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
 st.markdown("""
