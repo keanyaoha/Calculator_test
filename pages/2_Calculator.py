@@ -63,22 +63,23 @@ available_countries = [col for col in df.columns if col != "Activity"]
 country = st.selectbox("🌍 Select your country of residence:", available_countries)
 
 if country:
-    st.markdown(
-        """
-        <div style='
-            background-color: #e6f7ec;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 5px solid #34a853;
-            margin-bottom: 1.5rem;
-        '>
-            ✅ <strong>Next steps:</strong><br>
-            Please go through the <strong>Travel</strong>, <strong>Food</strong>, <strong>Energy & Water</strong>, and <strong>Other</strong> tabs.<br>
-            Fill in any values relevant to you. When you're ready, click <em>“Calculate My Carbon Footprint”</em> at the bottom.
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    # Show instructions
+    st.markdown("""
+    <div style='
+        background-color: #e6f7ec;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 5px solid #34a853;
+        margin-bottom: 1.5rem;
+    '>
+        ✅ <strong>Next steps:</strong><br>
+        Please go through the <strong>Travel</strong>, <strong>Food</strong>, <strong>Energy & Water</strong>, and <strong>Other</strong> tabs.<br>
+        Fill in any values relevant to you. When you're ready, click <em>“Calculate My Carbon Footprint”</em> at the bottom.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Show the tabbed questions
+    input_sections()
 
 # --- Tabs ---
 tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "\u26A1 Energy & Water", "\U0001F3E8 Other"])
