@@ -110,7 +110,7 @@ if country != def_country:
             for activity in food_activities:
                 label = activity.replace("_", " ").replace("products", "").replace("consumed", "").strip().capitalize()
                 value = st.number_input(f"{label}", min_value=0.0, key=activity, format="%.1f")
-                st.markdown(f"<div class='unit-label'>kg</div>", unsafe_allow_html=True)
+                # st.markdown(f"<div class='unit-label'>kg</div>", unsafe_allow_html=True)
 
     # --- Energy & Water Tab ---
     with tabs[2]:
