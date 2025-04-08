@@ -15,10 +15,10 @@ st.markdown(
             content: "";
             display: block;
             background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
-            background-size: contain;
+            background-size: 90% auto;  /* Control how much width it uses */
             background-repeat: no-repeat;
             background-position: center;
-            height: 120px;
+            height: 180px;  /* Increased from 120px to 180px */
             margin: 1rem auto 0.5rem auto;
         }
 
