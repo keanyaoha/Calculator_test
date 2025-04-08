@@ -140,8 +140,7 @@ if country != def_country:
         st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.1f} kg CO₂")
 
         # Tree equivalent
-        kg_co2 = total_emission * 1000
-        trees_cut = kg_co2 / 21.77
+        trees_cut = total_emission / 21.77
         st.markdown(f"\U0001F333 **That’s equivalent to cutting down ~{trees_cut:.0f} trees!**")
 
         def get_per_capita_emission(country_name):
