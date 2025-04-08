@@ -19,7 +19,7 @@ st.markdown(
             background-repeat: no-repeat;
             background-position: center;
             height: 140px;
-            margin: 0.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
+            margin: 1.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
         }
 
         section[data-testid="stSidebar"] {
