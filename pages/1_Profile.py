@@ -71,7 +71,7 @@ if submitted:
 
         # Set redirect flag
         st.session_state["go_to_calculator"] = True
-        st.experimental_rerun()
+        st.rerun()  # <--- updated function!
 
 # --- Redirect after save ---
 if "go_to_calculator" in st.session_state and st.session_state["go_to_calculator"]:
