@@ -35,20 +35,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Custom CSS ---
-st.markdown(
-    """
-    <style>
-        .stApp {
-            background-color: white;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # ✅ Fixed Email Validation
 def is_valid_email(email):
