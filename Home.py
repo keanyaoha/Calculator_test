@@ -1,5 +1,5 @@
-import streamlit as st
 from PIL import Image
+import streamlit as st
 
 # --- App Config ---
 st.set_page_config(
@@ -17,19 +17,18 @@ st.markdown(
         }
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
+            padding-top: 1rem;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# --- Sidebar with Logo ---
+# --- Sidebar Logo (Top, No Extra Text) ---
 try:
-    logo = Image.open("GreenPrint_logo.png")  # Adjust path if needed
-    with st.sidebar:
-        st.image(logo, use_container_width=True)
-        st.markdown("### GreenPrint", unsafe_allow_html=True)
-        st.markdown("---")
+    logo = Image.open("GreenPrint_logo.png")  # Adjust filename if needed
+    st.sidebar.image(logo, use_container_width=True)
+    st.sidebar.markdown("---")  # Optional separator
 except Exception as e:
     st.sidebar.warning("⚠️ Logo not found or failed to load.")
 
