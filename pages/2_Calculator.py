@@ -24,7 +24,7 @@ except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()
 
-# --- Format questions ---
+# --- Question formatter ---
 def format_activity_name(activity):
     mapping = {
         "Domestic flight": "How many km of Domestic Flights taken the last month",
@@ -55,102 +55,38 @@ def format_activity_name(activity):
     }
     return mapping.get(activity, activity.replace("_", " ").capitalize())
 
-# --- Inputs ---
+# --- UI Layout ---
 st.title("Carbon Footprint Calculator")
 st.image('carbon_image.jpg', use_container_width=True)
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 
+# --- Country selection ---
 if "Activity" not in df.columns or "Country" not in df1.columns:
     st.error("Error: Missing required columns in dataset!")
     st.stop()
 
 available_countries = [col for col in df.columns if col != "Activity"]
-country = st.selectbox("🌍 Select a country:", available_countries)
+country = st.selectbox("\U0001F30D Select a country:", available_countries)
 
-# --- Define activity groups ---
-activity_groups = {
-    "🚗 Travel": [
-        "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled",
-        "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled",
-        "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled",
-        "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
-    ],
-    "🍽️ Food": [
-        "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-        "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
-        "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed",
-        "other_food_products_consumed", "beverages_consumed"
-    ],
-    "⚡ Energy & Water": ["electricity_used", "water_consumed"],
-    "🏨 Other": ["hotel_stay"]
+# --- Diet Selection ---
+diet_type = st.selectbox("\U0001F957 What is your diet type?", [
+    "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"
+])
+
+# --- Diet-aware food logic ---
+base_foods = [
+    "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
+    "other_food_products_consumed", "beverages_consumed"
+]
+
+diet_foods = {
+    "Vegan": [],
+    "Vegetarian": ["dairy_products_consumed", "other_meat_products_consumed"],
+    "Pescatarian": ["fish_products_consumed", "dairy_products_consumed"],
+    "Omnivore": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                 "dairy_products_consumed", "fish_products_consumed"],
+    "Heavy Meat Eater": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                         "dairy_products_consumed", "fish_products_consumed", "other_meat_products_consumed"]
 }
 
-# --- Create tabs and inputs ---
-tabs = st.tabs(list(activity_groups.keys()))
-user_inputs = {}
-
-for tab, label in zip(tabs, activity_groups.keys()):
-    with tab:
-        for activity in activity_groups[label]:
-            formatted = format_activity_name(activity)
-            user_inputs[activity] = st.number_input(formatted, min_value=0.0, key=activity)
-
-# --- Only show the button if at least one field is filled ---
-any_input = any(value > 0 for value in user_inputs.values())
-st.markdown("----")
-
-if st.button("🌍 Calculate My Carbon Footprint", disabled=not any_input):
-    emission_values = {}
-    for activity, input_val in user_inputs.items():
-        factor = df.loc[df["Activity"] == activity, country].values[0]
-        emission_values[activity] = input_val * factor
-
-    total_emission = sum(emission_values.values())
-    st.subheader(f"🌿 Your Carbon Footprint: **{total_emission:.4f} tons CO₂**")
-
-    # 🌳 Tree equivalence
-    kg_co2 = total_emission * 1000
-    trees_cut = kg_co2 / 21.77
-    st.markdown(f"🌲 That’s equivalent to cutting down ~**{trees_cut:.0f} trees**!")
-
-    # --- Averages ---
-    def get_per_capita_emission(c):
-        match = df1.loc[df1["Country"] == c, "PerCapitaCO2"]
-        return match.iloc[0] if not match.empty else None
-
-    country_avg = get_per_capita_emission(country)
-    eu_avg = get_per_capita_emission("European Union (27)")
-    world_avg = get_per_capita_emission("World")
-
-    if country_avg: st.subheader(f"🇨🇵 {country} Avg: {country_avg:.4f} tons CO₂")
-    if eu_avg: st.subheader(f"🇪🇺 EU Avg: {eu_avg:.4f} tons CO₂")
-    if world_avg: st.subheader(f"🌍 World Avg: {world_avg:.4f} tons CO₂")
-
-    # --- Comparison Chart ---
-    import matplotlib.pyplot as plt
-    labels = ['You', country, 'EU', 'World']
-    values = [total_emission, country_avg or 0, eu_avg or 0, world_avg or 0]
-    colors = ['#4CAF50'] + ['#4682B4'] * 3
-
-    labels.reverse()
-    values.reverse()
-    colors.reverse()
-
-    fig, ax = plt.subplots(figsize=(8, 3.2))
-    bars = ax.barh(labels, values, color=colors, height=0.6)
-    ax.set_xlim(0, max(values) * 1.1)
-    for bar in bars:
-        ax.annotate(f'{bar.get_width():.2f}',
-                    xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                    xytext=(5, 0), textcoords='offset points',
-                    ha='left', va='center')
-    ax.set_xlabel("Tons CO₂ per year")
-    ax.xaxis.grid(True, linestyle='--', alpha=0.3)
-    st.pyplot(fig)
-
-    st.markdown(
-        "<div style='text-align: center; color: gray;'>"
-        "Comparison of your estimated annual carbon footprint with national and global averages."
-        "</div>",
-        unsafe_allow_html=True
-    )
+food_activities = base_foods + diet_foods.get(diet_type, [])
