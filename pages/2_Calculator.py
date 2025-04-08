@@ -2,21 +2,18 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
+# --- Styling ---
 st.markdown(
     """
     <style>
-        .stApp {
-            background-color: white;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;
-        }
+        .stApp { background-color: white; }
+        section[data-testid="stSidebar"] { background-color: #e8f8f5; }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Load DataFrames from GitHub
+# --- Load data ---
 csv_url = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/emission_factor_formated.csv"
 csv_url_1 = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/per_capita_filtered_monthly.csv"
 
@@ -25,9 +22,11 @@ try:
     df1 = pd.read_csv(csv_url_1)
 except Exception as e:
     st.error(f"Error loading data: {e}")
+    st.stop()
 
+# --- Format questions ---
 def format_activity_name(activity):
-    activity_mappings = {
+    mapping = {
         "Domestic flight": "How many km of Domestic Flights taken the last month",
         "International flight": "How many km of International Flights taken the last month",
         "km_diesel_local_passenger_train_traveled": "How many km traveled by diesel-powered local passenger trains the last month",
@@ -54,126 +53,104 @@ def format_activity_name(activity):
         "other_food_products_consumed": "How much other food products have you consumed in kg the last month",
         "hotel_stay": "How many nights stayed in hotels the last month"
     }
-    return activity_mappings.get(activity, activity.replace("_", " ").capitalize())
+    return mapping.get(activity, activity.replace("_", " ").capitalize())
 
-def input_sections():
-    travel = [
+# --- Inputs ---
+st.title("Carbon Footprint Calculator")
+st.image('carbon_image.jpg', use_container_width=True)
+st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
+
+if "Activity" not in df.columns or "Country" not in df1.columns:
+    st.error("Error: Missing required columns in dataset!")
+    st.stop()
+
+available_countries = [col for col in df.columns if col != "Activity"]
+country = st.selectbox("🌍 Select a country:", available_countries)
+
+# --- Define activity groups ---
+activity_groups = {
+    "🚗 Travel": [
         "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled",
         "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled",
         "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled",
         "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
-    ]
-
-    food = [
+    ],
+    "🍽️ Food": [
         "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
         "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
         "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed",
         "other_food_products_consumed", "beverages_consumed"
-    ]
+    ],
+    "⚡ Energy & Water": ["electricity_used", "water_consumed"],
+    "🏨 Other": ["hotel_stay"]
+}
 
-    energy = ["electricity_used", "water_consumed"]
-    other = ["hotel_stay"]
+# --- Create tabs and inputs ---
+tabs = st.tabs(list(activity_groups.keys()))
+user_inputs = {}
 
-    tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "\u26A1 Energy & Water", "\U0001F3E8 Other"])
+for tab, label in zip(tabs, activity_groups.keys()):
+    with tab:
+        for activity in activity_groups[label]:
+            formatted = format_activity_name(activity)
+            user_inputs[activity] = st.number_input(formatted, min_value=0.0, key=activity)
 
-    categories = {
-        tabs[0]: travel,
-        tabs[1]: food,
-        tabs[2]: energy,
-        tabs[3]: other
-    }
+# --- Only show the button if at least one field is filled ---
+any_input = any(value > 0 for value in user_inputs.values())
+st.markdown("----")
 
-    for tab, activities in categories.items():
-        with tab:
-            for activity in activities:
-                formatted = format_activity_name(activity)
-                st.number_input(formatted, min_value=0.0, key=activity)
+if st.button("🌍 Calculate My Carbon Footprint", disabled=not any_input):
+    emission_values = {}
+    for activity, input_val in user_inputs.items():
+        factor = df.loc[df["Activity"] == activity, country].values[0]
+        emission_values[activity] = input_val * factor
 
-# Streamlit UI
-st.title("Carbon Footprint Calculator")
-st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
-st.image('carbon_image.jpg', use_container_width=True)
+    total_emission = sum(emission_values.values())
+    st.subheader(f"🌿 Your Carbon Footprint: **{total_emission:.4f} tons CO₂**")
 
-if "Activity" not in df.columns or "Country" not in df1.columns:
-    st.error("Error: Missing required columns in dataset!")
-else:
-    available_countries = [col for col in df.columns if col != "Activity"]
-    country = st.selectbox("Select a country:", available_countries)
+    # 🌳 Tree equivalence
+    kg_co2 = total_emission * 1000
+    trees_cut = kg_co2 / 21.77
+    st.markdown(f"🌲 That’s equivalent to cutting down ~**{trees_cut:.0f} trees**!")
 
-    if country:
-        if "emission_values" not in st.session_state:
-            st.session_state.emission_values = {}
+    # --- Averages ---
+    def get_per_capita_emission(c):
+        match = df1.loc[df1["Country"] == c, "PerCapitaCO2"]
+        return match.iloc[0] if not match.empty else None
 
-        input_sections()
+    country_avg = get_per_capita_emission(country)
+    eu_avg = get_per_capita_emission("European Union (27)")
+    world_avg = get_per_capita_emission("World")
 
-        for activity in df["Activity"]:
-            factor = df.loc[df["Activity"] == activity, country].values[0]
-            user_input = st.session_state.get(activity, 0.0)
-            st.session_state.emission_values[activity] = user_input * factor
+    if country_avg: st.subheader(f"🇨🇵 {country} Avg: {country_avg:.4f} tons CO₂")
+    if eu_avg: st.subheader(f"🇪🇺 EU Avg: {eu_avg:.4f} tons CO₂")
+    if world_avg: st.subheader(f"🌍 World Avg: {world_avg:.4f} tons CO₂")
 
-        if st.button("Calculate Carbon Footprint"):
-            total_emission = sum(st.session_state.emission_values.values())
-            st.subheader(f"🌍 Your Carbon Footprint: {total_emission:.4f} tons CO₂")
+    # --- Comparison Chart ---
+    import matplotlib.pyplot as plt
+    labels = ['You', country, 'EU', 'World']
+    values = [total_emission, country_avg or 0, eu_avg or 0, world_avg or 0]
+    colors = ['#4CAF50'] + ['#4682B4'] * 3
 
-            # 🌳 Convert CO₂ to "trees cut" equivalent
-            kg_co2 = total_emission * 1000
-            trees_cut = kg_co2 / 21.77
-            st.markdown(f"🌲 **That’s equivalent to cutting down ~{trees_cut:.0f} trees!**")
+    labels.reverse()
+    values.reverse()
+    colors.reverse()
 
-            def get_per_capita_emission(country_name):
-                match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
-                return match.iloc[0] if not match.empty else None
+    fig, ax = plt.subplots(figsize=(8, 3.2))
+    bars = ax.barh(labels, values, color=colors, height=0.6)
+    ax.set_xlim(0, max(values) * 1.1)
+    for bar in bars:
+        ax.annotate(f'{bar.get_width():.2f}',
+                    xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                    xytext=(5, 0), textcoords='offset points',
+                    ha='left', va='center')
+    ax.set_xlabel("Tons CO₂ per year")
+    ax.xaxis.grid(True, linestyle='--', alpha=0.3)
+    st.pyplot(fig)
 
-            country_avg = get_per_capita_emission(country)
-            eu_avg = get_per_capita_emission("European Union (27)")
-            world_avg = get_per_capita_emission("World")
-
-            if country_avg is not None:
-                st.subheader(f"🇨🇵 Avg emission for {country}: {country_avg:.4f} tons CO₂")
-            if eu_avg is not None:
-                st.subheader(f"🇪🇺 Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
-            if world_avg is not None:
-                st.subheader(f"🌍 Avg emission for World: {world_avg:.4f} tons CO₂")
-
-            # 📊 Horizontal bar chart comparison
-            labels = ['You', country, 'EU', 'World']
-            values = [
-                total_emission,
-                country_avg if country_avg is not None else 0,
-                eu_avg if eu_avg is not None else 0,
-                world_avg if world_avg is not None else 0
-            ]
-            user_color = '#4CAF50' if total_emission < values[3] else '#FF4B4B'
-            shared_color = '#4682B4'
-            colors = [user_color] + [shared_color] * 3
-
-            labels = labels[::-1]
-            values = values[::-1]
-            colors = colors[::-1]
-
-            fig, ax = plt.subplots(figsize=(8, 3.2))
-            bars = ax.barh(labels, values, color=colors, height=0.6)
-
-            max_value = max(values)
-            ax.set_xlim(0, max_value + 0.1 * max_value)
-
-            for bar in bars:
-                width = bar.get_width()
-                ax.annotate(f'{width:.2f}',
-                            xy=(width, bar.get_y() + bar.get_height() / 2),
-                            xytext=(5, 0),
-                            textcoords='offset points',
-                            ha='left', va='center')
-
-            ax.set_xlabel("Tons CO₂ per year")
-            ax.xaxis.grid(True, linestyle='--', alpha=0.3)
-
-            plt.tight_layout()
-            st.pyplot(fig)
-
-            st.markdown(
-                "<div style='text-align: center; color: gray;'>"
-                "Comparison of your estimated annual carbon footprint with national and global averages."
-                "</div>",
-                unsafe_allow_html=True
-            )
+    st.markdown(
+        "<div style='text-align: center; color: gray;'>"
+        "Comparison of your estimated annual carbon footprint with national and global averages."
+        "</div>",
+        unsafe_allow_html=True
+    )
