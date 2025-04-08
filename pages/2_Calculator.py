@@ -82,30 +82,31 @@ with tabs[0]:
     for activity in travel_activities:
         st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
 
-# --- Food tab with diet selector ---
+# --- Food tab with conditional diet selector and inputs ---
 with tabs[1]:
     diet_type = st.selectbox("\U0001F957 What is your diet type?", [
-        "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"
+        "Select...", "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"
     ])
 
-    base_foods = [
-        "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
-        "other_food_products_consumed", "beverages_consumed"
-    ]
+    if diet_type != "Select...":
+        base_foods = [
+            "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
+            "other_food_products_consumed", "beverages_consumed"
+        ]
 
-    diet_foods = {
-        "Vegan": [],
-        "Vegetarian": ["dairy_products_consumed", "other_meat_products_consumed"],
-        "Pescatarian": ["fish_products_consumed", "dairy_products_consumed"],
-        "Omnivore": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-                     "dairy_products_consumed", "fish_products_consumed"],
-        "Heavy Meat Eater": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-                             "dairy_products_consumed", "fish_products_consumed", "other_meat_products_consumed"]
-    }
+        diet_foods = {
+            "Vegan": [],
+            "Vegetarian": ["dairy_products_consumed", "other_meat_products_consumed"],
+            "Pescatarian": ["fish_products_consumed", "dairy_products_consumed"],
+            "Omnivore": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                         "dairy_products_consumed", "fish_products_consumed"],
+            "Heavy Meat Eater": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                                 "dairy_products_consumed", "fish_products_consumed", "other_meat_products_consumed"]
+        }
 
-    food_activities = base_foods + diet_foods.get(diet_type, [])
-    for activity in food_activities:
-        st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
+        food_activities = base_foods + diet_foods.get(diet_type, [])
+        for activity in food_activities:
+            st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
 
 # --- Energy & Water tab ---
 with tabs[2]:
