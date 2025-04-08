@@ -51,7 +51,7 @@ A **carbon footprint** includes emissions from:
 - 🍔 Food and consumption habits
 - 🛒 Shopping, waste, and more
 
-It's measured in **tons of CO₂ equivalent (CO₂e)**.
+It's measured in **kg of CO₂ equivalent (CO₂e)**.
 
 ---
 
@@ -76,5 +76,5 @@ The higher our carbon footprint, the more we contribute to climate change. By un
 
 ### 🌿 Ready to make a difference?
 
-Start by heading to the **Calculator** page in the sidebar!
+Start by heading to the **Profile** page in the sidebar!
 """)
