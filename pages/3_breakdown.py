@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # --- App Config ---
 st.set_page_config(
-    page_title="Green Tomorrow",
+    page_title="GreenPrint",
     page_icon="🌿",
     layout="centered"
 )
@@ -29,20 +29,6 @@ st.markdown(
 
         .stApp {
             background-color: white;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    """
-    <style>
-        .stApp {
-            background-color: white;  /* main content area */
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;  /* soft green sidebar */
         }
     </style>
     """,
