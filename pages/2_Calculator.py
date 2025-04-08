@@ -54,29 +54,17 @@ def format_activity_name(activity):
 st.title("Carbon Footprint Calculator")
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 
-# --- Country Selection ---
-if "Activity" not in df.columns or "Country" not in df1.columns:
-    st.error("Missing required columns in dataset.")
-    st.stop()
+# Country selection
+st.markdown("### 🌍 Select your country of residence:")
+country = st.selectbox(" ", available_countries)
 
-available_countries = [col for col in df.columns if col != "Activity"]
-country = st.selectbox("🌍 Select your country of residence:", available_countries)
-
+# Show next steps only after a country is selected
 if country:
-    # Show instructions
-    st.markdown("""
-    <div style='
-        background-color: #e6f7ec;
-        padding: 1rem;
-        border-radius: 8px;
-        border-left: 5px solid #34a853;
-        margin-bottom: 1.5rem;
-    '>
-        ✅ <strong>Next steps:</strong><br>
-        Please go through the <strong>Travel</strong>, <strong>Food</strong>, <strong>Energy & Water</strong>, and <strong>Other</strong> tabs.<br>
-        Fill in any values relevant to you. When you're ready, click <em>“Calculate My Carbon Footprint”</em> at the bottom.
-    </div>
-    """, unsafe_allow_html=True)
+    st.success(
+        "✅ **Next steps:**\n"
+        "Please go through the **Travel**, **Food**, **Energy & Water**, and **Other** tabs.\n"
+        "Fill in any values relevant to you. When you're ready, click *“Calculate My Carbon Footprint”* at the bottom."
+    )
 
     # Show the tabbed questions
     input_sections()
