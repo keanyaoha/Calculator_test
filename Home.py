@@ -11,7 +11,6 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-        /* Insert logo above the sidebar */
         [data-testid="stSidebar"]::before {
             content: "";
             display: block;
@@ -19,16 +18,14 @@ st.markdown(
             background-size: 90% auto;
             background-repeat: no-repeat;
             background-position: center;
-            height: 140px; /* Less than before */
-            margin: 0.5rem auto 0rem auto; /* Reduced bottom margin */
+            height: 140px;
+            margin: -0.5rem auto -1.2rem auto;  /* SUPER tight top & bottom spacing */
         }
 
-        /* Sidebar background */
         section[data-testid="stSidebar"] {
             background-color: #d6f5ec;
         }
 
-        /* App background */
         .stApp {
             background-color: white;
         }
