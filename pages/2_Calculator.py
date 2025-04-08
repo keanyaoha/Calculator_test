@@ -68,25 +68,50 @@ if "Activity" not in df.columns or "Country" not in df1.columns:
 available_countries = [col for col in df.columns if col != "Activity"]
 country = st.selectbox("\U0001F30D Select a country:", available_countries)
 
-# --- Diet Selection ---
-diet_type = st.selectbox("\U0001F957 What is your diet type?", [
-    "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"
-])
+# --- Define tabs ---
+tabs = st.tabs(["\U0001F697 Travel", "\U0001F37D Food", "\u26A1 Energy & Water", "\U0001F3E8 Other"])
 
-# --- Diet-aware food logic ---
-base_foods = [
-    "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
-    "other_food_products_consumed", "beverages_consumed"
-]
+# --- Travel tab inputs ---
+with tabs[0]:
+    travel_activities = [
+        "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled",
+        "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled",
+        "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled",
+        "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
+    ]
+    for activity in travel_activities:
+        st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
 
-diet_foods = {
-    "Vegan": [],
-    "Vegetarian": ["dairy_products_consumed", "other_meat_products_consumed"],
-    "Pescatarian": ["fish_products_consumed", "dairy_products_consumed"],
-    "Omnivore": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-                 "dairy_products_consumed", "fish_products_consumed"],
-    "Heavy Meat Eater": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-                         "dairy_products_consumed", "fish_products_consumed", "other_meat_products_consumed"]
-}
+# --- Food tab with diet selector ---
+with tabs[1]:
+    diet_type = st.selectbox("\U0001F957 What is your diet type?", [
+        "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"
+    ])
 
-food_activities = base_foods + diet_foods.get(diet_type, [])
+    base_foods = [
+        "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
+        "other_food_products_consumed", "beverages_consumed"
+    ]
+
+    diet_foods = {
+        "Vegan": [],
+        "Vegetarian": ["dairy_products_consumed", "other_meat_products_consumed"],
+        "Pescatarian": ["fish_products_consumed", "dairy_products_consumed"],
+        "Omnivore": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                     "dairy_products_consumed", "fish_products_consumed"],
+        "Heavy Meat Eater": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                             "dairy_products_consumed", "fish_products_consumed", "other_meat_products_consumed"]
+    }
+
+    food_activities = base_foods + diet_foods.get(diet_type, [])
+    for activity in food_activities:
+        st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
+
+# --- Energy & Water tab ---
+with tabs[2]:
+    for activity in ["electricity_used", "water_consumed"]:
+        st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
+
+# --- Other tab ---
+with tabs[3]:
+    st.number_input(format_activity_name("hotel_stay"), min_value=0.0, key="hotel_stay")
