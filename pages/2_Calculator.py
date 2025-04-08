@@ -133,7 +133,7 @@ if calculate:
             st.session_state.emission_values[activity] = user_input * factor
 
     total_emission = sum(st.session_state.emission_values.values())
-    st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.4f} kg CO₂")
+    st.subheader(f"\U0001F30D Your Carbon Footprint: {total_emission:.1f} kg CO₂")
 
     # 🌳 Convert CO₂ to "trees cut" equivalent
     kg_co2 = total_emission * 1000
@@ -172,7 +172,7 @@ if calculate:
 
     for bar in bars:
         width = bar.get_width()
-        ax.annotate(f'{width:.2f}',
+        ax.annotate(f'{width:.1f}',
                     xy=(width, bar.get_y() + bar.get_height() / 2),
                     xytext=(5, 0),
                     textcoords='offset points',
