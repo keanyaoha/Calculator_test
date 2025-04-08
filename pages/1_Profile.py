@@ -4,7 +4,7 @@ import re  # for email validation
 # --- Page config ---
 st.set_page_config(page_title="Profile", page_icon="🌿")
 
-# --- Custom CSS for styling (without button color override) ---
+# --- Custom CSS ---
 st.markdown(
     """
     <style>
@@ -14,6 +14,17 @@ st.markdown(
 
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
+        }
+
+        .redirect-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.5em 1.5em;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
         }
     </style>
     """,
@@ -27,7 +38,7 @@ def is_valid_email(email):
 
 # --- Title ---
 st.title("Create Your Profile")
-st.write("Let us know a bit about you so we can personalize your carbon footprint journey")
+st.write("Let us know a bit about you so we can personalize your carbon footprint journey.")
 
 # --- Profile Form ---
 with st.form("profile_form"):
@@ -44,7 +55,7 @@ with st.form("profile_form"):
 
     submitted = st.form_submit_button("Save Profile")
 
-# --- Submission handling ---
+# --- Submission Handling ---
 if submitted:
     if not name or not email or gender == "-- Select --":
         st.warning("⚠️ Please fill in all required fields.")
@@ -61,3 +72,12 @@ if submitted:
             "email": email,
             "consent": consent
         }
+
+        # ✅ Redirect to calculator via custom link button
+        st.markdown(
+            """
+            <br>
+            <a href="/Calculator" class="redirect-button">Go to Calculator →</a>
+            """,
+            unsafe_allow_html=True
+        )
