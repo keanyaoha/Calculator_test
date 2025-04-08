@@ -11,23 +11,26 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+        /* Insert logo above the sidebar */
         [data-testid="stSidebar"]::before {
             content: "";
             display: block;
             background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
-            background-size: 90% auto;  /* Control how much width it uses */
+            background-size: 90% auto;
             background-repeat: no-repeat;
             background-position: center;
-            height: 180px;  /* Increased from 120px to 180px */
-            margin: 1rem auto 0.5rem auto;
+            height: 140px; /* Less than before */
+            margin: 0.5rem auto 0.2rem auto; /* Reduced bottom margin */
         }
 
+        /* Sidebar background */
+        section[data-testid="stSidebar"] {
+            background-color: #d6f5ec;
+        }
+
+        /* App background */
         .stApp {
             background-color: white;
-        }
-
-        section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;
         }
     </style>
     """,
