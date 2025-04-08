@@ -119,7 +119,7 @@ with tabs[3]:
 
 # --- Confirmation Checkbox ---
 st.markdown("---")
-confirmed = st.checkbox("✅ I have reviewed all fields and want to calculate my footprint")
+confirmed = st.checkbox("I have reviewed all fields and want to calculate my footprint")
 calculate = st.button("Calculate My Carbon Footprint", disabled=not confirmed)
 
 if calculate:
