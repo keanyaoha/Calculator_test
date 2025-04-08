@@ -25,7 +25,7 @@ st.markdown(
 
 # --- Sidebar with Logo ---
 try:
-    logo = Image.open("greenprint_logo.png")  # Adjust path if needed
+    logo = Image.open("GreenPrint_logo.png")  # Adjust path if needed
     with st.sidebar:
         st.image(logo, use_column_width=True)
         st.markdown("### GreenPrint", unsafe_allow_html=True)
