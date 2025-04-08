@@ -1,4 +1,3 @@
-
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -7,10 +6,10 @@ st.markdown(
     """
     <style>
         .stApp {
-            background-color: white;  /* main content area */
+            background-color: white;
         }
         section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;  /* soft green sidebar */
+            background-color: #e8f8f5;
         }
     </style>
     """,
@@ -24,11 +23,9 @@ csv_url_1 = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/
 try:
     df = pd.read_csv(csv_url)
     df1 = pd.read_csv(csv_url_1)
-    # st.success("Datasets Loaded Successfully")
 except Exception as e:
     st.error(f"Error loading data: {e}")
 
-# Function to format activity names
 def format_activity_name(activity):
     activity_mappings = {
         "Domestic flight": "How many km of Domestic Flights taken the last month",
@@ -116,7 +113,12 @@ else:
 
         if st.button("Calculate Carbon Footprint"):
             total_emission = sum(st.session_state.emission_values.values())
-            st.subheader(f"Your Carbon Footprint: {total_emission:.4f} tons CO₂")
+            st.subheader(f"🌍 Your Carbon Footprint: {total_emission:.4f} tons CO₂")
+
+            # 🌳 Convert CO₂ to "trees cut" equivalent
+            kg_co2 = total_emission * 1000
+            trees_cut = kg_co2 / 21.77
+            st.markdown(f"🌲 **That’s equivalent to cutting down ~{trees_cut:.0f} trees!**")
 
             def get_per_capita_emission(country_name):
                 match = df1.loc[df1["Country"] == country_name, "PerCapitaCO2"]
@@ -127,14 +129,13 @@ else:
             world_avg = get_per_capita_emission("World")
 
             if country_avg is not None:
-                st.subheader(f"Avg emission for {country}: {country_avg:.4f} tons CO₂")
+                st.subheader(f"🇨🇵 Avg emission for {country}: {country_avg:.4f} tons CO₂")
             if eu_avg is not None:
-                st.subheader(f"Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
+                st.subheader(f"🇪🇺 Avg emission for EU (27): {eu_avg:.4f} tons CO₂")
             if world_avg is not None:
-                st.subheader(f"Avg emission for World: {world_avg:.4f} tons CO₂")
+                st.subheader(f"🌍 Avg emission for World: {world_avg:.4f} tons CO₂")
 
-            st.markdown("<br><br>", unsafe_allow_html=True)
-
+            # 📊 Horizontal bar chart comparison
             labels = ['You', country, 'EU', 'World']
             values = [
                 total_emission,
