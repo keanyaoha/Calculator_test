@@ -52,7 +52,7 @@ def format_activity_name(activity):
 
 # --- UI Layout ---
 st.title("Carbon Footprint Calculator")
-# st.image('carbon_image.jpg', use_container_width=True)
+st.image('carbon_image.jpg', use_container_width=True)
 st.markdown("Calculate your carbon footprint and compare it to national and global averages!")
 
 # --- Country Selection ---
@@ -117,9 +117,15 @@ with tabs[2]:
 with tabs[3]:
     st.number_input(format_activity_name("hotel_stay"), min_value=0.0, key="hotel_stay")
 
-# --- Calculate Button ---
+# --- Validate all fields are filled ---
+required_keys = [k for k in df["Activity"] if k in st.session_state]
+all_filled = all(st.session_state.get(k, 0.0) > 0 for k in required_keys)
+
+# --- Button (conditionally enabled) ---
 st.markdown("---")
-if st.button("Calculate My Carbon Footprint"):
+calculate = st.button("Calculate My Carbon Footprint", disabled=not all_filled)
+
+if calculate:
     if "emission_values" not in st.session_state:
         st.session_state.emission_values = {}
 
