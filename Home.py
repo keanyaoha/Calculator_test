@@ -1,5 +1,4 @@
 import streamlit as st
-from PIL import Image
 
 # --- App Config ---
 st.set_page_config(
@@ -8,34 +7,32 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Custom Sidebar Styling + Remove Top Padding ---
+# --- Force Logo to Appear at Top of Sidebar ---
 st.markdown(
     """
     <style>
+        [data-testid="stSidebar"]::before {
+            content: "";
+            display: block;
+            background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 120px;
+            margin: 1rem auto 0.5rem auto;
+        }
+
         .stApp {
             background-color: white;
         }
 
         section[data-testid="stSidebar"] {
             background-color: #e8f8f5;
-            padding-top: 0.5rem !important;
-        }
-
-        [data-testid="stImage"] {
-            margin-top: -1rem;
-            margin-bottom: 0.5rem;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
-
-# --- Sidebar Logo (Top, No Extra Text or Separator) ---
-try:
-    logo = Image.open("GreenPrint_logo.png")  # Make sure this file exists in your project folder
-    st.sidebar.image(logo, use_container_width=True)
-except Exception as e:
-    st.sidebar.warning("⚠️ Logo not found or failed to load.")
 
 # --- Main App Content ---
 st.title("🌍 Welcome to Green Tomorrow")
