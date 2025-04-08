@@ -35,7 +35,7 @@ st.markdown(
 )
 
 # --- Main App Content ---
-st.title("🌍 Welcome to GreenPrint")
+st.title("Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
 st.markdown("""
@@ -67,7 +67,7 @@ The higher our carbon footprint, the more we contribute to climate change. By un
 
 ### 🛠️ How This App Works
 
-1. Go to the **Calculator** page and enter details about your daily habits.  
+1. Go to the **Profile** page and create your profile, which brings you directly to the **Calculator** and enter details about your daily habits.  
 2. Get an estimate of your **annual carbon footprint**.  
 3. Compare your score to **national and global averages**.  
 4. See personalized suggestions on how to **reduce** it.
