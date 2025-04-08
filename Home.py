@@ -1,26 +1,39 @@
 import streamlit as st
+from PIL import Image
 
+# --- App Config ---
 st.set_page_config(
     page_title="Green Tomorrow",
     page_icon="🌿",
     layout="centered"
 )
 
+# --- Custom Sidebar Styling ---
 st.markdown(
     """
     <style>
         .stApp {
-            background-color: white;  /* main content area */
+            background-color: white;
         }
         section[data-testid="stSidebar"] {
-            background-color: #e8f8f5;  /* soft green sidebar */
+            background-color: #e8f8f5;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# --- App Overview Section ---
+# --- Sidebar with Logo ---
+try:
+    logo = Image.open("greenprint_logo.png")  # Adjust path if needed
+    with st.sidebar:
+        st.image(logo, use_column_width=True)
+        st.markdown("### GreenPrint", unsafe_allow_html=True)
+        st.markdown("---")
+except Exception as e:
+    st.sidebar.warning("⚠️ Logo not found or failed to load.")
+
+# --- App Overview Content ---
 st.title("🌍 Welcome to Green Tomorrow")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
@@ -45,17 +58,17 @@ It's measured in **tons of CO₂ equivalent (CO₂e)**.
 
 The higher our carbon footprint, the more we contribute to climate change. By understanding your own emissions, you can:
 
-- Reduce your environmental impact
-- Save money through efficient choices
-- Join the global effort to combat the climate crisis
+- Reduce your environmental impact  
+- Save money through efficient choices  
+- Join the global effort to combat the climate crisis  
 
 ---
 
 ### 🛠️ How This App Works
 
-1. Go to the **Calculator** page and enter details about your daily habits.
-2. Get an estimate of your **annual carbon footprint**.
-3. Compare your score to **national and global averages**.
+1. Go to the **Calculator** page and enter details about your daily habits.  
+2. Get an estimate of your **annual carbon footprint**.  
+3. Compare your score to **national and global averages**.  
 4. See personalized suggestions on how to **reduce** it.
 
 ---
@@ -64,4 +77,3 @@ The higher our carbon footprint, the more we contribute to climate change. By un
 
 Start by heading to the **Calculator** page in the sidebar!
 """)
-
