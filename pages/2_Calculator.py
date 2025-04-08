@@ -40,17 +40,6 @@ def format_activity_name(activity):
         "diesel_car_traveled": "How many km traveled by diesel-powered car the last month",
         "water_consumed": "How much water consumed in liters the last month",
         "electricity_used": "How much electricity used in kWh the last month",
-        "beef_products_consumed": "How much beef consumed in kg the last month",
-        "beverages_consumed": "How much beverages consumed in liters the last month",
-        "poultry_products_consumed": "How much poultry consumed in Kg the last month",
-        "pork_products_consumed": "How much pork have you consumed in kg the last month",
-        "processed_rice_consumed": "How much processed rice consumed in kg the last month",
-        "sugar_consumed": "How much sugar have you consumed in kg the last month",
-        "vegetable_oils_fats_consumed": "How much vegetable oils and fats consumed in kg the last month",
-        "other_meat_products_consumed": "How much other meat products consumed in kg the last month",
-        "dairy_products_consumed": "How much dairy products consumed in kg the last month",
-        "fish_products_consumed": "How much fish products consumed in kg the last month",
-        "other_food_products_consumed": "How much other food products have you consumed in kg the last month",
         "hotel_stay": "How many nights stayed in hotels the last month"
     }
     return mapping.get(activity, activity.replace("_", " ").capitalize())
@@ -82,13 +71,16 @@ with tabs[0]:
     for activity in travel_activities:
         st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
 
-# --- Food tab with conditional diet selector and inputs ---
+# --- Food tab with simplified layout ---
 with tabs[1]:
     diet_type = st.selectbox("\U0001F957 What is your diet type?", [
         "Select...", "Vegan", "Vegetarian", "Pescatarian", "Omnivore", "Heavy Meat Eater"
     ])
 
     if diet_type != "Select...":
+        st.markdown("#### Now please answer the following questions:")
+        st.markdown("How much of the following foods do you consume on average per month?")
+
         base_foods = [
             "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed",
             "other_food_products_consumed", "beverages_consumed"
@@ -106,7 +98,8 @@ with tabs[1]:
 
         food_activities = base_foods + diet_foods.get(diet_type, [])
         for activity in food_activities:
-            st.number_input(format_activity_name(activity), min_value=0.0, key=activity)
+            label = activity.replace("_", " ").replace("products", "").replace("consumed", "").strip().capitalize()
+            st.number_input(f"{label} (kg)", min_value=0.0, key=activity)
 
 # --- Energy & Water tab ---
 with tabs[2]:
