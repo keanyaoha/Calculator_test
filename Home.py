@@ -39,7 +39,7 @@ st.title("🌍 Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
 st.markdown("""
-**Green Tomorrow** is an interactive tool designed to help you measure your **carbon footprint** — the total amount of greenhouse gases, primarily carbon dioxide, that your lifestyle and choices emit into the atmosphere.
+**GreenPrint** is an interactive tool designed to help you measure your **carbon footprint** — the total amount of greenhouse gases, primarily carbon dioxide, that your lifestyle and choices emit into the atmosphere.
 
 ---
 
