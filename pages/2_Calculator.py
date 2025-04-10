@@ -137,11 +137,14 @@ st.markdown("Estimate your monthly carbon footprint and compare it to country an
 st.divider()
 
 
-st.markdown("Select your country")
+# Keep your separate markdown line for the label
+st.markdown("**Step 1: Select your country**")
 
 # --- Country Selection ---
 country_options = ["-- Select --"] + available_countries
 selected_country = st.selectbox(
+    label="country_select_hidden", # Provide a unique internal label (won't be shown)
+    label_visibility="collapsed", # Hide the label visually
     options=country_options,
     index=country_options.index(st.session_state.selected_country),
     key="country_selector_main"
