@@ -63,6 +63,12 @@ def format_activity_name(activity):
     }
     return mapping.get(activity, activity.replace("_", " ").capitalize())
 
+# --- Check if profile is completed ---
+if not st.session_state.profile_completed:
+    st.warning("🚫 Please complete your profile first before using the Calculator.")
+    st.markdown("You can go back to the **Profile** page and fill in your details.")
+    st.stop()  # Stop further execution of the page content
+
 # --- App Title ---
 st.title("🌍 Carbon Footprint Calculator")
 st.markdown("Estimate your monthly carbon footprint and compare it to country and global averages.")
