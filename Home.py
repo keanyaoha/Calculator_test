@@ -81,11 +81,19 @@ Your footprint shows how much your actions contribute to climate change. By unde
 
 ### 🚨 Why It Matters
 
-The higher our carbon footprint, the more we contribute to climate change. By understanding your own emissions, you can:
+At **GreenPrint**, we believe that our planet is finite, and sustainability is crucial for our future. The consumption of resources leads to greenhouse gas emissions, which are responsible for global warming. These emissions contribute to environmental challenges such as:
 
-- Reduce your environmental impact  
-- Save money through efficient choices  
-- Join the global effort to combat the climate crisis  
+- 🌊 Floods
+- 🔥 Forest fires
+- 🌵 Droughts
+- ⚔️ Conflict
+- 🌍 Ecological damage
+
+The higher your carbon footprint, the more you contribute to these issues. By understanding your emissions, you can:
+
+- 🌍 **Reduce your environmental impact**
+- 💰 **Save money** through efficient choices
+- 🌱 **Join the global effort** to fight climate change and protect the planet 
 
 ---
 
