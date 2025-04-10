@@ -40,7 +40,7 @@ st.markdown("""
             background-color: white;
             border-bottom: 1px solid white; /* Ensure it's connected to the content */
             font-weight: bold;
-            color: #4CAF50;  /* Change the color of selected tab text (Green in this case) */
+            color: #61c2a2;  /* Change the color of selected tab text (Green in this case) */
         }
 
         /* --- Add bottom border for tabs container --- */
@@ -51,14 +51,14 @@ st.markdown("""
 
         /* --- Styling for the Next and Previous buttons --- */
         div[data-testid="stButton"] button[kind="primary"] {
-            background-color: #4CAF50;  /* Green background */
+            background-color: #61c2a2;  /* Green background */
             color: white;              /* White text */
             border: none;
             padding: 0.5rem 1rem;      /* Adjust padding */
             border-radius: 0.25rem;
         }
         div[data-testid="stButton"] button[kind="primary"]:hover {
-            background-color: #45a049;  /* Darker green on hover */
+            background-color: #52a58a;  /* Darker green on hover */
         }
     </style>
 """, unsafe_allow_html=True)
