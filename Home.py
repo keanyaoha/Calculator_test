@@ -47,7 +47,7 @@ With just a few quick questions about how you **live, travel, eat**, and **consu
 ✅ **A personalized estimate** of your yearly carbon emissions  
 📊 **A clear breakdown** of which habits contribute the most  
 🌍 **Comparisons** with your country, Europe, and global averages  
-🌱 **Practical tips** to reduce your footprint and live more sustainably.  
+🌞 **Practical tips** to reduce your footprint and live more sustainably.  
 
 <be>
 
@@ -94,6 +94,7 @@ The higher your carbon footprint, the more you contribute to these issues. By un
 - 🌍 **Reduce your environmental impact**
 - 💰 **Save money** through efficient choices
 - 🌱 **Join the global effort** to fight climate change and protect the planet 
+
 
 ---
 
