@@ -26,6 +26,57 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# --- Custom CSS for Radio Button (Tabs) Styling --- 
+st.markdown("""
+    <style>
+        /* --- Sidebar Logo --- */
+        [data-testid="stSidebar"]::before {
+            content: ""; display: block;
+            background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
+            background-size: 90% auto; background-repeat: no-repeat;
+            background-position: center; height: 140px;
+            margin: 1.5rem auto -4rem auto;
+        }
+        section[data-testid="stSidebar"] { background-color: #d6f5ec; }
+        .stApp { background-color: white; }
+
+        /* --- Tab-like Radio Buttons --- */
+        div[role="radiogroup"] > label > div:first-child { display: none; }
+        div[role="radiogroup"] > label {
+            margin: 0 !important; padding: 0.5rem 1rem; border: 1px solid #ddd;
+            border-bottom: none; border-radius: 5px 5px 0 0; background-color: #f0f2f6;
+            cursor: pointer; transition: background-color 0.3s ease;
+        }
+        div[role="radiogroup"] > label:hover { background-color: #e0e2e6; }
+
+        /* --- Control the color of the selected tab --- */
+        div[role="radiogroup"] input[type="radio"]:checked + div {
+            background-color: white;
+            border-bottom: 1px solid white; /* Ensure it's connected to the content */
+            font-weight: bold;
+            color: #4CAF50;  /* Change the color of selected tab text (Green in this case) */
+        }
+
+        /* --- Add bottom border for tabs container --- */
+         div.stRadio > div {
+             border-bottom: 1px solid #ddd;
+             padding-bottom: 1rem;
+         }
+
+        /* --- Styling for the Next and Previous buttons --- */
+        div[data-testid="stButton"] button[kind="primary"] {
+            background-color: #4CAF50;  /* Green background */
+            color: white;              /* White text */
+            border: none;
+            padding: 0.5rem 1rem;      /* Adjust padding */
+            border-radius: 0.25rem;
+        }
+        div[data-testid="stButton"] button[kind="primary"]:hover {
+            background-color: #45a049;  /* Darker green on hover */
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # --- Sidebar Logo Styling ---
 # Using a raw string for safety
 st.markdown(r"""
