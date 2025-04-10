@@ -338,7 +338,7 @@ if st.session_state.selected_country != "-- Select --":
                     fig_comp.update_traces(
                          texttemplate='%{text:.1f}', textposition='outside',
                          hovertemplate="<b>%{y}</b><br>Emission: %{x:.1f} kg CO₂<extra></extra>",
-                         width=200                    
+                         width=0.5                  
                          )
 
                     # Update layout (styling for overall chart)
