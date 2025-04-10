@@ -30,9 +30,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Initialize profile_completed if not already done ---
-if "profile_completed" not in st.session_state:
-    st.session_state.profile_completed = False  # Set to False initially if not defined
+# --- Check if Profile is Completed ---
+if "profile_completed" not in st.session_state or not st.session_state.profile_completed:
+    st.warning("🚫 Please complete your profile first before using the Calculator.")
+    st.markdown("You can go back to the **Profile** page and fill in your details.")
+    st.stop()  # Prevent the calculator page from loading if profile is not completed
 
 # --- Load Emission Data ---
 CSV_URL = "https://drive.google.com/uc?export=download&id=1PWeBZKB6adZKORvtMDLFwCX__gfzH33g"
@@ -66,12 +68,6 @@ def format_activity_name(activity):
         "hotel_stay": "How many nights in hotels",
     }
     return mapping.get(activity, activity.replace("_", " ").capitalize())
-
-# --- Check if profile is completed ---
-if not st.session_state.profile_completed:
-    st.warning("🚫 Please complete your profile first before using the Calculator.")
-    st.markdown("You can go back to the **Profile** page and fill in your details.")
-    st.stop()  # Stop further execution of the page content
 
 # --- App Title ---
 st.title("🌍 Carbon Footprint Calculator")
