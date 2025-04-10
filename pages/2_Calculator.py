@@ -136,10 +136,12 @@ st.title("🌍 Carbon Footprint Calculator")
 st.markdown("Estimate your monthly carbon footprint and compare it to country and global averages.")
 st.divider()
 
+
+st.markdown("Select your country")
+
 # --- Country Selection ---
 country_options = ["-- Select --"] + available_countries
 selected_country = st.selectbox(
-    "**Step 1: Select your country**",
     options=country_options,
     index=country_options.index(st.session_state.selected_country),
     key="country_selector_main"
