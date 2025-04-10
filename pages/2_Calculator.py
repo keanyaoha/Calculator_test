@@ -125,7 +125,7 @@ with tab1:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    if st.button("Next"):
+    if st.button("Next", key="next_tab1"):
         st.session_state.current_tab = 1  # Move to the next tab
 
 # Food Tab
@@ -146,7 +146,7 @@ with tab2:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    if st.button("Next"):
+    if st.button("Next", key="next_tab2"):
         st.session_state.current_tab = 2  # Move to the next tab
 
 # Energy and Water Tab
@@ -162,7 +162,7 @@ with tab3:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    if st.button("Next"):
+    if st.button("Next", key="next_tab3"):
         st.session_state.current_tab = 3  # Move to the next tab
 
 # Hotel Tab
