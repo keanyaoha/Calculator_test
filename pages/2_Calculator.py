@@ -288,7 +288,7 @@ if st.session_state.selected_country != "-- Select --":
 
             if plot_data_list:
                 df_comparison = pd.DataFrame(plot_data_list)
-                color_map = {'You': '#1a9850', 'Average': '#a6cee3'}
+                color_map = {'You': '#f0f2f6', 'Average': '#a6cee3'}
                 try:
                     fig_comp = px.bar(
                         df_comparison.sort_values("Emissions", ascending=True),
