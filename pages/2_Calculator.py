@@ -50,19 +50,6 @@ st.markdown(r"""
     unsafe_allow_html=True
 )
 
-st.markdown("""
-    <style>
-        .stButton>button {
-            background-color: #4CAF50;  /* Green background */
-            color: white;  /* White text */
-            font-size: 16px;
-            border-radius: 10px;  /* Rounded corners */
-        }
-        .stButton>button:hover {
-            background-color: #45a049;  /* Darker green on hover */
-        }
-    </style>
-""", unsafe_allow_html=True)
 
 # Now you can use the button
 if st.button("Calculate My Carbon Footprint"):
