@@ -89,6 +89,8 @@ At **GreenPrint**, we believe that our planet is finite, and sustainability is c
 - ⚔️ Conflict
 - 🌍 Ecological damage
 
+<be>
+
 The higher your carbon footprint, the more you contribute to these issues. By understanding your emissions, you can:
 
 - 🌍 **Reduce your environmental impact**
@@ -109,7 +111,7 @@ The higher your carbon footprint, the more you contribute to these issues. By un
 
 ### 🌿 Ready to make a difference?
 
-Click **Next →** to start creating your profile.
+Let's get started! Click Next → to begin creating your profile and take the first step in reducing your carbon footprint.
 """, unsafe_allow_html=True)
 
 # --- Simulated Redirect to Profile using query param ---
