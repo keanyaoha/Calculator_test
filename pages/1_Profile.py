@@ -35,7 +35,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # ✅ Fixed Email Validation
 def is_valid_email(email):
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
@@ -70,6 +69,7 @@ if submitted:
     else:
         st.success(f"Thank you, {name}! Your profile has been saved.")
 
+        # Save user profile in session state
         st.session_state["user_profile"] = {
             "name": name,
             "age": age,
@@ -78,7 +78,10 @@ if submitted:
             "consent": consent
         }
 
-        # ✅ Trigger "redirect" on next render
+        # Mark profile as completed
+        st.session_state.profile_completed = True
+
+        # Trigger "redirect" to calculator page
         st.session_state["go_to_calculator"] = True
         st.rerun()
 
@@ -86,18 +89,12 @@ if submitted:
 if st.session_state.get("go_to_calculator"):
     st.session_state["go_to_calculator"] = False  # reset flag
 
-    st.markdown("✅ Profile saved. Redirecting to Calculator page...")
+    # You can display a success message here if needed
+    st.markdown("✅ Profile saved successfully. Redirecting to Calculator page...")
     st.markdown(
         """
-        <meta http-equiv="refresh" content="0; url=/Calculator">
+        <meta http-equiv="refresh" content="2; url=/Calculator">
         """,
         unsafe_allow_html=True
     )
 
-if st.button("Save Profile"):
-    # Set profile_completed to True after form submission
-    if name and age and country != "-- Select --":  # Make sure all fields are filled
-        st.session_state.profile_completed = True
-        st.success("Profile saved successfully! You can now proceed to the Calculator.")
-    else:
-        st.warning("Please fill in all the required fields.")
