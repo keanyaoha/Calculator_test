@@ -134,7 +134,6 @@ def format_activity_name(activity_key):
 st.title("🌍 Carbon Footprint Calculator")
 st.markdown("Estimate your monthly carbon footprint and compare it to country and global averages.")
 
-<br>
 
 # --- Country Selection ---
 st.markdown("**Select your country**")
