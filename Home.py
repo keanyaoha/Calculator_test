@@ -66,16 +66,16 @@ Whether you're just curious or committed to climate action, **GreenPrint** is he
 
 ### 🔍 What is a Carbon Footprint?
 
-Your **carbon footprint** is the total amount of **greenhouse gases** released into the air because of your daily life.
+Your **carbon footprint** is the total amount of **greenhouse gases** released into the air because of your everyday activities.
 
-Everyday things like:
+Common activities like:
 
 - 🏠 **Using energy at home** (heating, electricity)
 - 🚗 **Getting around** (cars, buses, flights)
 - 🍔 **What you eat** (especially meat and dairy)
 - 🛍️ **What you buy and throw away** (clothes, electronics, waste)
 
-It's measured in **kg of CO₂ equivalent (CO₂e)** — a standard way to show how much impact your actions have on climate change.
+Your footprint shows how much your actions contribute to climate change. By understanding your footprint, you can take steps to reduce it and make more sustainable choices!
 
 ---
 
