@@ -46,15 +46,6 @@ if "tab_index" not in st.session_state:
 st.title("Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
-# --- Progress Status ---
-status = [
-    ("👤 Profile", st.session_state.profile_completed),
-    ("🧮 Calculator", st.session_state.calculator_completed),
-    ("📊 Breakdown", st.session_state.profile_completed and st.session_state.calculator_completed)
-]
-with st.expander("✅ Progress Tracker", expanded=True):
-    for label, done in status:
-        st.markdown(f"- {'✅' if done else '⏳'} {label}")
 
 # --- Tabs Interface ---
 tab_labels = ["Profile", "Calculator", "Breakdown"]
