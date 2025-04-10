@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
-# --- Sidebar Logo Styling (Still in Sidebar) ---
-# Keep your sidebar styling as is, it applies to the sidebar container
+# --- Sidebar Logo Styling ---
 st.markdown(
     """
     <style>
@@ -18,7 +17,7 @@ st.markdown(
             background-repeat: no-repeat;
             background-position: center;
             height: 140px;
-            margin: 1.5rem auto -4rem auto; /* Adjust margins as needed */
+            margin: 1.5rem auto -4rem auto;
         }
         section[data-testid="stSidebar"] {
             background-color: #d6f5ec;
@@ -61,15 +60,23 @@ st.markdown(
 )
 
 # --- Initialize Session State Variables ---
+# General App State
 if "profile_completed" not in st.session_state:
     st.session_state.profile_completed = False
-if "emission_values" not in st.session_state:
-    st.session_state.emission_values = {}
+if "selected_country" not in st.session_state:
+    st.session_state.selected_country = "-- Select --"
 if "current_tab_index" not in st.session_state:
     st.session_state.current_tab_index = 0
-if "selected_country" not in st.session_state:
-    # Initialize with the placeholder to ensure it exists
-    st.session_state.selected_country = "-- Select --"
+
+# Input & Calculation State
+if "emission_values" not in st.session_state:
+    st.session_state.emission_values = {} # Stores raw inputs (key_input) and calculated emissions (key)
+if "calculation_done" not in st.session_state:
+    st.session_state.calculation_done = False # Track if calculation has been performed
+if "calculated_emission" not in st.session_state:
+    st.session_state.calculated_emission = None # Store the result
+if "comparison_plot_data" not in st.session_state:
+     st.session_state.comparison_plot_data = None # Store data needed for the plot
 
 
 # --- Load Emission Data ---
@@ -95,6 +102,7 @@ if df is None or df1 is None:
 available_countries = sorted([col for col in df.columns if col != "Activity"])
 
 # --- Format Activity Titles ---
+# (Keep your format_activity_name function as is)
 def format_activity_name(activity):
     mapping = {
         "Domestic_flight_traveled": "How many km of Domestic Flights taken last month",
@@ -127,33 +135,31 @@ def format_activity_name(activity):
 # --- App Title ---
 st.title("🌍 Carbon Footprint Calculator")
 st.markdown("Estimate your monthly carbon footprint and compare it to country and global averages.")
-st.divider() # Add a line after the title
+st.divider()
 
-# --- Country Selection (Moved to Main Page) ---
+# --- Country Selection ---
 country_options = ["-- Select --"] + available_countries
-# Use st.session_state.selected_country to keep the selection sticky across reruns
 selected_country = st.selectbox(
     "**Step 1: Select your country**",
     options=country_options,
-    index=country_options.index(st.session_state.selected_country), # Set index based on session state
-    key="country_selector_main" # Use a unique key
+    index=country_options.index(st.session_state.selected_country),
+    key="country_selector_main"
 )
 
 # --- Update Session State on Country Change ---
-# Important: Check if the *widget's current value* is different from the state
-# This prevents unnecessary state updates on reruns where the selection didn't change
 if selected_country != st.session_state.selected_country:
     st.session_state.selected_country = selected_country
-    # Reset tab index and potentially stored emission values when country changes?
-    # This might be desirable behavior, otherwise previous entries remain associated with a new country's factors
+    # Reset state when country changes
     st.session_state.current_tab_index = 0
-    st.session_state.emission_values = {} # Reset emissions if country changes
-    st.rerun() # Rerun immediately to reflect the change and potentially reset state
+    st.session_state.emission_values = {}
+    st.session_state.calculation_done = False # Reset calculation status
+    st.session_state.calculated_emission = None
+    st.session_state.comparison_plot_data = None
+    st.rerun()
 
-# --- Conditional Display of Tabs and Calculation ---
-# Only show the rest of the app if a valid country is selected
+# --- Main Content Area (Tabs and Calculation) ---
 if st.session_state.selected_country != "-- Select --":
-    country = st.session_state.selected_country # Use the confirmed selected country for calculations
+    country = st.session_state.selected_country
 
     st.markdown("**Step 2: Enter your monthly consumption details**")
 
@@ -172,42 +178,40 @@ if st.session_state.selected_country != "-- Select --":
     clicked_index = tab_labels.index(selected_tab_label)
     if clicked_index != st.session_state.current_tab_index:
         st.session_state.current_tab_index = clicked_index
-        st.rerun() # Rerun needed to show the correct content for the clicked tab
+        # Don't rerun here automatically, let the structure below handle content display
+        # We might only need rerun on explicit button clicks
+        # st.rerun() # Removed potential double rerun
 
     # --- Display Content Based on Selected "Tab" ---
-    # Helper function (ensure it uses the correct 'country' variable from session state)
+    # (Keep your display_activity_inputs function as is)
     def display_activity_inputs(activities, category_key, current_country):
         for activity in activities:
             label = format_activity_name(activity)
-            input_key = f"{category_key}_{activity}" # Unique key per input
-            # Retrieve previous input *value* if exists in state, otherwise default to 0.0
+            input_key = f"{category_key}_{activity}"
             default_value = st.session_state.emission_values.get(f"{input_key}_input", 0.0)
-
             user_input = st.number_input(label, min_value=0.0, step=0.1, key=input_key, value=default_value)
-
-            # Store the raw input value back into session state
             st.session_state.emission_values[f"{input_key}_input"] = user_input
-
             try:
                 factor_series = df.loc[df["Activity"] == activity, current_country]
                 if not factor_series.empty:
                     factor = factor_series.iloc[0]
-                    # Store calculated emission value for this activity
-                    # Use the raw input value just retrieved/stored
-                    st.session_state.emission_values[activity] = user_input * factor
+                    if pd.isna(factor): # Handle potential NaN factors in the data
+                         st.warning(f"Missing emission factor for '{activity}' in {current_country}. Assuming 0 emission.")
+                         st.session_state.emission_values[activity] = 0
+                    else:
+                         st.session_state.emission_values[activity] = user_input * float(factor) # Ensure factor is float
                 else:
-                    st.warning(f"Emission factor not found for '{activity}' in {current_country}. Skipping calculation for this item.")
+                    st.warning(f"Emission factor row not found for '{activity}' in {current_country}. Assuming 0 emission.")
                     st.session_state.emission_values[activity] = 0
             except Exception as e:
                 st.error(f"Error processing factor for activity '{activity}' in {current_country}: {e}")
                 st.session_state.emission_values[activity] = 0
 
-
-    # --- Display Input Sections and Navigation Buttons ---
+    # --- Display Input Sections and Navigation/Calculation Trigger ---
     current_index = st.session_state.current_tab_index
 
+    # --- Tab 1: Transport ---
     if current_index == 0:
-        # st.subheader("🚗 Transport") # Subheader might be redundant with tab selection
         transport_activities = [
             "Domestic_flight_traveled", "International_flight_traveled",
             "km_diesel_local_passenger_train_traveled", "km_diesel_long_distance_passenger_train_traveled",
@@ -216,14 +220,14 @@ if st.session_state.selected_country != "-- Select --":
             "km_Motorcycle_traveled", "km_ev_scooter_traveled", "km_ev_car_traveled"
         ]
         display_activity_inputs(transport_activities, "transport", country)
-        col1, col2 = st.columns([3, 1]) # Give more space to potential content on left
+        col1, col2 = st.columns([3, 1])
         with col2:
             if st.button("Next →", key="next_transport", use_container_width=True):
                 st.session_state.current_tab_index = 1
                 st.rerun()
 
+    # --- Tab 2: Food ---
     elif current_index == 1:
-        # st.subheader("🍔 Food")
         food_activities = [
             "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
             "fish_products_consumed", "other_meat_products_consumed", "dairy_products_consumed",
@@ -241,8 +245,8 @@ if st.session_state.selected_country != "-- Select --":
                 st.session_state.current_tab_index = 2
                 st.rerun()
 
+    # --- Tab 3: Energy & Water ---
     elif current_index == 2:
-        # st.subheader("💡 Energy & 💧 Water")
         energy_water_activities = ["electricity_used", "water_consumed"]
         display_activity_inputs(energy_water_activities, "energy", country)
         col1, col2 = st.columns(2)
@@ -255,78 +259,125 @@ if st.session_state.selected_country != "-- Select --":
                 st.session_state.current_tab_index = 3
                 st.rerun()
 
+    # --- Tab 4: Hotel (with Calculation Trigger) ---
     elif current_index == 3:
-        # st.subheader("🏨 Hotel")
         hotel_activities = ["hotel_stay"]
         display_activity_inputs(hotel_activities, "hotel", country)
-        col1, col2 = st.columns([1, 3]) # Adjust column ratios
+
+        col1, col2 = st.columns([1, 3]) # Give previous button less space
         with col1:
             if st.button("← Previous", key="prev_hotel", use_container_width=True):
                 st.session_state.current_tab_index = 2
                 st.rerun()
-        # No "Next" button on the last tab
 
-    # --- Calculation and Results Section ---
-    st.divider() # Add a visual separator
+        # --- Calculation Trigger Section (ONLY IN TAB 4) ---
+        st.divider() # Add a visual separator before calculation trigger
+        st.markdown("**Step 3: Calculate your footprint**")
+        reviewed_all = st.checkbox("I have reviewed/entered my data for all categories.", key="review_check")
 
-    st.markdown("**Step 3: Calculate your footprint**")
+        if reviewed_all:
+            if st.button("Calculate My Carbon Footprint", type="primary", use_container_width=True, key="calculate_button"):
+                # Perform Calculation
+                emission_values_to_sum = {
+                    k: v for k, v in st.session_state.emission_values.items()
+                    if not k.endswith('_input') and isinstance(v, (int, float))
+                }
 
-    reviewed_all = st.checkbox("I have reviewed/entered my data for all categories.")
+                if not emission_values_to_sum:
+                     st.warning("No emission data calculated. Please enter some values in the categories above.")
+                     st.session_state.calculation_done = False # Ensure status is false if nothing to calculate
+                else:
+                    total_emission = sum(emission_values_to_sum.values())
+                    st.session_state.calculated_emission = total_emission # Store result
 
-    if reviewed_all:
-        if st.button("Calculate My Carbon Footprint", type="primary", use_container_width=True):
-            emission_values_to_sum = {k: v for k, v in st.session_state.emission_values.items() if not k.endswith('_input') and isinstance(v, (int, float))} # Ensure values are numeric
+                    # Prepare comparison data
+                    def get_avg(name, df_avg):
+                        match = df_avg.loc[df_avg["Country"] == name, "PerCapitaCO2"]
+                        return match.iloc[0] if not match.empty else None
 
-            if not emission_values_to_sum:
-                 st.warning("No emission data calculated. Please enter some values in the categories above.")
-            else:
-                total_emission = sum(emission_values_to_sum.values())
-                st.subheader(f"📊 Your Estimated Monthly Carbon Footprint:")
-                st.metric(label="kg CO₂ equivalent", value=f"{total_emission:.1f}")
+                    country_avg = get_avg(country, df1)
+                    eu_avg = get_avg("European Union (27)", df1)
+                    world_avg = get_avg("World", df1)
 
-                # Using 21.77 kg CO2 absorption per tree per year (Source: European Environment Agency)
-                # Monthly absorption per tree = 21.77 / 12 = 1.814 kg CO2/month/tree
-                trees_monthly_equiv = total_emission / (21.77 / 12)
-                st.markdown(f"This is roughly equivalent to the amount of CO₂ absorbed by **{trees_monthly_equiv:.1f} mature trees** in a month.")
+                    comparison_data = {
+                         "country": {"name": country, "avg": country_avg, "color": '#4682B4'},
+                         "eu": {"name": "EU Average", "avg": eu_avg, "color": '#ADD8E6'},
+                         "world": {"name": "World Average", "avg": world_avg, "color": '#D3D3D3'}
+                    }
+                    st.session_state.comparison_plot_data = comparison_data # Store comparison data for plotting
 
-                st.divider()
-                st.subheader("📈 Comparison with Averages")
+                    st.session_state.calculation_done = True # Set flag that calculation is done
+                    st.rerun() # Rerun to display results below tabs
 
-                def get_avg(name, df_avg):
-                    match = df_avg.loc[df_avg["Country"] == name, "PerCapitaCO2"]
-                    return match.iloc[0] if not match.empty else None
+        else:
+            # Show info only if the checkbox isn't ticked *on this tab*
+            st.info("Please review your inputs in all categories and check the box above to enable calculation.")
 
-                country_avg = get_avg(country, df1)
-                eu_avg = get_avg("European Union (27)", df1)
-                world_avg = get_avg("World", df1)
 
+    # --- Display Results Area (Below Tabs, only if calculation is done) ---
+    if st.session_state.get('calculation_done', False):
+        st.divider()
+        st.subheader(f"📊 Your Estimated Monthly Carbon Footprint:")
+
+        total_emission = st.session_state.calculated_emission
+        if total_emission is not None: # Check if emission value exists
+            st.metric(label="kg CO₂ equivalent", value=f"{total_emission:.1f}")
+
+            trees_monthly_equiv = total_emission / (21.77 / 12)
+            st.markdown(f"This is roughly equivalent to the amount of CO₂ absorbed by **{trees_monthly_equiv:.1f} mature trees** in a month.")
+
+            st.divider()
+            st.subheader("📈 Comparison with Averages")
+
+            # Retrieve comparison data from session state
+            comparison_data = st.session_state.comparison_plot_data
+            if comparison_data:
                 plot_labels = ["You"]
                 plot_values = [total_emission]
                 plot_colors = ['#4CAF50']
+                captions = [] # To collect notes about missing data
 
-                comparison_data = {}
-                if country_avg is not None: comparison_data[country] = (country_avg, '#4682B4')
-                else: st.caption(f"Note: Monthly average data for {country} not available for comparison.")
+                # Add country data if available
+                c_data = comparison_data["country"]
+                if c_data["avg"] is not None:
+                    plot_labels.append(c_data["name"])
+                    plot_values.append(c_data["avg"])
+                    plot_colors.append(c_data["color"])
+                else:
+                    captions.append(f"Note: Monthly average data for {c_data['name']} not available.")
 
-                if eu_avg is not None: comparison_data["EU Average"] = (eu_avg, '#ADD8E6')
-                else: st.caption("Note: Monthly average data for EU not available for comparison.")
+                # Add EU data if available
+                eu_data = comparison_data["eu"]
+                if eu_data["avg"] is not None:
+                    plot_labels.append(eu_data["name"])
+                    plot_values.append(eu_data["avg"])
+                    plot_colors.append(eu_data["color"])
+                else:
+                     captions.append("Note: Monthly average data for EU not available.")
 
-                if world_avg is not None: comparison_data["World Average"] = (world_avg, '#D3D3D3')
-                else: st.caption("Note: Monthly average data for World not available for comparison.")
+                # Add World data if available
+                world_data = comparison_data["world"]
+                if world_data["avg"] is not None:
+                    plot_labels.append(world_data["name"])
+                    plot_values.append(world_data["avg"])
+                    plot_colors.append(world_data["color"])
+                else:
+                    captions.append("Note: Monthly average data for World not available.")
 
-                # Add comparison data if available
-                for label, (value, color) in comparison_data.items():
-                    plot_labels.append(label)
-                    plot_values.append(value)
-                    plot_colors.append(color)
+                # Display collected captions
+                for caption in captions:
+                    st.caption(caption)
 
+                # Plot only if there's comparison data
                 if len(plot_values) > 1:
                     fig, ax = plt.subplots(figsize=(8, max(3, len(plot_labels) * 0.6)))
                     bars = ax.barh(plot_labels, plot_values, color=plot_colors)
-                    ax.set_xlim(0, max(plot_values) * 1.15)
+                    # Adjust xlim dynamically based on max value
+                    max_val = max(plot_values) if plot_values else 1 # Avoid error if list is empty
+                    ax.set_xlim(0, max_val * 1.15)
 
                     for bar in bars:
-                        ax.text(bar.get_width() + (max(plot_values) * 0.01),
+                        ax.text(bar.get_width() + (max_val * 0.01), # Offset based on max value
                                 bar.get_y() + bar.get_height()/2,
                                 f"{bar.get_width():.1f}",
                                 va='center', ha='left', fontsize=9)
@@ -338,10 +389,13 @@ if st.session_state.selected_country != "-- Select --":
 
                     st.markdown("<div style='text-align: center; color: gray; font-size: small;'>Comparison of your estimated monthly carbon footprint with available national and global averages.</div>", unsafe_allow_html=True)
                 else:
+                    # This case might happen if only "You" is plotted and no averages were found
                     st.info("Could not retrieve average data for comparison.")
+            else:
+                 st.warning("Comparison data not found in session state.")
+        else:
+            st.warning("Calculated emission value not found in session state.")
 
-    else:
-        st.info("Please review your inputs in all categories and check the box above to enable calculation.")
 
 # --- Show prompt if no country is selected ---
 elif not st.session_state.selected_country or st.session_state.selected_country == "-- Select --":
@@ -350,4 +404,4 @@ elif not st.session_state.selected_country or st.session_state.selected_country 
 # --- Optional: Add Footer or Info in Sidebar ---
 st.sidebar.markdown("---")
 st.sidebar.info("Tip: Fill in your typical monthly consumption.")
-st.sidebar.markdown("*(Data Sources: Emission factors adapted from public datasets, Per capita averages aggregated)*") # Example source note
+st.sidebar.markdown("*(Data Sources: Emission factors adapted from public datasets, Per capita averages aggregated)*")
