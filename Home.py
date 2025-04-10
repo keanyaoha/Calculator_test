@@ -47,7 +47,13 @@ With just a few quick questions about how you **live, travel, eat**, and **consu
 ✅ **A personalized estimate** of your yearly carbon emissions  
 📊 **A clear breakdown** of which habits contribute the most  
 🌍 **Comparisons** with your country, Europe, and global averages  
-🌱 **Practical tips** to reduce your footprint and live more sustainably  
+🌱 **Practical tips** to reduce your footprint and live more sustainably.  
+
+<be>
+
+You can also
+📄 **Download a PDF report** containing your calculation and personalized recommendations  
+🤖 **GreenPrint AI** to help answer your questions about your carbon footprint and offer real-time advice.
 
 <br>
 
