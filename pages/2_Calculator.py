@@ -159,10 +159,10 @@ reviewed_all = st.checkbox("I have reviewed all the questions above.")
 
 # --- Calculate Emissions Button ---
 if reviewed_all:
-    if st.button("📊 Calculate My Carbon Footprint"):
+    if st.button("Calculate My Carbon Footprint"):
         emission_values = st.session_state.emission_values
         total_emission = sum(emission_values.values())
-        st.subheader(f"🌱 Your Carbon Footprint: **{total_emission:.1f} kg CO₂**")
+        st.subheader(f"Your Carbon Footprint: **{total_emission:.1f} kg CO₂**")
 
         trees_cut = total_emission / 21.77
         st.markdown(f"🌳 Equivalent to cutting down ~**{trees_cut:.0f} trees**!")
