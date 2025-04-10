@@ -47,11 +47,6 @@ st.title("Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
 
-# --- Tabs Interface ---
-tab_labels = ["Profile", "Calculator", "Breakdown"]
-tabs = st.tabs(tab_labels)
-tab = tabs[st.session_state.tab_index]
-
 # --- Tab Content ---
 with tab:
     if st.session_state.tab_index == 0:  # Profile
