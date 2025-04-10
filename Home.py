@@ -109,12 +109,12 @@ The higher your carbon footprint, the more you contribute to these issues. By un
 
 ### 🌿 Ready to make a difference?
 
-Click **Next →** to start your profile.
+Click **Next →** to start creating your profile.
 """, unsafe_allow_html=True)
 
 # --- Simulated Redirect to Profile using query param ---
 col1, col2, col3 = st.columns([1, 6, 1])
 with col2:
-    if st.button("Next →", use_container_width=True):
+    if st.button("Next →", use_container_width=False):
         st.experimental_set_query_params(page="Profile")
         st.markdown('<meta http-equiv="refresh" content="0;url=./Profile">', unsafe_allow_html=True)
