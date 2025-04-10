@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.switch_page_button import switch_page  # Make sure streamlit-extras is installed
 
 # --- App Config ---
 st.set_page_config(
@@ -34,87 +35,54 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Track session state ---
-if "profile_completed" not in st.session_state:
-    st.session_state.profile_completed = False
-if "calculator_completed" not in st.session_state:
-    st.session_state.calculator_completed = False
-if "tab_index" not in st.session_state:
-    st.session_state.tab_index = 0
-
 # --- Page Title ---
 st.title("Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
-# --- Step-by-step Info Screens ---
-if st.session_state.tab_index == 0:  # Intro
-    st.markdown("""
-    **GreenPrint** is an interactive tool designed to help you measure your **carbon footprint** — the total amount of greenhouse gases, primarily carbon dioxide, that your lifestyle and choices emit into the atmosphere.
+# --- Introduction Content ---
+st.markdown("""
+**GreenPrint** is an interactive tool designed to help you measure your **carbon footprint** — the total amount of greenhouse gases, primarily carbon dioxide, that your lifestyle and choices emit into the atmosphere.
 
-    ---
+---
 
-    ### 🧠 What is a Carbon Footprint?
+### 🧠 What is a Carbon Footprint?
 
-    A **carbon footprint** includes emissions from:
-    - 🏠 Household energy use (heating, electricity)
-    - 🚗 Transportation (car, flights, public transport)
-    - 🍔 Food and consumption habits
-    - 🛒 Shopping, waste, and more
+A **carbon footprint** includes emissions from:
+- 🏠 Household energy use (heating, electricity)
+- 🚗 Transportation (car, flights, public transport)
+- 🍔 Food and consumption habits
+- 🛒 Shopping, waste, and more
 
-    It's measured in **kg of CO₂ equivalent (CO₂e)**.
+It's measured in **kg of CO₂ equivalent (CO₂e)**.
 
-    ---
+---
 
-    ### 🚨 Why It Matters
+### 🚨 Why It Matters
 
-    The higher our carbon footprint, the more we contribute to climate change. By understanding your own emissions, you can:
+The higher our carbon footprint, the more we contribute to climate change. By understanding your own emissions, you can:
 
-    - Reduce your environmental impact  
-    - Save money through efficient choices  
-    - Join the global effort to combat the climate crisis  
+- Reduce your environmental impact  
+- Save money through efficient choices  
+- Join the global effort to combat the climate crisis  
 
-    ---
+---
 
-    ### 🛠️ How This App Works
+### 🛠️ How This App Works
 
-    1. Go to the **Profile** page and create your profile, which brings you directly to the **Calculator** and enter details about your daily habits.  
-    2. Get an estimate of your **annual carbon footprint**.  
-    3. Compare your score to **national and global averages**.  
-    4. See personalized suggestions on how to **reduce** it.
+1. Go to the **Profile** page and create your profile, which brings you directly to the **Calculator** and enter details about your daily habits.  
+2. Get an estimate of your **annual carbon footprint**.  
+3. Compare your score to **national and global averages**.  
+4. See personalized suggestions on how to **reduce** it.
 
-    ---
+---
 
-    ### 🌿 Ready to make a difference?
+### 🌿 Ready to make a difference?
 
-    Click **Next →** to start your profile.
-    """)
+Click **Next →** to start your profile.
+""")
 
-elif st.session_state.tab_index == 1:  # Profile
-    if not st.session_state.profile_completed:
-        st.warning("🚫 Please complete your profile first using the sidebar.")
-    else:
-        st.success("✅ Profile completed.")
-        st.markdown("You may now proceed to the **Calculator** using the sidebar or continue to the next step.")
-
-elif st.session_state.tab_index == 2:  # Calculator
-    if not st.session_state.calculator_completed:
-        st.warning("🚫 Please complete the calculator first.")
-    else:
-        st.success("✅ Calculation completed. You can now check your emission breakdown.")
-
-# --- Navigation Buttons ---
+# --- Navigation Button to Profile ---
 col1, col2, col3 = st.columns([1, 6, 1])
 with col2:
-    col_prev, col_next = st.columns(2)
-
-    with col_prev:
-        if st.session_state.tab_index > 0:
-            if st.button("← Previous", use_container_width=True):
-                st.session_state.tab_index -= 1
-                st.rerun()
-
-    with col_next:
-        if st.session_state.tab_index < 2:
-            if st.button("Next →", use_container_width=True):
-                st.session_state.tab_index += 1
-                st.rerun()
+    if st.button("Next →", use_container_width=True):
+        switch_page("Profile")
