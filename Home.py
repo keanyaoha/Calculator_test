@@ -39,18 +39,19 @@ st.subheader("Your Personal Carbon Footprint Tracker")
 # --- Intro Content ---
 st.markdown("""
  
-**GreenPrint** is your interactive guide to understanding and reducing your environmental impact.
-We help you calculate your carbon footprint With just a few questions about how you live, travel, eat, and consume resources, you'll receive:
+**GreenPrint** is your interactive guide to understanding and reducing your environmental impact.  
+With just a few quick questions about how you **live, travel, eat**, and **consume resources**, you'll get:
 
-A personalized estimate of your yearly emissions
+---
 
-A breakdown of which habits contribute the most
+✅ **A personalized estimate** of your yearly carbon emissions  
+📊 **A clear breakdown** of which habits contribute the most  
+🌍 **Comparisons** with your country, Europe, and global averages  
+🌱 **Practical tips** to reduce your footprint and live more sustainably  
 
-Comparisons with your country, Europe, and global averages
+---
 
-Actionable tips to reduce your footprint and live more sustainably
-
-Whether you're just curious or committed to climate action, GreenPrint is here to support your journey 🌍💪
+Whether you're just curious or committed to climate action, **GreenPrint** is here to support your journey 💪
 
 ---
 
