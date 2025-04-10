@@ -183,9 +183,9 @@ if country != def_country:
         with col_prev:
             if st.button("\u2190 Previous", disabled=prev_disabled, use_container_width=True):
                 st.session_state.tab_index -= 1
-                st.experimental_rerun()
+                st.rerun()
 
         with col_next:
             if st.button("Next \u2192", disabled=next_disabled, use_container_width=True):
                 st.session_state.tab_index += 1
-                st.experimental_rerun()
+                st.rerun()
