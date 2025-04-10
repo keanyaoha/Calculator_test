@@ -46,12 +46,14 @@ st.markdown("""
 
 Your **carbon footprint** is the total amount of **greenhouse gases** released into the air because of your everyday activities, such as:
 
-- 🏠 Household energy use (like heating and electricity)  
-- 🚗 Transportation (cars, buses, flights)  
-- 🍔 Food and consumption habits (especially meat and dairy)  
-- 🛒 Shopping, packaging waste, and more  
+- 🏠 Household energy use (like heating and electricity)
+- 🚗 Transportation (cars, buses, flights)
+- 🍔 Food and consumption habits (especially meat and dairy)
+- 🛍️ Shopping, packaging waste, and more
 
 It's measured in **kg of CO₂ equivalent (CO₂e)** — a standard way to show how much impact your actions have on climate change.
+
+
 ---
 
 ### 🚨 Why It Matters
