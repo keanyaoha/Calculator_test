@@ -49,7 +49,7 @@ With just a few quick questions about how you **live, travel, eat**, and **consu
 🌍 **Comparisons** with your country, Europe, and global averages  
 🌞 **Practical tips** to reduce your footprint and live more sustainably.  
 
-<be>
+<be><be>
 
 You can also
 
