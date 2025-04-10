@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -12,27 +12,22 @@ import traceback
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
-# --- Sidebar Logo Styling ---
+# --- Sidebar Logo & Button Styling ---
 # Using a raw string for safety
 st.markdown(r"""
     <style>
+        /* --- Sidebar Logo --- */
         [data-testid="stSidebar"]::before {
-            content: "";
-            display: block;
+            content: ""; display: block;
             background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
-            background-size: 90% auto;
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 140px;
+            background-size: 90% auto; background-repeat: no-repeat;
+            background-position: center; height: 140px;
             margin: 1.5rem auto -4rem auto;
         }
-        section[data-testid="stSidebar"] {
-            background-color: #d6f5ec;
-        }
-        .stApp {
-            background-color: white;
-        }
-        /* Style radio buttons to look more like tabs */
+        section[data-testid="stSidebar"] { background-color: #d6f5ec; }
+        .stApp { background-color: white; }
+
+        /* --- Tab-like Radio Buttons --- */
         div[role="radiogroup"] > label > div:first-child { display: none; }
         div[role="radiogroup"] > label {
             margin: 0 !important; padding: 0.5rem 1rem; border: 1px solid #ddd;
@@ -45,15 +40,29 @@ st.markdown(r"""
              font-weight: bold; color: #007bff;
         }
          div.stRadio > div { border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
+
+        /* --- Primary Calculate Button Styling --- */
+        div[data-testid="stButton"] button[kind="primary"] {
+            background-color: #1a9850; /* Logo Green */
+            color: white;              /* White text for contrast */
+            border: none;              /* Remove default border */
+            padding: 0.5rem 1rem;      /* Adjust padding */
+            border-radius: 0.25rem;    /* Standard radius */
+        }
+        div[data-testid="stButton"] button[kind="primary"]:hover {
+            background-color: #147a40; /* Darker green on hover */
+            color: white;
+            border: none;
+        }
+        div[data-testid="stButton"] button[kind="primary"]:focus:not(:active) {
+             border: none;
+             box-shadow: 0 0 0 0.2rem rgba(26, 152, 80, 0.5); /* Green focus outline */
+        }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-
-# Now you can use the button
-if st.button("Calculate My Carbon Footprint"):
-    st.write("Button was clicked!")
 
 # --- Initialize Session State Variables ---
 def init_session_state():
@@ -181,8 +190,7 @@ if st.session_state.selected_country != "-- Select --":
                 else:
                     st.session_state.emission_values[activity] = 0.0
             except Exception as e:
-                # Keep error reporting minimal unless debugging
-                # st.error(f"Calc error for {label}: {e}")
+                # st.error(f"Calc error for {label}: {e}") # Keep commented unless debugging
                 st.session_state.emission_values[activity] = 0.0
 
     # Define Activity Lists
@@ -193,11 +201,13 @@ if st.session_state.selected_country != "-- Select --":
 
     # Display Tabs
     current_index = st.session_state.current_tab_index
-    if current_index == 0:
+    if current_index == 0: # Transport
         display_activity_inputs(transport_activities, "transport", country)
-        if st.button("Next →", key="next_transport", use_container_width=True):
-            st.session_state.current_tab_index = 1; st.rerun()
-    elif current_index == 1:
+        col1, col2 = st.columns([3,1]) # Place button to the right
+        with col2:
+            if st.button("Next →", key="next_transport", use_container_width=True):
+                st.session_state.current_tab_index = 1; st.rerun()
+    elif current_index == 1: # Food
         display_activity_inputs(food_activities, "food", country)
         col1, col2 = st.columns(2)
         with col1:
@@ -206,7 +216,7 @@ if st.session_state.selected_country != "-- Select --":
         with col2:
             if st.button("Next →", key="next_food", use_container_width=True):
                 st.session_state.current_tab_index = 2; st.rerun()
-    elif current_index == 2:
+    elif current_index == 2: # Energy & Water
         display_activity_inputs(energy_water_activities, "energy", country)
         col1, col2 = st.columns(2)
         with col1:
@@ -215,16 +225,19 @@ if st.session_state.selected_country != "-- Select --":
         with col2:
             if st.button("Next →", key="next_energy", use_container_width=True):
                 st.session_state.current_tab_index = 3; st.rerun()
-    elif current_index == 3:
+    elif current_index == 3: # Hotel
         display_activity_inputs(hotel_activities, "hotel", country)
-        if st.button("← Previous", key="prev_hotel", use_container_width=True):
-            st.session_state.current_tab_index = 2; st.rerun()
+        col1, col2 = st.columns([1,3]) # Place button to the left
+        with col1:
+            if st.button("← Previous", key="prev_hotel", use_container_width=True):
+                st.session_state.current_tab_index = 2; st.rerun()
 
         # Calculation Trigger
         st.divider()
         st.markdown("**Step 3: Calculate your footprint**")
         reviewed_all = st.checkbox("I have reviewed/entered my data for all categories.", key="review_final_check")
         if reviewed_all:
+             # The button below will be styled by the CSS added earlier
             if st.button("Calculate My Carbon Footprint", type="primary", use_container_width=True, key="calculate_final_button"):
                 emission_values_to_sum = {k: v for k, v in st.session_state.emission_values.items() if not k.endswith('_input') and isinstance(v, (int, float)) and v > 0}
                 if not emission_values_to_sum:
@@ -282,14 +295,26 @@ if st.session_state.selected_country != "-- Select --":
                         title="Monthly Carbon Footprint Comparison",
                         labels={'Emissions': 'kg CO₂ per month', 'Source': '', 'Type': 'Category'}
                     )
-                    # Simplified styling - COMMENTED OUT advanced styling
+                    # Apply the beautified styling
                     fig_comp.update_traces(
-                         texttemplate='%{text:.1f}', textposition='outside',
-                         hovertemplate="<b>%{y}</b>: %{x:.1f} kg CO₂<extra></extra>"
+                        texttemplate='%{text:.1f}',
+                        textposition='outside',
+                        marker_line_width=1,
+                        marker_line_color='rgba(0,0,0,0.3)',
+                        hovertemplate="<b>%{y}</b><br>Emission: %{x:.1f} kg CO₂<extra></extra>"
                     )
                     fig_comp.update_layout(
-                         yaxis={'categoryorder':'total ascending'},
-                         margin=dict(l=5, r=5, t=50, b=20), showlegend=False
+                        font_family="sans-serif",
+                        title_font_size=18,
+                        yaxis={'categoryorder':'total ascending'},
+                        xaxis_title_font_size=12,
+                        yaxis_title_font_size=12,
+                        xaxis=dict(showgrid=True, gridcolor='rgba(0,0,0,0.1)'),
+                        yaxis=dict(showgrid=False),
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        margin=dict(l=5, r=5, t=50, b=20),
+                        showlegend=False
                     )
                     st.plotly_chart(fig_comp, use_container_width=True)
                     st.markdown("<div style='text-align: center; color: gray; font-size: small;'>Comparison with averages.</div>", unsafe_allow_html=True)
@@ -301,5 +326,4 @@ if st.session_state.selected_country != "-- Select --":
 
 elif not st.session_state.selected_country or st.session_state.selected_country == "-- Select --":
     st.info("Please select your country in Step 1 to begin.")
-
 
