@@ -76,13 +76,13 @@ if country == "-- Select --":
 if "emission_values" not in st.session_state:
     st.session_state.emission_values = {}
 
-# --- Categorize questions into tabs ---
-tabs = ["Food", "Mobility", "Energy & Water", "Other"]
+# --- Create Tabs for categorization ---
+tabs = ["Food", "Mobility", "Energy", "Water"]
 selected_tab = st.radio("Select Category", tabs)
 
 if selected_tab == "Food":
     # Questions related to food
-    food_activities = ["water_consumed", "hotel_stay"]  # Example food-related activities
+    food_activities = ["hotel_stay", "water_consumed"]
     for activity in food_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
@@ -103,19 +103,19 @@ elif selected_tab == "Mobility":
         factor = df.loc[df["Activity"] == activity, country].values[0]
         st.session_state.emission_values[activity] = user_input * factor
 
-elif selected_tab == "Energy & Water":
-    # Questions related to energy and water
-    energy_water_activities = ["electricity_used", "water_consumed"]
-    for activity in energy_water_activities:
+elif selected_tab == "Energy":
+    # Questions related to energy
+    energy_activities = ["electricity_used"]
+    for activity in energy_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
         factor = df.loc[df["Activity"] == activity, country].values[0]
         st.session_state.emission_values[activity] = user_input * factor
 
-elif selected_tab == "Other":
-    # Questions related to other categories
-    other_activities = ["hotel_stay"]
-    for activity in other_activities:
+elif selected_tab == "Water":
+    # Questions related to water usage
+    water_activities = ["water_consumed"]
+    for activity in water_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
         factor = df.loc[df["Activity"] == activity, country].values[0]
