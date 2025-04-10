@@ -30,11 +30,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Check if Profile is Completed ---
-if "profile_completed" not in st.session_state or not st.session_state.profile_completed:
-    st.warning("🚫 Please complete your profile first before using the Calculator.")
-    st.markdown("You can go back to the **Profile** page and fill in your details.")
-    st.stop()  # Prevent the calculator page from loading if profile is not completed
 
 # --- Load Emission Data ---
 CSV_URL = "https://drive.google.com/uc?export=download&id=1PWeBZKB6adZKORvtMDLFwCX__gfzH33g"
