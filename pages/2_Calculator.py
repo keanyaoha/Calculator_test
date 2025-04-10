@@ -164,7 +164,7 @@ if st.session_state.selected_country != "-- Select --":
     country = st.session_state.selected_country
     st.markdown("**Step 2: Enter your monthly consumption details**")
 
-    tab_labels = ["Transport", "Food", "Energy & Water", "Hotel"]
+    tab_labels = ["🚗 Transport", "🍽️ Food", " ⚡💧 Energy & Water", "🏨 Hotel"]
     selected_tab_label = st.radio(
         "Select Category:", tab_labels, index=st.session_state.current_tab_index,
         key="tab_selector", horizontal=True, label_visibility="collapsed"
