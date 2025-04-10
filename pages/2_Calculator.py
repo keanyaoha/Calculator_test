@@ -333,42 +333,27 @@ if st.session_state.selected_country != "-- Select --":
                         labels={'Emissions': 'kg CO₂ per month', 'Source': '', 'Type': 'Category'}
                     )
 
-                    # Add target line
-                    fig_comp.add_vline(
-                        x=sustainable_target,
-                        line_width=2,
-                        line_dash="dash",
-                        line_color="grey",
-                        annotation_text=f"~{sustainable_target} kg: Long-term Target*",
-                        annotation_position="top right",
-                        annotation_font_size=10,
-                        annotation_font_color="grey"
-                    )
 
                     # Update traces (styling for bars and hover)
                     fig_comp.update_traces(
                          texttemplate='%{text:.1f}', textposition='outside',
-                         hovertemplate="<b>%{y}</b><br>Emission: %{x:.1f} kg CO₂<extra></extra>"
-                         # Removed fixed width from here
-                    )
+                         hovertemplate="<b>%{y}</b><br>Emission: %{x:.1f} kg CO₂<extra></extra>",
+                         width=200                    
+                         )
 
                     # Update layout (styling for overall chart)
                     fig_comp.update_layout(
                          yaxis={'categoryorder':'total ascending'}, # Order bars by value
-                         bargap=0.4, # Adjust gap between bars (controls thickness)
-                         # Removed fixed height and width - rely on use_container_width
+                         bargap=0.6, # Adjust gap between bars (controls thickness)
+                         height=300,
                          margin=dict(l=5, r=5, t=30, b=20), # Adjust top margin for title space
                          showlegend=False,
-                         title_text="Monthly Carbon Footprint Comparison", # Use layout title
-                         title_x=0.5, # Center title
-                         title_font_size=16
+                         # title_text="Monthly Carbon Footprint Comparison", # Use layout title
+                         # title_x=0.5, # Center title
+                         # title_font_size=16
                     )
 
                     st.plotly_chart(fig_comp, use_container_width=True)
-
-                    # Explanation for target line and conditional color
-                    st.markdown(f"<div style='font-size: small; text-align: center; color: gray;'>Your footprint color {color_reason}.</div>", unsafe_allow_html=True)
-                    st.caption(f"*Target (~{sustainable_target} kg CO₂e/month) reflects a global per capita average often cited as necessary by mid-century to align with the Paris Agreement 1.5°C goal (Source: UN Framework Convention on Climate Change / IPCC reports). Individual sustainable levels can vary.")
 
                 except Exception as plot_error:
                     st.error(f"Error generating plot: {plot_error}")
