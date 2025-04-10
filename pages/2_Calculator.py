@@ -76,12 +76,11 @@ if country == "-- Select --":
 if "emission_values" not in st.session_state:
     st.session_state.emission_values = {}
 
-# --- Create Tabs for categorization ---
-tabs = ["Food", "Mobility", "Energy", "Water"]
-selected_tab = st.radio("Select Category", tabs)
+# --- Use Streamlit Tabs for categorizing questions ---
+tab1, tab2, tab3, tab4 = st.tabs(["Food", "Mobility", "Energy", "Water"])
 
-if selected_tab == "Food":
-    # Questions related to food
+with tab1:
+    # Food-related activities
     food_activities = ["hotel_stay", "water_consumed"]
     for activity in food_activities:
         label = format_activity_name(activity)
@@ -89,8 +88,8 @@ if selected_tab == "Food":
         factor = df.loc[df["Activity"] == activity, country].values[0]
         st.session_state.emission_values[activity] = user_input * factor
 
-elif selected_tab == "Mobility":
-    # Questions related to mobility
+with tab2:
+    # Mobility-related activities
     mobility_activities = [
         "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled", 
         "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", 
@@ -103,8 +102,8 @@ elif selected_tab == "Mobility":
         factor = df.loc[df["Activity"] == activity, country].values[0]
         st.session_state.emission_values[activity] = user_input * factor
 
-elif selected_tab == "Energy":
-    # Questions related to energy
+with tab3:
+    # Energy-related activities
     energy_activities = ["electricity_used"]
     for activity in energy_activities:
         label = format_activity_name(activity)
@@ -112,8 +111,8 @@ elif selected_tab == "Energy":
         factor = df.loc[df["Activity"] == activity, country].values[0]
         st.session_state.emission_values[activity] = user_input * factor
 
-elif selected_tab == "Water":
-    # Questions related to water usage
+with tab4:
+    # Water-related activities
     water_activities = ["water_consumed"]
     for activity in water_activities:
         label = format_activity_name(activity)
