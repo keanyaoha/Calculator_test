@@ -204,29 +204,29 @@ if st.session_state.selected_country != "-- Select --":
     current_index = st.session_state.current_tab_index
     if current_index == 0:
         display_activity_inputs(transport_activities, "transport", country)
-        if st.button("Next →", key="next_transport", use_container_width=True):
+        if st.button("Next →", key="next_transport", use_container_width=False):
             st.session_state.current_tab_index = 1; st.rerun()
     elif current_index == 1:
         display_activity_inputs(food_activities, "food", country)
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("← Previous", key="prev_food", use_container_width=True):
+            if st.button("← Previous", key="prev_food", use_container_width=False):
                 st.session_state.current_tab_index = 0; st.rerun()
         with col2:
-            if st.button("Next →", key="next_food", use_container_width=True):
+            if st.button("Next →", key="next_food", use_container_width=False):
                 st.session_state.current_tab_index = 2; st.rerun()
     elif current_index == 2:
         display_activity_inputs(energy_water_activities, "energy", country)
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("← Previous", key="prev_energy", use_container_width=True):
+            if st.button("← Previous", key="prev_energy", use_container_width=False):
                 st.session_state.current_tab_index = 1; st.rerun()
         with col2:
-            if st.button("Next →", key="next_energy", use_container_width=True):
+            if st.button("Next →", key="next_energy", use_container_width=False):
                 st.session_state.current_tab_index = 3; st.rerun()
     elif current_index == 3:
         display_activity_inputs(hotel_activities, "hotel", country)
-        if st.button("← Previous", key="prev_hotel", use_container_width=True):
+        if st.button("← Previous", key="prev_hotel", use_container_width=False):
             st.session_state.current_tab_index = 2; st.rerun()
 
         # Calculation Trigger
