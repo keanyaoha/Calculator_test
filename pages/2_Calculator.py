@@ -106,6 +106,26 @@ with tab1:
     
     for activity in transport_activities:
         label = format_activity_name(activity)
+        user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"transport_{activity}")
+        try:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            st.session_state.emission_values[activity] = user_input * factor
+        except IndexError:
+            st.error(f"Error fetching data for activity: {activity} and country: {country}")
+
+    st.button("Next", key="next_transport")
+
+with tab2:
+    # Food-related activities
+    food_activities = [
+        "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+        "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", 
+        "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed", 
+        "other_food_products_consumed"
+    ]
+    
+    for activity in food_activities:
+        label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"food_{activity}")
         try:
             factor = df.loc[df["Activity"] == activity, country].values[0]
@@ -113,29 +133,13 @@ with tab1:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-with tab2:
-    # Food-related activities
-    food_activities = [
-        ""beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-                            "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", 
-                            "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed", 
-                            "other_food_products_consumed"
-    ]
-    
-    for activity in food_activities:
-        label = format_activity_name(activity)
-        user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"mobility_{activity}")
-        try:
-            factor = df.loc[df["Activity"] == activity, country].values[0]
-            st.session_state.emission_values[activity] = user_input * factor
-        except IndexError:
-            st.error(f"Error fetching data for activity: {activity} and country: {country}")
+    st.button("Next", key="next_food")
 
 with tab3:
     # Energy_Water-related activities
     energy_water_activities = ["electricity_used", "water_consumed"]
     
-    for activity in energy__water_activities:
+    for activity in energy_water_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"energy_{activity}")
         try:
@@ -144,17 +148,21 @@ with tab3:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
+    st.button("Next", key="next_energy")
+
 with tab4:
     # Hotel-related activities
     hotel_activities = ["hotel_stay"]
     for activity in hotel_activities:
         label = format_activity_name(activity)
-        user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"water_{activity}")
+        user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"hotel_{activity}")
         try:
             factor = df.loc[df["Activity"] == activity, country].values[0]
             st.session_state.emission_values[activity] = user_input * factor
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
+
+    st.button("Calculate My Carbon Footprint", key="calculate_button")
 
 # --- Checkbox to enable "Calculate My Carbon Footprint" button ---
 reviewed_all = st.checkbox("I have reviewed all the questions above.")
