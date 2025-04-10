@@ -21,7 +21,7 @@ def generate_pdf_report(category_data, top_activities_data):
     c.setFont("Helvetica", 11)
     y = height - 4 * cm
     for category, emission in category_data.items():
-        c.drawString(2.5 * cm, y, f"{category}: {emission:.2f} t CO₂")
+        c.drawString(2.5 * cm, y, f"{category}: {emission:.2f} kg CO₂")
         y -= 0.7 * cm
 
     c.setFont("Helvetica-Bold", 12)
@@ -30,7 +30,7 @@ def generate_pdf_report(category_data, top_activities_data):
     c.setFont("Helvetica", 11)
     y -= 1 * cm
     for activity, emission in top_activities_data.items():
-        c.drawString(2.5 * cm, y, f"{activity}: {emission:.2f} t CO₂")
+        c.drawString(2.5 * cm, y, f"{activity}: {emission:.2f} kg CO₂")
         y -= 0.6 * cm
         if y < 2 * cm:
             c.showPage()
@@ -44,6 +44,7 @@ def generate_pdf_report(category_data, top_activities_data):
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
+# --- Sidebar Logo ---
 st.markdown("""
     <style>
         [data-testid="stSidebar"]::before {
@@ -68,7 +69,7 @@ st.markdown("""
 st.title("📊 Emission Breakdown")
 st.write("Here is how your estimated carbon footprint breaks down by activity.")
 
-# --- Data from Calculator ---
+# --- Check for emission data ---
 if "emission_values" not in st.session_state or not st.session_state.emission_values:
     st.warning("No emission data found. Please fill in your activity data on the main page first.")
 else:
@@ -76,6 +77,7 @@ else:
     emissions_filtered = {k: v for k, v in emissions_dict.items() if v > 0}
 
     if emissions_filtered:
+        # --- Define categories ---
         categories = {
             "Travel": [
                 "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled",
@@ -93,63 +95,49 @@ else:
             "Other": ["hotel_stay"]
         }
 
-        prefixes = {
-            "Travel": "travel",
-            "Food": "food",
-            "Energy & Water": "energy",
-            "Other": "other"
+        # --- Compute totals ---
+        category_totals = {
+            cat: sum(emissions_filtered.get(a, 0) for a in acts)
+            for cat, acts in categories.items()
         }
 
-        # --- Compute totals ---
-        category_totals = {}
-        for cat, acts in categories.items():
-            prefix = prefixes[cat]
-            category_totals[cat] = sum(emissions_filtered.get(f"{prefix}_{a}", 0) for a in acts)
-
         category_df = pd.DataFrame({
-            "Category": list(category_totals.keys()),
-            "Emissions (t CO₂)": list(category_totals.values())
+            "Category": category_totals.keys(),
+            "Emissions (kg CO₂)": category_totals.values()
         })
 
-        # --- Plot Category Chart ---
+        # --- Category Chart ---
         st.subheader("🔍 Emission by Category")
-        cat_fig = px.bar(category_df.sort_values("Emissions (t CO₂)", ascending=True),
-                         x="Emissions (t CO₂)", y="Category",
-                         orientation='h',
-                         color="Emissions (t CO₂)",
-                         color_continuous_scale="Greens")
-        st.plotly_chart(cat_fig, use_container_width=True)
+        fig1 = px.bar(category_df.sort_values("Emissions (kg CO₂)", ascending=True),
+                      x="Emissions (kg CO₂)", y="Category",
+                      orientation='h', color="Emissions (kg CO₂)",
+                      color_continuous_scale="Greens")
+        st.plotly_chart(fig1, use_container_width=True)
 
         # --- Top 10 Activities ---
         st.subheader("🏆 Top 10 Emitting Activities")
         activity_df = pd.DataFrame(list(emissions_filtered.items()), columns=["Activity", "Emissions"])
         top10_df = activity_df.sort_values("Emissions", ascending=False).head(10)
-        top10_fig = px.bar(top10_df.sort_values("Emissions", ascending=True),
-                           x="Emissions", y="Activity",
-                           orientation='h',
-                           color="Emissions",
-                           color_continuous_scale="Blues")
-        st.plotly_chart(top10_fig, use_container_width=True)
+        fig2 = px.bar(top10_df.sort_values("Emissions", ascending=True),
+                      x="Emissions", y="Activity",
+                      orientation='h', color="Emissions",
+                      color_continuous_scale="Blues")
+        st.plotly_chart(fig2, use_container_width=True)
 
-        # --- Detailed Category Breakdown ---
+        # --- Detailed by Category ---
         st.subheader("📦 Detailed Breakdown by Category")
         for cat, acts in categories.items():
-            prefix = prefixes[cat]
-            cat_activities = {
-                a: emissions_filtered[f"{prefix}_{a}"]
-                for a in acts if f"{prefix}_{a}" in emissions_filtered
-            }
-            if cat_activities:
-                detail_df = pd.DataFrame(list(cat_activities.items()), columns=["Activity", "Emissions"])
+            cat_acts = {a: emissions_filtered[a] for a in acts if a in emissions_filtered}
+            if cat_acts:
                 st.markdown(f"**{cat}**")
-                detail_fig = px.bar(detail_df.sort_values("Emissions", ascending=True),
-                                    x="Emissions", y="Activity",
-                                    orientation='h',
-                                    color="Emissions",
-                                    color_continuous_scale="Purples")
-                st.plotly_chart(detail_fig, use_container_width=True)
+                df_cat = pd.DataFrame(list(cat_acts.items()), columns=["Activity", "Emissions"])
+                fig = px.bar(df_cat.sort_values("Emissions", ascending=True),
+                             x="Emissions", y="Activity",
+                             orientation='h', color="Emissions",
+                             color_continuous_scale="Purples")
+                st.plotly_chart(fig, use_container_width=True)
 
-        # --- Download Button ---
+        # --- PDF Download ---
         st.subheader("📄 Download Your Report")
         pdf_data = generate_pdf_report(category_totals, dict(top10_df.values))
         st.download_button("⬇️ Download Report as PDF", data=pdf_data, file_name="carbon_report.pdf")
