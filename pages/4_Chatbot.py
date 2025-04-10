@@ -28,7 +28,7 @@ st.markdown(
             background-repeat: no-repeat;
             background-position: center;
             height: 140px;
-            margin: 1.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
+            margin: 1.5rem auto -4rem auto;
         }
 
         section[data-testid="stSidebar"] {
@@ -37,6 +37,18 @@ st.markdown(
 
         .stApp {
             background-color: white;
+        }
+
+        .chat-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #2b7a78;
+            margin-top: 1rem;
+        }
+
+        .chatbox .stTextInput > div > div > input {
+            border-radius: 20px;
+            padding: 0.75rem 1.5rem;
         }
     </style>
     """,
@@ -104,6 +116,10 @@ if rag_bot is None:
 
 # --- Streamlit UI ---
 st.title("💬 GreenPrint AI")
+
+st.markdown("""
+<div class="chat-title">CarbonFootprint Chatbot</div>
+""", unsafe_allow_html=True)
 
 # Display chat messages from history
 if hasattr(rag_bot, 'chat_history') and rag_bot.chat_history:
