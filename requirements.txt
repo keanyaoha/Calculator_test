@@ -4,6 +4,7 @@ matplotlib
 streamlit-extras
 Pillow
 plotly
+reportlab
 
 # Core
 streamlit
