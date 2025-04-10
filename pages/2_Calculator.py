@@ -97,6 +97,14 @@ if "emission_values" not in st.session_state:
 # --- Use Streamlit Tabs for categorizing questions ---
 tab1, tab2, tab3, tab4 = st.tabs(["Transport", "Food", "Energy & Water", "Hotel"])
 
+# Track the current tab
+if 'current_tab' not in st.session_state:
+    st.session_state.current_tab = 0  # Default to first tab
+
+def set_tab(tab_index):
+    st.session_state.current_tab = tab_index
+
+# Handle "Next" button logic to switch between tabs
 with tab1:
     # Transport-related activities
     transport_activities = ["Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", 
@@ -113,7 +121,8 @@ with tab1:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    st.button("Next", key="next_transport")
+    if st.button("Next", key="next_transport"):
+        set_tab(1)
 
 with tab2:
     # Food-related activities
@@ -133,7 +142,8 @@ with tab2:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    st.button("Next", key="next_food")
+    if st.button("Next", key="next_food"):
+        set_tab(2)
 
 with tab3:
     # Energy_Water-related activities
@@ -148,7 +158,8 @@ with tab3:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    st.button("Next", key="next_energy")
+    if st.button("Next", key="next_energy"):
+        set_tab(3)
 
 with tab4:
     # Hotel-related activities
@@ -161,8 +172,6 @@ with tab4:
             st.session_state.emission_values[activity] = user_input * factor
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
-
-    st.button("Calculate My Carbon Footprint", key="calculate_button")
 
 # --- Checkbox to enable "Calculate My Carbon Footprint" button ---
 reviewed_all = st.checkbox("I have reviewed all the questions above.")
