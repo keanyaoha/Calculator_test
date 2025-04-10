@@ -19,7 +19,7 @@ embedding_model = "sentence-transformers/all-MiniLM-l6-v2"
 embeddings = HuggingFaceEmbedding(model_name=embedding_model)
 
 # Vector Database Configuration
-persist_directory = "vecctor_index"
+persist_directory = "vector_index"
 
 if not os.path.exists(persist_directory):
     st.error(f"❌ Error: Vector index directory '{persist_directory}' not found. Make sure it's in your GitHub repository root.")
