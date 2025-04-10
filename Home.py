@@ -51,7 +51,7 @@ With just a few quick questions about how you **live, travel, eat**, and **consu
 
 <br>
 
-Whether you're just curious or committed to climate action, **GreenPrint** is here to support your journey 💪
+Whether you're just curious or committed to climate action, **GreenPrint** is here to support your journey.
 
 ---
 
