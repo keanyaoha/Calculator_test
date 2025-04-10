@@ -134,9 +134,10 @@ def format_activity_name(activity_key):
 st.title("🌍 Carbon Footprint Calculator")
 st.markdown("Estimate your monthly carbon footprint and compare it to country and global averages.")
 
+<br>
 
 # --- Country Selection ---
-st.markdown("**Step 1: Select your country**")
+st.markdown("**Select your country**")
 country_options = ["-- Select --"] + available_countries
 current_selection = st.session_state.selected_country
 if current_selection not in country_options:
@@ -162,7 +163,7 @@ if selected_country_widget != st.session_state.selected_country:
 # --- Main Content Area ---
 if st.session_state.selected_country != "-- Select --":
     country = st.session_state.selected_country
-    st.markdown("**Step 2: Enter your monthly consumption details**")
+    st.markdown("**Enter your monthly consumption details**")
 
     tab_labels = ["🚗 Transport", "🍽️ Food", " ⚡💧 Energy & Water", "🏨 Hotel"]
     selected_tab_label = st.radio(
@@ -237,7 +238,7 @@ if st.session_state.selected_country != "-- Select --":
 
         # Calculation Trigger
         st.divider()
-        st.markdown("**Step 3: Calculate your footprint**")
+        st.markdown("**Calculate your footprint**")
         reviewed_all = st.checkbox("I have reviewed/entered my data for all categories.", key="review_final_check")
         if reviewed_all:
             if st.button("Calculate My Carbon Footprint", type="primary", use_container_width=True, key="calculate_final_button"):
