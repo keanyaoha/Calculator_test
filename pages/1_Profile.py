@@ -35,6 +35,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# --- Initialize session state if not already set ---
+if "profile_completed" not in st.session_state:
+    st.session_state.profile_completed = False
+
 # ✅ Fixed Email Validation
 def is_valid_email(email):
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
@@ -79,22 +83,22 @@ if submitted:
         }
 
         # Mark profile as completed
-        st.session_state.profile_completed = True
+        st.session_state.profile_completed = True  # Ensure this flag is set to True
 
         # Trigger "redirect" to calculator page
         st.session_state["go_to_calculator"] = True
-        st.rerun()
+
+        # Redirect to calculator page using rerun
+        st.experimental_rerun()  # Use experimental_rerun for reloading the page
 
 # --- Simulated Redirect ---
 if st.session_state.get("go_to_calculator"):
     st.session_state["go_to_calculator"] = False  # reset flag
 
-    # You can display a success message here if needed
-    st.markdown("✅ Profile saved successfully. Redirecting to Calculator page...")
+    st.markdown("✅ Profile saved. Redirecting to Calculator page...")
     st.markdown(
         """
-        <meta http-equiv="refresh" content="2; url=/Calculator">
+        <meta http-equiv="refresh" content="0; url=/Calculator">
         """,
         unsafe_allow_html=True
     )
-
