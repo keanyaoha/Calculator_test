@@ -3,13 +3,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 # --- App Config ---
-st.set_page_config(
-    page_title="Green Tomorrow",
-    page_icon="🌿",
-    layout="centered"
-)
+st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
-# --- Force Logo to Appear at Top of Sidebar ---
+# --- Sidebar Logo Styling ---
 st.markdown(
     """
     <style>
@@ -21,16 +17,43 @@ st.markdown(
             background-repeat: no-repeat;
             background-position: center;
             height: 140px;
-            margin: 1.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
+            margin: 1.5rem auto -4rem auto;
         }
-
         section[data-testid="stSidebar"] {
             background-color: #d6f5ec;
         }
-
         .stApp {
             background-color: white;
         }
+        /* Style radio buttons to look more like tabs */
+        div[role="radiogroup"] > label > div:first-child {
+            display: none; /* Hide the default radio circle */
+        }
+        div[role="radiogroup"] > label {
+            margin: 0 !important;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            background-color: #f0f2f6;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        div[role="radiogroup"] > label:hover {
+             background-color: #e0e2e6;
+        }
+        div[role="radiogroup"] input[type="radio"]:checked + div {
+             background-color: white;
+             border-bottom: 1px solid white; /* Make it look connected to content */
+             font-weight: bold;
+             color: #007bff; /* Highlight selected tab text */
+        }
+        /* Add a bottom border to the container to complete the tab look */
+         div.stRadio > div {
+             border-bottom: 1px solid #ddd;
+             padding-bottom: 1rem; /* Add some space below the 'tabs' */
+         }
+
     </style>
     """,
     unsafe_allow_html=True
