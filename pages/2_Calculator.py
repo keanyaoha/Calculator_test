@@ -21,7 +21,7 @@ st.markdown("""
             border-radius: 10px;  /* Rounded corners */
         }
         .stButton>button:hover {
-            background-color: #4baa8b;  /* Darker green on hover */
+            background-color: #52a58a;  /* Darker green on hover */
         }
     </style>
 """, unsafe_allow_html=True)
