@@ -143,17 +143,4 @@ else:
         pdf_data = generate_pdf_report(category_totals, dict(top10_df.values))
         st.download_button("⬇️ Download Report as PDF", data=pdf_data, file_name="carbon_report.pdf")
 
-        # --- Detailed View Per Category ---
-        for cat, acts in categories.items():
-            cat_activities = {a: emissions_filtered[a] for a in acts if a in emissions_filtered}
-            if cat_activities:
-                st.markdown(f"### 📦 Detailed Breakdown: {cat}")
-                detail_df = pd.DataFrame(list(cat_activities.items()), columns=["Activity", "Emissions"])
-                detail_fig = px.bar(detail_df.sort_values("Emissions", ascending=True),
-                                    x="Emissions", y="Activity",
-                                    orientation='h',
-                                    color="Emissions",
-                                    color_continuous_scale="Purples")
-                st.plotly_chart(detail_fig, use_container_width=True)
-    else:
-        st.info("Your inputs resulted in zero emissions. Try entering some activity data.")
+       
