@@ -30,6 +30,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# --- Initialize profile_completed if not already done ---
+if "profile_completed" not in st.session_state:
+    st.session_state.profile_completed = False  # Set to False initially if not defined
+
 # --- Load Emission Data ---
 CSV_URL = "https://drive.google.com/uc?export=download&id=1PWeBZKB6adZKORvtMDLFwCX__gfzH33g"
 PER_CAPITA_URL = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/per_capita_filtered_monthly.csv"
