@@ -299,7 +299,7 @@ if st.session_state.selected_country != "-- Select --":
                     )
                     # Simplified styling - COMMENTED OUT advanced styling
                     fig_comp.update_traces(
-                         texttemplate='%{text:.1f}', textposition='outside'
+                         texttemplate='%{text:.1f}', textposition='outside',
                          bargap=0.1,
                          hovertemplate="<b>%{y}</b>: %{x:.1f} kg CO₂<extra></extra>"
                     )
