@@ -154,38 +154,44 @@ with tab4:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-# --- Calculate Emissions ---
-if st.button("📊 Calculate My Carbon Footprint"):
-    emission_values = st.session_state.emission_values
-    total_emission = sum(emission_values.values())
-    st.subheader(f"🌱 Your Carbon Footprint: **{total_emission:.1f} kg CO₂**")
+# --- Checkbox to enable "Calculate My Carbon Footprint" button ---
+reviewed_all = st.checkbox("I have reviewed all the questions above.")
 
-    trees_cut = total_emission / 21.77
-    st.markdown(f"🌳 Equivalent to cutting down ~**{trees_cut:.0f} trees**!")
+# --- Calculate Emissions Button ---
+if reviewed_all:
+    if st.button("📊 Calculate My Carbon Footprint"):
+        emission_values = st.session_state.emission_values
+        total_emission = sum(emission_values.values())
+        st.subheader(f"🌱 Your Carbon Footprint: **{total_emission:.1f} kg CO₂**")
 
-    # --- Compare to Averages ---
-    def get_avg(name):
-        match = df1.loc[df1["Country"] == name, "PerCapitaCO2"]
-        return match.iloc[0] if not match.empty else 0
+        trees_cut = total_emission / 21.77
+        st.markdown(f"🌳 Equivalent to cutting down ~**{trees_cut:.0f} trees**!")
 
-    country_avg = get_avg(country)
-    eu_avg = get_avg("European Union (27)")
-    world_avg = get_avg("World")
+        # --- Compare to Averages ---
+        def get_avg(name):
+            match = df1.loc[df1["Country"] == name, "PerCapitaCO2"]
+            return match.iloc[0] if not match.empty else 0
 
-    # Plot comparison chart
-    labels = ["You", country, "EU", "World"]
-    values = [total_emission, country_avg, eu_avg, world_avg]
-    colors = ['#4CAF50'] + ['#4682B4'] * 3
+        country_avg = get_avg(country)
+        eu_avg = get_avg("European Union (27)")
+        world_avg = get_avg("World")
 
-    labels, values, colors = labels[::-1], values[::-1], colors[::-1]
-    fig, ax = plt.subplots(figsize=(8, 3))
-    bars = ax.barh(labels, values, color=colors)
-    ax.set_xlim(0, max(values) * 1.1)
+        # Plot comparison chart
+        labels = ["You", country, "EU", "World"]
+        values = [total_emission, country_avg, eu_avg, world_avg]
+        colors = ['#4CAF50'] + ['#4682B4'] * 3
 
-    for bar in bars:
-        ax.text(bar.get_width() + 5, bar.get_y() + bar.get_height()/2, f"{bar.get_width():.1f}", va='center')
+        labels, values, colors = labels[::-1], values[::-1], colors[::-1]
+        fig, ax = plt.subplots(figsize=(8, 3))
+        bars = ax.barh(labels, values, color=colors)
+        ax.set_xlim(0, max(values) * 1.1)
 
-    ax.set_xlabel("kg CO₂ per month")
-    st.pyplot(fig)
+        for bar in bars:
+            ax.text(bar.get_width() + 5, bar.get_y() + bar.get_height()/2, f"{bar.get_width():.1f}", va='center')
 
-    st.markdown("<div style='text-align: center; color: gray;'>Comparison of your estimated monthly carbon footprint with national and global averages.</div>", unsafe_allow_html=True)
+        ax.set_xlabel("kg CO₂ per month")
+        st.pyplot(fig)
+
+        st.markdown("<div style='text-align: center; color: gray;'>Comparison of your estimated monthly carbon footprint with national and global averages.</div>", unsafe_allow_html=True)
+else:
+    st.warning("Please review all the questions before calculating your carbon footprint.")
