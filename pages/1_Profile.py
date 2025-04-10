@@ -82,7 +82,7 @@ if submitted:
 
         # ✅ Trigger "redirect" to calculator page
         st.session_state["go_to_calculator"] = True
-        st.experimental_rerun()  # Replace this with rerun to refresh the page properly
+        st.rerun()  
 
 # --- Simulated Redirect ---
 if st.session_state.get("go_to_calculator"):
