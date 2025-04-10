@@ -8,14 +8,23 @@ import plotly.express as px
 from io import BytesIO
 import traceback
 
-# --- PDF Report Generator (COMMENTED OUT) ---
-# def generate_pdf_report(category_data, top_activities_data):
-#     buffer = BytesIO()
-#     # ... (PDF code omitted for simplicity) ...
-#     return buffer
-
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
+
+# --- Custom CSS for Button Styling ---
+st.markdown("""
+    <style>
+        .stButton>button {
+            background-color: #4CAF50;  /* Green background */
+            color: white;  /* White text */
+            font-size: 16px;
+            border-radius: 10px;  /* Rounded corners */
+        }
+        .stButton>button:hover {
+            background-color: #45a049;  /* Darker green on hover */
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # --- Sidebar Logo Styling ---
 # Using a raw string for safety
