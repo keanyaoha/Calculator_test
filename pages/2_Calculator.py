@@ -30,7 +30,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # --- Load Emission Data ---
 CSV_URL = "https://drive.google.com/uc?export=download&id=1PWeBZKB6adZKORvtMDLFwCX__gfzH33g"
 PER_CAPITA_URL = "https://raw.githubusercontent.com/keanyaoha/Final_Project_WBS/main/per_capita_filtered_monthly.csv"
@@ -77,12 +76,50 @@ if country == "-- Select --":
 if "emission_values" not in st.session_state:
     st.session_state.emission_values = {}
 
-st.markdown("### ✏️ Fill in your monthly activity data:")
-for activity in df["Activity"]:
-    label = format_activity_name(activity)
-    user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
-    factor = df.loc[df["Activity"] == activity, country].values[0]
-    st.session_state.emission_values[activity] = user_input * factor
+# --- Categorize questions into tabs ---
+tabs = ["Food", "Mobility", "Energy & Water", "Other"]
+selected_tab = st.radio("Select Category", tabs)
+
+if selected_tab == "Food":
+    # Questions related to food
+    food_activities = ["water_consumed", "hotel_stay"]  # Example food-related activities
+    for activity in food_activities:
+        label = format_activity_name(activity)
+        user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
+        factor = df.loc[df["Activity"] == activity, country].values[0]
+        st.session_state.emission_values[activity] = user_input * factor
+
+elif selected_tab == "Mobility":
+    # Questions related to mobility
+    mobility_activities = [
+        "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled", 
+        "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", 
+        "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled", 
+        "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
+    ]
+    for activity in mobility_activities:
+        label = format_activity_name(activity)
+        user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
+        factor = df.loc[df["Activity"] == activity, country].values[0]
+        st.session_state.emission_values[activity] = user_input * factor
+
+elif selected_tab == "Energy & Water":
+    # Questions related to energy and water
+    energy_water_activities = ["electricity_used", "water_consumed"]
+    for activity in energy_water_activities:
+        label = format_activity_name(activity)
+        user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
+        factor = df.loc[df["Activity"] == activity, country].values[0]
+        st.session_state.emission_values[activity] = user_input * factor
+
+elif selected_tab == "Other":
+    # Questions related to other categories
+    other_activities = ["hotel_stay"]
+    for activity in other_activities:
+        label = format_activity_name(activity)
+        user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
+        factor = df.loc[df["Activity"] == activity, country].values[0]
+        st.session_state.emission_values[activity] = user_input * factor
 
 # --- Calculate Emissions ---
 if st.button("📊 Calculate My Carbon Footprint"):
