@@ -111,7 +111,7 @@ The higher your carbon footprint, the more you contribute to these issues. By un
 
 ### 🌿 Ready to make a difference?
 
-Let's get started! Click Next → to begin creating your profile and take the first step in reducing your carbon footprint.
+Let's get started! **Click Next →** to begin creating your profile and take the first step in reducing your carbon footprint.
 """, unsafe_allow_html=True)
 
 # --- Simulated Redirect to Profile using query param ---
