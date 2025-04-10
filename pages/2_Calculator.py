@@ -133,7 +133,7 @@ def format_activity_name(activity_key):
 # --- App Title ---
 st.title("🌍 Carbon Footprint Calculator")
 st.markdown("Estimate your monthly carbon footprint and compare it to country and global averages.")
-st.divider()
+
 
 # --- Country Selection ---
 st.markdown("**Step 1: Select your country**")
