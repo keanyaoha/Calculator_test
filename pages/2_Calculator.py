@@ -85,8 +85,11 @@ with tab1:
     for activity in food_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
-        factor = df.loc[df["Activity"] == activity, country].values[0]
-        st.session_state.emission_values[activity] = user_input * factor
+        try:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            st.session_state.emission_values[activity] = user_input * factor
+        except IndexError:
+            st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 with tab2:
     # Mobility-related activities
@@ -99,8 +102,11 @@ with tab2:
     for activity in mobility_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
-        factor = df.loc[df["Activity"] == activity, country].values[0]
-        st.session_state.emission_values[activity] = user_input * factor
+        try:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            st.session_state.emission_values[activity] = user_input * factor
+        except IndexError:
+            st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 with tab3:
     # Energy-related activities
@@ -108,8 +114,11 @@ with tab3:
     for activity in energy_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
-        factor = df.loc[df["Activity"] == activity, country].values[0]
-        st.session_state.emission_values[activity] = user_input * factor
+        try:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            st.session_state.emission_values[activity] = user_input * factor
+        except IndexError:
+            st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 with tab4:
     # Water-related activities
@@ -117,8 +126,11 @@ with tab4:
     for activity in water_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=activity)
-        factor = df.loc[df["Activity"] == activity, country].values[0]
-        st.session_state.emission_values[activity] = user_input * factor
+        try:
+            factor = df.loc[df["Activity"] == activity, country].values[0]
+            st.session_state.emission_values[activity] = user_input * factor
+        except IndexError:
+            st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 # --- Calculate Emissions ---
 if st.button("📊 Calculate My Carbon Footprint"):
