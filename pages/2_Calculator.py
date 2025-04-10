@@ -38,7 +38,6 @@ st.markdown("""
         /* --- Control the color of the selected tab --- */
         div[role="radiogroup"] input[type="radio"]:checked + div {
             background-color: #f0f2f6;
-            border-bottom: 1px solid white; /* Ensure it's connected to the content */
             font-weight: bold;
             color: #52a58a;  /* Change the color of selected tab text (Green in this case) */
         }
