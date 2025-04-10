@@ -66,7 +66,7 @@ st.markdown(r"""
             border-radius: 0.25rem;
         }
         div[data-testid="stButton"] button:not([kind="primary"]):hover {
-            background-color: #52a58a;  /* Darker green on hover */
+            background-color: #61c2a2;  /* Darker green on hover */
             color: white;
         }
 
