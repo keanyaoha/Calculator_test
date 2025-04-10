@@ -100,10 +100,10 @@ The higher your carbon footprint, the more you contribute to these issues. By un
 
 ### 🛠️ How This App Works
 
-1. Go to the **Profile** page and create your profile, which brings you directly to the **Calculator** and enter details about your daily habits.  
-2. Get an estimate of your **annual carbon footprint**.  
-3. Compare your score to **national and global averages**.  
-4. See personalized suggestions on how to **reduce** it.
+1. Go to the **Profile** page and create your profile
+2. Use the **Calculator** to enter details about your daily habits, get an estimate of your **annual carbon footprint**, and compare your score to **national and global averages**.  
+3. Go to **Breakdown** page to see more details about your carbon footprint and receive personalized suggestions on how to **reduce** it.
+4. Ask your questions from **GreenPrint AI** for real-time advice on reducing your carbon footprint.
 
 ---
 
