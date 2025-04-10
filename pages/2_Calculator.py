@@ -45,13 +45,17 @@ except Exception as e:
     st.error(f"Error loading data: {e}")
     st.stop()
 
+# Clean the column names (removing any extra spaces or unexpected characters)
+df.columns = df.columns.str.strip()
+
+# Get available countries (i.e., columns excluding 'Activity')
 available_countries = [col for col in df.columns if col != "Activity"]
 
 # --- Format Activity Titles ---
 def format_activity_name(activity):
     mapping = {
-        "Domestic flight": "How many km of Domestic Flights taken last month",
-        "International flight": "How many km of International Flights taken last month",
+        "Domestic_flight_traveled": "How many km of Domestic Flights taken last month",
+        "International_flight_traveled": "How many km of International Flights taken last month",
         "km_diesel_local_passenger_train_traveled": "How many km by diesel-powered local trains",
         "km_diesel_long_distance_passenger_train_traveled": "How many km by diesel-powered long-distance trains",
         "km_electric_passenger_train_traveled": "How many km by electric-powered trains",
@@ -63,6 +67,16 @@ def format_activity_name(activity):
         "diesel_car_traveled": "How many km by diesel-powered car",
         "water_consumed": "How much water consumed (liters)",
         "electricity_used": "How much electricity used (kWh)",
+        "beef_products_consumed": "How much beef products consumed (kg)",
+        "poultry_products_consumed": "How much poultry products consumed (kg)",
+        "pork_products_consumed": "How much pork products consumed (kg)",
+        "processed_rice_consumed": "How much processed rice consumed (kg)",
+        "sugar_consumed": "How much sugar consumed (kg)",
+        "vegetable_oils_fats_consumed": "How much vegetable oils/fats consumed (kg)",
+        "other_meat_products_consumed": "How much other meat products consumed (kg)",
+        "dairy_products_consumed": "How much dairy products consumed (kg)",
+        "fish_products_consumed": "How much fish products consumed (kg)",
+        "other_food_products_consumed": "How much other food products consumed (kg)",
         "hotel_stay": "How many nights in hotels",
     }
     return mapping.get(activity, activity.replace("_", " ").capitalize())
@@ -85,7 +99,11 @@ tab1, tab2, tab3, tab4 = st.tabs(["Food", "Mobility", "Energy", "Water"])
 
 with tab1:
     # Food-related activities
-    food_activities = ["hotel_stay", "water_consumed"]
+    food_activities = ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                       "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", 
+                       "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed", 
+                       "other_food_products_consumed", "hotel_stay"]
+    
     for activity in food_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"food_{activity}")
@@ -98,7 +116,7 @@ with tab1:
 with tab2:
     # Mobility-related activities
     mobility_activities = [
-        "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled", 
+        "Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", 
         "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", 
         "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled", 
         "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
