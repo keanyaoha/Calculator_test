@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page  # Make sure streamlit-extras is installed
 
 # --- App Config ---
 st.set_page_config(
@@ -22,11 +21,9 @@ st.markdown(
             height: 140px;
             margin: 1.5rem auto -4rem auto;
         }
-
         section[data-testid="stSidebar"] {
             background-color: #d6f5ec;
         }
-
         .stApp {
             background-color: white;
         }
@@ -39,7 +36,7 @@ st.markdown(
 st.title("Welcome to GreenPrint")
 st.subheader("Your Personal Carbon Footprint Tracker")
 
-# --- Introduction Content ---
+# --- Intro Content ---
 st.markdown("""
 **GreenPrint** is an interactive tool designed to help you measure your **carbon footprint** — the total amount of greenhouse gases, primarily carbon dioxide, that your lifestyle and choices emit into the atmosphere.
 
@@ -81,8 +78,9 @@ The higher our carbon footprint, the more we contribute to climate change. By un
 Click **Next →** to start your profile.
 """)
 
-# --- Navigation Button to Profile ---
+# --- Simulated Redirect to Profile using query param ---
 col1, col2, col3 = st.columns([1, 6, 1])
 with col2:
     if st.button("Next →", use_container_width=True):
-        switch_page("Profile")
+        st.experimental_set_query_params(page="Profile")
+        st.markdown('<meta http-equiv="refresh" content="0;url=./Profile">', unsafe_allow_html=True)
