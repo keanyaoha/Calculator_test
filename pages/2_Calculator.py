@@ -163,7 +163,7 @@ if st.session_state.selected_country != "-- Select --":
     st.markdown("**Step 2: Enter your monthly consumption details**")
 
     # --- Tab Simulation using Radio Buttons ---
-    tab_labels = ["Transport", "Food", "Energy & Water", "Hotel"]
+    tab_labels = ["🚗 Transport", "🍽 Food", "💡💧 Energy & Water", "🏨 Hotel"]
     selected_tab_label = st.radio(
         "Select Category:",
         tab_labels,
