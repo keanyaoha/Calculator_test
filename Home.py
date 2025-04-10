@@ -42,14 +42,14 @@ st.markdown("""
 **GreenPrint** is your interactive guide to understanding and reducing your environmental impact.  
 With just a few quick questions about how you **live, travel, eat**, and **consume resources**, you'll get:
 
-
+<br>
 
 ✅ **A personalized estimate** of your yearly carbon emissions  
 📊 **A clear breakdown** of which habits contribute the most  
 🌍 **Comparisons** with your country, Europe, and global averages  
 🌱 **Practical tips** to reduce your footprint and live more sustainably  
 
-
+<br>
 
 Whether you're just curious or committed to climate action, **GreenPrint** is here to support your journey 💪
 
