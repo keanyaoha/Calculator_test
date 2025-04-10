@@ -42,11 +42,7 @@ def generate_pdf_report(category_data, top_activities_data):
     return buffer
 
 # --- App Config ---
-st.set_page_config(
-    page_title="GreenPrint",
-    page_icon="🌿",
-    layout="centered"
-)
+st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
 st.markdown("""
     <style>
@@ -60,20 +56,19 @@ st.markdown("""
             height: 140px;
             margin: 1.5rem auto -4rem auto;
         }
-
         section[data-testid="stSidebar"] {
             background-color: #d6f5ec;
         }
-
         .stApp {
             background-color: white;
         }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 st.title("📊 Emission Breakdown")
 st.write("Here is how your estimated carbon footprint breaks down by activity.")
 
+# --- Data from Calculator ---
 if "emission_values" not in st.session_state or not st.session_state.emission_values:
     st.warning("No emission data found. Please fill in your activity data on the main page first.")
 else:
@@ -82,27 +77,41 @@ else:
 
     if emissions_filtered:
         categories = {
-            "Travel": [k for k in emissions_dict if k in [
+            "Travel": [
                 "Domestic flight", "International flight", "km_diesel_local_passenger_train_traveled",
                 "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled",
                 "km_bus_traveled", "km_petrol_car_traveled", "km_ev_car_traveled", "km_ev_scooter_traveled",
-                "km_Motorcycle_traveled", "diesel_car_traveled"]],
-            "Food": [k for k in emissions_dict if k in [
+                "km_Motorcycle_traveled", "diesel_car_traveled"
+            ],
+            "Food": [
                 "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
                 "dairy_products_consumed", "fish_products_consumed", "processed_rice_consumed",
                 "sugar_consumed", "vegetable_oils_fats_consumed", "other_food_products_consumed",
-                "beverages_consumed", "other_meat_products_consumed"]],
-            "Energy & Water": [k for k in emissions_dict if k in ["electricity_used", "water_consumed"]],
-            "Other": [k for k in emissions_dict if k == "hotel_stay"]
+                "beverages_consumed", "other_meat_products_consumed"
+            ],
+            "Energy & Water": ["electricity_used", "water_consumed"],
+            "Other": ["hotel_stay"]
         }
 
-        category_totals = {cat: sum(emissions_filtered.get(act, 0) for act in acts) for cat, acts in categories.items()}
+        prefixes = {
+            "Travel": "travel",
+            "Food": "food",
+            "Energy & Water": "energy",
+            "Other": "other"
+        }
+
+        # --- Compute totals ---
+        category_totals = {}
+        for cat, acts in categories.items():
+            prefix = prefixes[cat]
+            category_totals[cat] = sum(emissions_filtered.get(f"{prefix}_{a}", 0) for a in acts)
 
         category_df = pd.DataFrame({
             "Category": list(category_totals.keys()),
             "Emissions (t CO₂)": list(category_totals.values())
         })
 
+        # --- Plot Category Chart ---
         st.subheader("🔍 Emission by Category")
         cat_fig = px.bar(category_df.sort_values("Emissions (t CO₂)", ascending=True),
                          x="Emissions (t CO₂)", y="Category",
@@ -111,6 +120,7 @@ else:
                          color_continuous_scale="Greens")
         st.plotly_chart(cat_fig, use_container_width=True)
 
+        # --- Top 10 Activities ---
         st.subheader("🏆 Top 10 Emitting Activities")
         activity_df = pd.DataFrame(list(emissions_filtered.items()), columns=["Activity", "Emissions"])
         top10_df = activity_df.sort_values("Emissions", ascending=False).head(10)
@@ -121,9 +131,14 @@ else:
                            color_continuous_scale="Blues")
         st.plotly_chart(top10_fig, use_container_width=True)
 
+        # --- Detailed Category Breakdown ---
         st.subheader("📦 Detailed Breakdown by Category")
         for cat, acts in categories.items():
-            cat_activities = {a: emissions_filtered[a] for a in acts if a in emissions_filtered}
+            prefix = prefixes[cat]
+            cat_activities = {
+                a: emissions_filtered[f"{prefix}_{a}"]
+                for a in acts if f"{prefix}_{a}" in emissions_filtered
+            }
             if cat_activities:
                 detail_df = pd.DataFrame(list(cat_activities.items()), columns=["Activity", "Emissions"])
                 st.markdown(f"**{cat}**")
@@ -134,6 +149,7 @@ else:
                                     color_continuous_scale="Purples")
                 st.plotly_chart(detail_fig, use_container_width=True)
 
+        # --- Download Button ---
         st.subheader("📄 Download Your Report")
         pdf_data = generate_pdf_report(category_totals, dict(top10_df.values))
         st.download_button("⬇️ Download Report as PDF", data=pdf_data, file_name="carbon_report.pdf")
