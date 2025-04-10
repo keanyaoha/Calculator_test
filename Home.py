@@ -42,7 +42,7 @@ st.markdown("""
 
 ---
 
-### 🧠 What is a Carbon Footprint?
+### 🔍 What is a Carbon Footprint?
 
 Your **carbon footprint** is the total amount of **greenhouse gases** released into the air because of your daily life.
 
@@ -54,7 +54,6 @@ Everyday things like:
 - 🛍️ **What you buy and throw away** (clothes, electronics, waste)
 
 It's measured in **kg of CO₂ equivalent (CO₂e)** — a standard way to show how much impact your actions have on climate change.
-
 
 ---
 
