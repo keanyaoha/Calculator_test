@@ -65,18 +65,18 @@ def format_activity_name(activity):
         "km_ev_scooter_traveled": "How many km by electric scooter",
         "km_ev_car_traveled": "How many km by electric car",
         "diesel_car_traveled": "How many km by diesel-powered car",
-        "water_consumed": "How much water consumed (liters)",
-        "electricity_used": "How much electricity used (kWh)",
         "beef_products_consumed": "How much beef products consumed (kg)",
         "poultry_products_consumed": "How much poultry products consumed (kg)",
         "pork_products_consumed": "How much pork products consumed (kg)",
+        "fish_products_consumed": "How much fish products consumed (kg)",
+        "other_meat_products_consumed": "How much other meat products consumed (kg)",
         "processed_rice_consumed": "How much processed rice consumed (kg)",
         "sugar_consumed": "How much sugar consumed (kg)",
         "vegetable_oils_fats_consumed": "How much vegetable oils/fats consumed (kg)",
-        "other_meat_products_consumed": "How much other meat products consumed (kg)",
         "dairy_products_consumed": "How much dairy products consumed (kg)",
-        "fish_products_consumed": "How much fish products consumed (kg)",
         "other_food_products_consumed": "How much other food products consumed (kg)",
+        "water_consumed": "How much water consumed (liters)",
+        "electricity_used": "How much electricity used (kWh)",
         "hotel_stay": "How many nights in hotels",
     }
     return mapping.get(activity, activity.replace("_", " ").capitalize())
@@ -95,16 +95,16 @@ if "emission_values" not in st.session_state:
     st.session_state.emission_values = {}
 
 # --- Use Streamlit Tabs for categorizing questions ---
-tab1, tab2, tab3, tab4 = st.tabs(["Food", "Mobility", "Energy", "Water"])
+tab1, tab2, tab3, tab4 = st.tabs(["Transport", "Food", "Energy & Water", "Hotel"])
 
 with tab1:
-    # Food-related activities
-    food_activities = ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
-                       "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", 
-                       "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed", 
-                       "other_food_products_consumed", "hotel_stay"]
+    # Transport-related activities
+    transport_activities = ["Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", 
+        "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", 
+        "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled", 
+        "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"]
     
-    for activity in food_activities:
+    for activity in transport_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"food_{activity}")
         try:
@@ -114,14 +114,15 @@ with tab1:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 with tab2:
-    # Mobility-related activities
-    mobility_activities = [
-        "Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", 
-        "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", 
-        "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled", 
-        "km_ev_scooter_traveled", "km_ev_car_traveled", "diesel_car_traveled"
+    # Food-related activities
+    food_activities = [
+        ""beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
+                            "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", 
+                            "other_meat_products_consumed", "dairy_products_consumed", "fish_products_consumed", 
+                            "other_food_products_consumed"
     ]
-    for activity in mobility_activities:
+    
+    for activity in food_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"mobility_{activity}")
         try:
@@ -131,9 +132,10 @@ with tab2:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 with tab3:
-    # Energy-related activities
-    energy_activities = ["electricity_used"]
-    for activity in energy_activities:
+    # Energy_Water-related activities
+    energy_water_activities = ["electricity_used", "water_consumed"]
+    
+    for activity in energy__water_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"energy_{activity}")
         try:
@@ -143,9 +145,9 @@ with tab3:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
 with tab4:
-    # Water-related activities
-    water_activities = ["water_consumed"]
-    for activity in water_activities:
+    # Hotel-related activities
+    hotel_activities = ["hotel_stay"]
+    for activity in hotel_activities:
         label = format_activity_name(activity)
         user_input = st.number_input(label, min_value=0.0, step=0.1, key=f"water_{activity}")
         try:
