@@ -38,7 +38,7 @@ st.subheader("Your Personal Carbon Footprint Tracker")
 
 # --- Intro Content ---
 st.markdown("""
-**GreenPrint** is an interactive tool designed to help you measure your **carbon footprint** — the total amount of greenhouse gases, primarily carbon dioxide, that your lifestyle and choices emit into the atmosphere.
+**GreenPrint** is an interactive tool designed to help you measure your **carbon footprint** 
 
 ---
 
