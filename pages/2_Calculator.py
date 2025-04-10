@@ -392,7 +392,4 @@ if st.session_state.selected_country != "-- Select --":
 elif not st.session_state.selected_country or st.session_state.selected_country == "-- Select --":
     pass # Do nothing if no country is selected, main content area won't render anyway
 
-# --- Optional: Add Footer or Info in Sidebar ---
-st.sidebar.markdown("---")
-# st.sidebar.info("Tip: Fill in your typical monthly consumption.") # This line was removed
-st.sidebar.markdown("*(Data Sources: Emission factors adapted from public datasets, Per capita averages aggregated)*")
+
