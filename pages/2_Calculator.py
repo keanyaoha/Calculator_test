@@ -94,12 +94,23 @@ if country == "-- Select --":
 if "emission_values" not in st.session_state:
     st.session_state.emission_values = {}
 
-# --- Use Streamlit Tabs for categorizing questions ---
-tab1, tab2, tab3, tab4 = st.tabs(["Transport", "Food", "Energy & Water", "Hotel"])
+# --- Tab Switching Logic ---
+if "current_tab" not in st.session_state:
+    st.session_state.current_tab = 0  # Default to the first tab
 
-# Handle "Next" button logic to switch between tabs
+tab_labels = ["Transport", "Food", "Energy & Water", "Hotel"]
+tab_content = [
+    "Transport-related activities",
+    "Food-related activities",
+    "Energy and Water-related activities",
+    "Hotel-related activities"
+]
+
+# Show the current tab
+tab1, tab2, tab3, tab4 = st.tabs(tab_labels)
+
+# Transport Tab
 with tab1:
-    # Transport-related activities
     transport_activities = ["Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", 
         "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", 
         "km_bus_traveled", "km_petrol_car_traveled", "km_Motorcycle_traveled", 
@@ -114,21 +125,11 @@ with tab1:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    # Next Button Logic
-    st.markdown("""
-        <button onclick="nextTab()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
-            Next
-        </button>
-        <script>
-            function nextTab() {
-                let tabLinks = document.querySelectorAll('.streamlit-expanderHeader');
-                tabLinks[1].click();  // This will simulate a click on the next tab (index 1)
-            }
-        </script>
-    """, unsafe_allow_html=True)
+    if st.button("Next"):
+        st.session_state.current_tab = 1  # Move to the next tab
 
+# Food Tab
 with tab2:
-    # Food-related activities
     food_activities = [
         "beef_products_consumed", "poultry_products_consumed", "pork_products_consumed",
         "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", 
@@ -145,21 +146,11 @@ with tab2:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    # Next Button Logic
-    st.markdown("""
-        <button onclick="nextTab()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
-            Next
-        </button>
-        <script>
-            function nextTab() {
-                let tabLinks = document.querySelectorAll('.streamlit-expanderHeader');
-                tabLinks[2].click();  // This will simulate a click on the next tab (index 2)
-            }
-        </script>
-    """, unsafe_allow_html=True)
+    if st.button("Next"):
+        st.session_state.current_tab = 2  # Move to the next tab
 
+# Energy and Water Tab
 with tab3:
-    # Energy_Water-related activities
     energy_water_activities = ["electricity_used", "water_consumed"]
     
     for activity in energy_water_activities:
@@ -171,21 +162,11 @@ with tab3:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    # Next Button Logic
-    st.markdown("""
-        <button onclick="nextTab()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
-            Next
-        </button>
-        <script>
-            function nextTab() {
-                let tabLinks = document.querySelectorAll('.streamlit-expanderHeader');
-                tabLinks[3].click();  // This will simulate a click on the next tab (index 3)
-            }
-        </script>
-    """, unsafe_allow_html=True)
+    if st.button("Next"):
+        st.session_state.current_tab = 3  # Move to the next tab
 
+# Hotel Tab
 with tab4:
-    # Hotel-related activities
     hotel_activities = ["hotel_stay"]
     for activity in hotel_activities:
         label = format_activity_name(activity)
