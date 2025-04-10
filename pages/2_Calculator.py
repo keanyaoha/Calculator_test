@@ -368,5 +368,5 @@ elif not st.session_state.selected_country or st.session_state.selected_country 
     st.info("Please select your country in Step 1 to begin.")
 
 # --- Sidebar ---
-st.sidebar.markdown("---")
+# st.sidebar.markdown("---")
 # Add other sidebar elements if needed 
