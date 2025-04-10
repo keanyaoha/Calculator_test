@@ -117,9 +117,9 @@ if rag_bot is None:
 # --- Streamlit UI ---
 st.title("💬 GreenPrint AI")
 
-st.markdown("""
-<div class="chat-title">CarbonFootprint Chatbot</div>
-""", unsafe_allow_html=True)
+# st.markdown("""
+# <div class="chat-title">CarbonFootprint Chatbot</div>
+# """, unsafe_allow_html=True)
 
 # Display chat messages from history
 if hasattr(rag_bot, 'chat_history') and rag_bot.chat_history:
