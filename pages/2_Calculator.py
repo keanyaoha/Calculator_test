@@ -1,19 +1,12 @@
-
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-# from reportlab.lib.pagesizes import A4 # PDF generation commented out
-# from reportlab.pdfgen import canvas    # PDF generation commented out
-# from reportlab.lib.units import cm     # PDF generation commented out
 from io import BytesIO
-import traceback
-
 
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
 # --- Sidebar Logo & Button Styling ---
-# Using a raw string for safety
 st.markdown(r"""
     <style>
         /* --- Sidebar Logo --- */
@@ -59,10 +52,7 @@ st.markdown(r"""
              box-shadow: 0 0 0 0.2rem rgba(26, 152, 80, 0.5); /* Green focus outline */
         }
     </style>
-    """,
-    unsafe_allow_html=True
-)
-
+    """, unsafe_allow_html=True)
 
 # --- Initialize Session State Variables ---
 def init_session_state():
@@ -190,7 +180,6 @@ if st.session_state.selected_country != "-- Select --":
                 else:
                     st.session_state.emission_values[activity] = 0.0
             except Exception as e:
-                # st.error(f"Calc error for {label}: {e}") # Keep commented unless debugging
                 st.session_state.emission_values[activity] = 0.0
 
     # Define Activity Lists
