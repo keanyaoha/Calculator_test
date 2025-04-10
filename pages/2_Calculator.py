@@ -11,20 +11,6 @@ import traceback
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
-# --- Custom CSS for Button Styling ---
-st.markdown("""
-    <style>
-        .stButton>button {
-            background-color: #61c2a2;  /* Green background */
-            color: white;  /* White text */
-            font-size: 16px;
-            border-radius: 10px;  /* Rounded corners */
-        }
-        .stButton>button:hover {
-            background-color: #52a58a;  /* Darker green on hover */
-        }
-    </style>
-""", unsafe_allow_html=True)
 
 # --- Custom CSS for Radio Button (Tabs) Styling --- 
 st.markdown("""
@@ -77,43 +63,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Sidebar Logo Styling ---
-# Using a raw string for safety
-st.markdown(r"""
-    <style>
-        [data-testid="stSidebar"]::before {
-            content: "";
-            display: block;
-            background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
-            background-size: 90% auto;
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 140px;
-            margin: 1.5rem auto -4rem auto;
-        }
-        section[data-testid="stSidebar"] {
-            background-color: #d6f5ec;
-        }
-        .stApp {
-            background-color: white;
-        }
-        /* Style radio buttons to look more like tabs */
-        div[role="radiogroup"] > label > div:first-child { display: none; }
-        div[role="radiogroup"] > label {
-            margin: 0 !important; padding: 0.5rem 1rem; border: 1px solid #ddd;
-            border-bottom: none; border-radius: 5px 5px 0 0; background-color: #f0f2f6;
-            cursor: pointer; transition: background-color 0.3s ease;
-        }
-        div[role="radiogroup"] > label:hover { background-color: #e0e2e6; }
-        div[role="radiogroup"] input[type="radio"]:checked + div {
-             background-color: white; border-bottom: 1px solid white;
-             font-weight: bold; color: #007bff;
-        }
-         div.stRadio > div { border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+
 
 # --- Initialize Session State Variables ---
 def init_session_state():
