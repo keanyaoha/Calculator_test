@@ -49,14 +49,14 @@ With just a few quick questions about how you **live, travel, eat**, and **consu
 🌍 **Comparisons** with your country, Europe, and global averages  
 🌞 **Practical tips** to reduce your footprint and live more sustainably.  
 
-<br><br>
+<br>
 
 You can also
 
 <be>
 
 📄 **Download a PDF report** containing your calculation and personalized recommendations  
-🤖 **GreenPrint AI** to help answer your questions about your carbon footprint and offer real-time advice.
+🤖 **Use GreenPrint AI** to help answer your questions about your carbon footprint and offer real-time advice.
 
 <br>
 
