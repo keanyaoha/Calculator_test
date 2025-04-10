@@ -85,20 +85,17 @@ if submitted:
         # Mark profile as completed
         st.session_state.profile_completed = True  # Ensure this flag is set to True
 
-        # Trigger "redirect" to calculator page
-        st.session_state["go_to_calculator"] = True
+        # Set a flag to show that profile is completed
+        st.session_state["profile_completed"] = True
+        st.success("Profile completed. You can now proceed to the Calculator.")
 
-        # Simulate a redirect without rerun
-        st.experimental_rerun()  # Use experimental_rerun to reload the page
-
-# --- Simulated Redirect ---
-if st.session_state.get("go_to_calculator"):
-    st.session_state["go_to_calculator"] = False  # reset flag
-
-    st.markdown("✅ Profile saved. Redirecting to Calculator page...")
+# --- Redirect or Show Message Based on Profile Completion ---
+if st.session_state.get("profile_completed"):
+    # Redirect to Calculator after profile is saved
     st.markdown(
         """
-        <meta http-equiv="refresh" content="0; url=/Calculator">
+        <meta http-equiv="refresh" content="3; url=/Calculator">
         """,
         unsafe_allow_html=True
     )
+
