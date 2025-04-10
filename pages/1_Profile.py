@@ -8,38 +8,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- Force Logo to Appear at Top of Sidebar ---
-st.markdown(
-    """
-    <style>
-        [data-testid="stSidebar"]::before {
-            content: "";
-            display: block;
-            background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
-            background-size: 90% auto;
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 140px;
-            margin: 1.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
-        }
-
-        section[data-testid="stSidebar"] {
-            background-color: #d6f5ec;
-        }
-
-        .stApp {
-            background-color: white;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# --- Initialize session state if not already set ---
-if "profile_completed" not in st.session_state:
-    st.session_state.profile_completed = False
-
-# ✅ Fixed Email Validation
+# --- Email Validation ---
 def is_valid_email(email):
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
     return re.match(pattern, email)
@@ -55,10 +24,7 @@ with st.form("profile_form"):
     gender = st.selectbox("Gender *", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"], key="gender")
     email = st.text_input("Email Address *", key="email")
 
-    consent = st.checkbox(
-        "I agree to participate in the carbon footprint analysis and share anonymous data for research.",
-        key="consent"
-    )
+    consent = st.checkbox("I agree to participate in the carbon footprint analysis and share anonymous data for research.", key="consent")
 
     submitted = st.form_submit_button("Save Profile")
 
@@ -73,7 +39,7 @@ if submitted:
     else:
         st.success(f"Thank you, {name}! Your profile has been saved.")
 
-        # Save user profile in session state
+        # Save the user profile in session state
         st.session_state["user_profile"] = {
             "name": name,
             "age": age,
@@ -85,17 +51,8 @@ if submitted:
         # Mark profile as completed
         st.session_state.profile_completed = True  # Ensure this flag is set to True
 
-        # Set a flag to show that profile is completed
-        st.session_state["profile_completed"] = True
-        st.success("Profile completed. You can now proceed to the Calculator.")
-
-# --- Redirect or Show Message Based on Profile Completion ---
-if st.session_state.get("profile_completed"):
-    # Redirect to Calculator after profile is saved
-    st.markdown(
-        """
-        <meta http-equiv="refresh" content="3; url=/Calculator">
-        """,
-        unsafe_allow_html=True
-    )
-
+        # Add a success message with redirection
+        st.success("You can now proceed to the Calculator page.")
+        
+        # Trigger the page to refresh so it updates the session state correctly
+        st.experimental_rerun()
