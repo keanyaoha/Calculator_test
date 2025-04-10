@@ -2,6 +2,47 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
 import pandas as pd
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from io import BytesIO
+
+# --- PDF Report Generator ---
+def generate_pdf_report(category_data, top_activities_data):
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Title
+    c.setFont("Helvetica-Bold", 16)
+    c.drawCentredString(width / 2, height - 2 * cm, "GreenPrint Carbon Footprint Report")
+
+    # Category Breakdown
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(2 * cm, height - 3 * cm, "Emission by Category:")
+    c.setFont("Helvetica", 11)
+    y = height - 4 * cm
+    for category, emission in category_data.items():
+        c.drawString(2.5 * cm, y, f"{category}: {emission:.2f} t CO₂")
+        y -= 0.7 * cm
+
+    # Top 10 Activities
+    c.setFont("Helvetica-Bold", 12)
+    y -= 0.5 * cm
+    c.drawString(2 * cm, y, "Top 10 Emitting Activities:")
+    c.setFont("Helvetica", 11)
+    y -= 1 * cm
+    for activity, emission in top_activities_data.items():
+        c.drawString(2.5 * cm, y, f"{activity}: {emission:.2f} t CO₂")
+        y -= 0.6 * cm
+        if y < 2 * cm:
+            c.showPage()
+            y = height - 2 * cm
+
+    c.showPage()
+    c.save()
+    buffer.seek(0)
+    return buffer
 
 # --- App Config ---
 st.set_page_config(
@@ -22,7 +63,7 @@ st.markdown(
             background-repeat: no-repeat;
             background-position: center;
             height: 140px;
-            margin: 1.5rem auto -4rem auto;  /* SUPER tight top & bottom spacing */
+            margin: 1.5rem auto -4rem auto;
         }
 
         section[data-testid="stSidebar"] {
@@ -44,7 +85,6 @@ st.write("Here is how your estimated carbon footprint breaks down by activity.")
 if "emission_values" not in st.session_state or not st.session_state.emission_values:
     st.warning("No emission data found. Please fill in your activity data on the main page first.")
 else:
-    # Retrieve and clean up data
     emissions_dict = st.session_state.emission_values
     emissions_filtered = {k: v for k, v in emissions_dict.items() if v > 0}
 
@@ -97,6 +137,11 @@ else:
                            color="Emissions",
                            color_continuous_scale="Blues")
         st.plotly_chart(top10_fig, use_container_width=True)
+
+        # --- Download PDF Report ---
+        st.subheader("📄 Download Your Report")
+        pdf_data = generate_pdf_report(category_totals, dict(top10_df.values))
+        st.download_button("⬇️ Download Report as PDF", data=pdf_data, file_name="carbon_report.pdf")
 
         # --- Detailed View Per Category ---
         for cat, acts in categories.items():
