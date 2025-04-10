@@ -97,13 +97,6 @@ if "emission_values" not in st.session_state:
 # --- Use Streamlit Tabs for categorizing questions ---
 tab1, tab2, tab3, tab4 = st.tabs(["Transport", "Food", "Energy & Water", "Hotel"])
 
-# Track the current tab
-if 'current_tab' not in st.session_state:
-    st.session_state.current_tab = 0  # Default to first tab
-
-def set_tab(tab_index):
-    st.session_state.current_tab = tab_index
-
 # Handle "Next" button logic to switch between tabs
 with tab1:
     # Transport-related activities
@@ -121,8 +114,18 @@ with tab1:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    if st.button("Next", key="next_transport"):
-        set_tab(1)
+    # Next Button Logic
+    st.markdown("""
+        <button onclick="nextTab()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+            Next
+        </button>
+        <script>
+            function nextTab() {
+                let tabLinks = document.querySelectorAll('.streamlit-expanderHeader');
+                tabLinks[1].click();  // This will simulate a click on the next tab (index 1)
+            }
+        </script>
+    """, unsafe_allow_html=True)
 
 with tab2:
     # Food-related activities
@@ -142,8 +145,18 @@ with tab2:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    if st.button("Next", key="next_food"):
-        set_tab(2)
+    # Next Button Logic
+    st.markdown("""
+        <button onclick="nextTab()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+            Next
+        </button>
+        <script>
+            function nextTab() {
+                let tabLinks = document.querySelectorAll('.streamlit-expanderHeader');
+                tabLinks[2].click();  // This will simulate a click on the next tab (index 2)
+            }
+        </script>
+    """, unsafe_allow_html=True)
 
 with tab3:
     # Energy_Water-related activities
@@ -158,8 +171,18 @@ with tab3:
         except IndexError:
             st.error(f"Error fetching data for activity: {activity} and country: {country}")
 
-    if st.button("Next", key="next_energy"):
-        set_tab(3)
+    # Next Button Logic
+    st.markdown("""
+        <button onclick="nextTab()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+            Next
+        </button>
+        <script>
+            function nextTab() {
+                let tabLinks = document.querySelectorAll('.streamlit-expanderHeader');
+                tabLinks[3].click();  // This will simulate a click on the next tab (index 3)
+            }
+        </script>
+    """, unsafe_allow_html=True)
 
 with tab4:
     # Hotel-related activities
