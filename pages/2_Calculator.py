@@ -57,7 +57,7 @@ st.markdown("""
             border-radius: 0.25rem;
         }
         div[data-testid="stButton"] button[kind="primary"]:hover {
-            background-color: #52a58a;  /* Darker green on hover */
+            background-color: #61c2a2;  /* Darker green on hover */
         }
     </style>
 """, unsafe_allow_html=True)
