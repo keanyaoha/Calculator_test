@@ -15,7 +15,7 @@ st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 st.markdown("""
     <style>
         .stButton>button {
-            background-color: #4CAF50;  /* Green background */
+            background-color: #61c2a2;  /* Green background */
             color: white;  /* White text */
             font-size: 16px;
             border-radius: 10px;  /* Rounded corners */
@@ -311,5 +311,4 @@ if st.session_state.selected_country != "-- Select --":
 elif not st.session_state.selected_country or st.session_state.selected_country == "-- Select --":
     st.info("Please select your country in Step 1 to begin.")
 
-# --- Sidebar ---
-st.sidebar.markdown("---")
+
