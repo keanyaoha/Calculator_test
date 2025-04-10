@@ -12,7 +12,6 @@ import traceback
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
 
 
-# --- Custom CSS for Radio Button (Tabs) Styling --- 
 st.markdown("""
     <style>
         /* --- Sidebar Logo --- */
@@ -36,29 +35,36 @@ st.markdown("""
         div[role="radiogroup"] > label:hover { background-color: #e0e2e6; }
 
         /* --- Control the color of the selected tab --- */
-        div[role="radiogroup"] input[type="radio"]:checked + div {
+        div[role="radiogroup"] input[type="radio"]:checked + label {
             background-color: #f0f2f6;
             font-weight: bold;
             color: #52a58a;  /* Change the color of selected tab text (Green in this case) */
         }
 
         /* --- Add bottom border for tabs container --- */
-         div.stRadio > div {
-             border-bottom: 1px solid #ddd;
-             padding-bottom: 1rem;
-         }
+        div.stRadio > div {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 1rem;
+        }
 
         /* --- Styling for the Next and Previous buttons --- */
-        div[data-testid="stButton"] button[kind="primary"] {
+        div[data-testid="stButton"] button {
             background-color: #61c2a2;  /* Green background */
             color: white;              /* White text */
             border: none;
             padding: 0.5rem 1rem;      /* Adjust padding */
             border-radius: 0.25rem;
         }
-        div[data-testid="stButton"] button[kind="primary"]:hover {
-            background-color: #61c2a2;  /* Darker green on hover */
+        div[data-testid="stButton"] button:hover {
+            background-color: #52a58a;  /* Darker green on hover */
         }
+
+        /* Focus state for buttons */
+        div[data-testid="stButton"] button:focus {
+            outline: none;  /* Remove the default focus outline */
+            box-shadow: 0 0 0 0.3rem rgba(26, 152, 80, 0.5); /* Green shadow on focus */
+        }
+
     </style>
 """, unsafe_allow_html=True)
 
