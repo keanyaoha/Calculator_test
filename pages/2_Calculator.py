@@ -305,7 +305,7 @@ if st.session_state.selected_country != "-- Select --":
                     )
                     fig_comp.update_layout(
                          yaxis={'categoryorder':'total ascending'},
-                         bargap=0.6,
+                         bargap=0.3,
                          margin=dict(l=5, r=5, t=50, b=20), showlegend=False
                     )
                     st.plotly_chart(fig_comp, use_container_width=True)
