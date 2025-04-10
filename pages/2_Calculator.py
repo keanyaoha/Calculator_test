@@ -326,4 +326,3 @@ if st.session_state.selected_country != "-- Select --":
 
 elif not st.session_state.selected_country or st.session_state.selected_country == "-- Select --":
     st.info("Please select your country in Step 1 to begin.")
-
