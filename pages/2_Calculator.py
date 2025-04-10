@@ -300,11 +300,12 @@ if st.session_state.selected_country != "-- Select --":
                     # Simplified styling - COMMENTED OUT advanced styling
                     fig_comp.update_traces(
                          texttemplate='%{text:.1f}', textposition='outside',
-                         hovertemplate="<b>%{y}</b>: %{x:.1f} kg CO₂<extra></extra>"
+                         hovertemplate="<b>%{y}</b>: %{x:.1f} kg CO₂<extra></extra>",
+                         width=0.5 
                     )
                     fig_comp.update_layout(
                          yaxis={'categoryorder':'total ascending'},
-                         bargap=0.9,
+                         bargap=0.6,
                          margin=dict(l=5, r=5, t=50, b=20), showlegend=False
                     )
                     st.plotly_chart(fig_comp, use_container_width=True)
