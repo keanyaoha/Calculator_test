@@ -43,11 +43,11 @@ def is_valid_email(email):
 
 # --- Page Title ---
 st.title("Create Your Profile")
-st.write("Let us know a bit about you so we can personalize your carbon footprint journey.")
+st.write("Please fill out the following information to help us calculate your carbon footprint.")
 
 # --- Profile Form ---
 with st.form("profile_form"):
-    name = st.text_input("Full Name *", key="name")
+    name = st.text_input("Your Name *", key="name")
     age = st.number_input("Age *", min_value=0, max_value=120, step=1, key="age")
     gender = st.selectbox("Gender *", ["-- Select --", "Female", "Male", "Other", "Prefer not to say"], key="gender")
     email = st.text_input("Email Address *", key="email")
@@ -93,3 +93,11 @@ if st.session_state.get("go_to_calculator"):
         """,
         unsafe_allow_html=True
     )
+
+if st.button("Save Profile"):
+    # Set profile_completed to True after form submission
+    if name and age and country != "-- Select --":  # Make sure all fields are filled
+        st.session_state.profile_completed = True
+        st.success("Profile saved successfully! You can now proceed to the Calculator.")
+    else:
+        st.warning("Please fill in all the required fields.")
