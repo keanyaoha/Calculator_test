@@ -92,7 +92,7 @@ The higher our carbon footprint, the more we contribute to climate change. By un
 ### 🌿 Ready to make a difference?
 
 Click **Next →** to start your profile.
-""")
+""", unsafe_allow_html=True)
 
 # --- Simulated Redirect to Profile using query param ---
 col1, col2, col3 = st.columns([1, 6, 1])
