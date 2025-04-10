@@ -52,6 +52,9 @@ With just a few quick questions about how you **live, travel, eat**, and **consu
 <be>
 
 You can also
+
+<be>
+
 📄 **Download a PDF report** containing your calculation and personalized recommendations  
 🤖 **GreenPrint AI** to help answer your questions about your carbon footprint and offer real-time advice.
 
