@@ -14,7 +14,7 @@ st.markdown(
         [data-testid="stSidebar"]::before {
             content: "";
             display: block;
-            background-image: url('https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png');
+            background-image: url('https://raw.githubusercontent.com/keanyaoha/Calculator_test/main/GreenPrint_logo.png');
             background-size: 90% auto;
             background-repeat: no-repeat;
             background-position: center;
