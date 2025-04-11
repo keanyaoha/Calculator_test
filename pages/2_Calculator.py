@@ -201,10 +201,10 @@ if st.session_state.selected_country != "-- Select --":
                 st.session_state.emission_values[activity] = 0.0
 
     # Define Activity Lists
-    transport_activities = ["Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", "km_bus_traveled", "km_petrol_car_traveled", "diesel_car_traveled", "km_Motorcycle_traveled", "km_ev_scooter_traveled", "km_ev_car_traveled"]
-    food_activities = ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed", "fish_products_consumed", "other_meat_products_consumed", "dairy_products_consumed", "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", "other_food_products_consumed"]
-    energy_water_activities = ["electricity_used", "water_consumed"]
-    hotel_activities = ["hotel_stay"]
+    transport_activities = ["Domestic_flight", "International_flight", "Diesel_train_local", "Diesel_train_long", "Electric_train",  "Bus", "Petrol_car", "Ev_car", "Ev_scooter", "Motorcycle", "Diesel_car"]
+    food_activities = ["Beef", "Poultry", "Pork", "Dairy", "Fish_products", "Rice", "Sugar", "Oils_fats", "Other_food", "Beverages", "Other_meat"]
+    energy_water_activities = ["Electricity", "Water"]
+    hotel_activities = ["Hotel_stay"]
 
     # Display Tabs
     current_index = st.session_state.current_tab_index
