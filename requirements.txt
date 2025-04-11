@@ -5,6 +5,7 @@ streamlit-extras
 Pillow
 plotly
 reportlab
+kaleido
 
 # Core
 streamlit
