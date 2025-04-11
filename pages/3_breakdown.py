@@ -107,18 +107,18 @@ def generate_pdf_report(logo_data, category_data, top_activities_data, fig1_img_
         if top_activities_dict:
             def format_activity_name_pdf(activity_key): # Needs access to this mapping
                  mapping = {
-                    "Domestic_flight_traveled": "Domestic Flights", "International_flight_traveled": "International Flights",
-                    "km_diesel_local_passenger_train_traveled": "Diesel Local Train", "km_diesel_long_distance_passenger_train_traveled": "Diesel Long-Dist Train",
-                    "km_electric_passenger_train_traveled": "Electric Train", "km_bus_traveled": "Bus",
-                    "km_petrol_car_traveled": "Petrol Car", "km_Motorcycle_traveled": "Motorcycle",
-                    "km_ev_scooter_traveled": "E-Scooter", "km_ev_car_traveled": "Electric Car",
-                    "diesel_car_traveled": "Diesel Car", "beef_products_consumed": "Beef Products",
-                    "poultry_products_consumed": "Poultry Products", "pork_products_consumed": "Pork Products",
-                    "fish_products_consumed": "Fish Products", "other_meat_products_consumed": "Other Meat",
-                    "processed_rice_consumed": "Rice", "sugar_consumed": "Sugar",
-                    "vegetable_oils_fats_consumed": "Veg Oils/Fats", "dairy_products_consumed": "Dairy Products",
-                    "other_food_products_consumed": "Other Food", "water_consumed": "Water",
-                    "electricity_used": "Electricity", "hotel_stay": "Hotel Stay",
+                  "Domestic_flight": "Domestic Flights", "International_flight": "International Flights",
+                  "Diesel_train_local": "Diesel Local Train", "Diesel_train_long": "Diesel Long-Dist Train",
+                  "Electric_train": "Electric Train", "Bus": "Bus",
+                  "Petrol_car": "Petrol Car", "Motorcycle": "Motorcycle",
+                  "Ev_scooter": "E-Scooter", "Ev_car": "Electric Car",
+                  "Diesel_car": "Diesel Car", "Beef": "Beef Products",
+                  "Poultry": "Poultry Products", "Beverages": "Beverages", "Pork": "Pork Products",
+                  "Fish_products": "Fish Products", "Other_meat": "Other Meat Products",
+                  "Rice": "Rice", "Sugar": "Sugar",
+                  "Oils_fats": "Veg Oils/Fats", "Dairy": "Dairy Products",
+                  "Other_food": "Other Food", "Water": "Water",
+                  "Electricity": "Electricity", "Hotel_stay": "Hotel Stay",
                  }
                  return mapping.get(activity_key, activity_key.replace("_", " ").capitalize())
 
@@ -222,10 +222,10 @@ else:
     else:
         # --- Define categories ---
         categories = {
-            "Travel": ["Domestic_flight_traveled", "International_flight_traveled", "km_diesel_local_passenger_train_traveled", "km_diesel_long_distance_passenger_train_traveled", "km_electric_passenger_train_traveled", "km_bus_traveled", "km_petrol_car_traveled", "km_ev_car_traveled", "km_ev_scooter_traveled", "km_Motorcycle_traveled", "diesel_car_traveled"],
-            "Food": ["beef_products_consumed", "poultry_products_consumed", "pork_products_consumed", "dairy_products_consumed", "fish_products_consumed", "processed_rice_consumed", "sugar_consumed", "vegetable_oils_fats_consumed", "other_food_products_consumed", "other_meat_products_consumed"],
-            "Energy & Water": ["electricity_used", "water_consumed"],
-            "Other": ["hotel_stay"]
+            "Travel": ["Domestic_flight", "International_flight", "Diesel_train_local", "Diesel_train_long", "Electric_train",  "Bus", "Petrol_car", "Ev_car", "Ev_scooter", "Motorcycle", "Diesel_car"],
+            "Food": ["Beef", "Poultry", "Pork", "Dairy", "Fish_products", "Rice", "Sugar", "Oils_fats", "Other_food", "Beverages", "Other_meat"],
+            "Energy & Water": ["Electricity", "Water"],
+            "Other": ["Hotel_stay"]
         }
 
         # --- Compute totals ---
@@ -263,18 +263,18 @@ else:
         # --- Format Activity Names for Display ---
         def format_activity_name(activity_key): # Keep consistent formatting function
              mapping = {
-                 "Domestic_flight_traveled": "Domestic Flights", "International_flight_traveled": "International Flights",
-                 "km_diesel_local_passenger_train_traveled": "Diesel Local Train", "km_diesel_long_distance_passenger_train_traveled": "Diesel Long-Dist Train",
-                 "km_electric_passenger_train_traveled": "Electric Train", "km_bus_traveled": "Bus",
-                 "km_petrol_car_traveled": "Petrol Car", "km_Motorcycle_traveled": "Motorcycle",
-                 "km_ev_scooter_traveled": "E-Scooter", "km_ev_car_traveled": "Electric Car",
-                 "diesel_car_traveled": "Diesel Car", "beef_products_consumed": "Beef Products",
-                 "poultry_products_consumed": "Poultry Products", "pork_products_consumed": "Pork Products",
-                 "fish_products_consumed": "Fish Products", "other_meat_products_consumed": "Other Meat",
-                 "processed_rice_consumed": "Rice", "sugar_consumed": "Sugar",
-                 "vegetable_oils_fats_consumed": "Veg Oils/Fats", "dairy_products_consumed": "Dairy Products",
-                 "other_food_products_consumed": "Other Food", "water_consumed": "Water",
-                 "electricity_used": "Electricity", "hotel_stay": "Hotel Stay",
+                 "Domestic_flight": "Domestic Flights", "International_flight": "International Flights",
+                  "Diesel_train_local": "Diesel Local Train", "Diesel_train_long": "Diesel Long-Dist Train",
+                  "Electric_train": "Electric Train", "Bus": "Bus",
+                  "Petrol_car": "Petrol Car", "Motorcycle": "Motorcycle",
+                  "Ev_scooter": "E-Scooter", "Ev_car": "Electric Car",
+                  "Diesel_car": "Diesel Car", "Beef": "Beef Products",
+                  "Poultry": "Poultry Products", "Beverages": "Beverages", "Pork": "Pork Products",
+                  "Fish_products": "Fish Products", "Other_meat": "Other Meat Products",
+                  "Rice": "Rice", "Sugar": "Sugar",
+                  "Oils_fats": "Veg Oils/Fats", "Dairy": "Dairy Products",
+                  "Other_food": "Other Food", "Water": "Water",
+                  "Electricity": "Electricity", "Hotel_stay": "Hotel Stay",
              }
              return mapping.get(activity_key, activity_key.replace("_", " ").capitalize())
 
@@ -307,7 +307,7 @@ else:
                  fig2_img_data = BytesIO(fig2.to_image(format="png", scale=2))
 
                  # Get logo data
-                 logo_url = 'https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png'
+                 logo_url = 'https://raw.githubusercontent.com/keanyaoha/Calculator_test/main/GreenPrint_logo.png'
                  logo_data = get_logo_data(logo_url)
 
                  # Prepare top activities data dict
