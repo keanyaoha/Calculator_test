@@ -185,7 +185,7 @@ else:
         st.plotly_chart(fig1, use_container_width=True)
 
         # --- Top Emitting Activities (based on filtered, positive emissions) ---
-        st.subheader("🏆 Top Emitting Activities") # Changed number if less than 10 available
+        # st.subheader("🏆 Top Emitting Activities") # Changed number if less than 10 available
         # Create DataFrame from the filtered positive emissions
         activity_df = pd.DataFrame(list(emissions_filtered.items()), columns=["Activity Key", "Emissions"])
 
