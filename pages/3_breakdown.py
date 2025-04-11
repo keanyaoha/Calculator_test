@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import streamlit as st
-# import matplotlib.pyplot as plt # Not used here
 import plotly.express as px
 import pandas as pd
 from reportlab.lib.pagesizes import A4
@@ -12,51 +11,92 @@ import urllib.request # To fetch the logo URL
 import traceback # For detailed error logging
 
 # --- Constants ---
-CO2_SUB = "CO\u2082" # Unicode for subscript 2
+MARGIN = 1.8 * cm
+CO2_SUB = "CO\u2082" # Unicode for subscript 2 - Ensure your PDF viewer/font supports it
 
-# --- PDF Report Generator ---
-def generate_pdf_report(category_data, top_activities_data):
+# --- Enhanced PDF Report Generator with Images ---
+def generate_pdf_report(logo_data, category_data, top_activities_data, fig1_img_data, fig2_img_data):
     buffer = BytesIO()
     try:
         c = canvas.Canvas(buffer, pagesize=A4)
         width, height = A4
-        margin = 2 * cm # Define margin
 
+        # --- Draw Logo ---
+        logo_height = 0
+        if logo_data:
+            try:
+                logo_img = ImageReader(logo_data)
+                img_w, img_h = logo_img.getSize()
+                aspect = img_h / float(img_w) if img_w > 0 else 1
+                draw_width = 5.5 * cm # Slightly larger logo
+                draw_height = draw_width * aspect
+                logo_height = draw_height
+                c.drawImage(logo_img, width - MARGIN - draw_width, height - MARGIN - draw_height,
+                            width=draw_width, height=draw_height, preserveAspectRatio=True, mask='auto')
+            except Exception as logo_err:
+                print(f"Error drawing logo: {logo_err}")
+
+        # --- Title ---
         c.setFont("Helvetica-Bold", 16)
-        c.drawCentredString(width / 2.0, height - margin, "GreenPrint Carbon Footprint Report")
+        title_y = height - MARGIN - (logo_height / 2 if logo_height > 0 else 0) - 0.5 * cm
+        c.drawCentredString(width / 2.0, title_y, "GreenPrint Carbon Footprint Report")
+        y_pos = title_y - 1.5 * cm # Start below title/logo
 
-        y_pos = height - margin - 1.5*cm # Starting Y below title
-
-        # --- Section 1: Emission by Category ---
+        # --- Section 1: Emission by Category (Text) ---
         c.setFont("Helvetica-Bold", 12)
-        # Check page boundary
-        if y_pos < margin + 1*cm: c.showPage(); c.setFont("Helvetica-Bold", 12); y_pos = height - margin
-        c.drawString(margin, y_pos, "Emission by Category:")
-        c.setFont("Helvetica", 10) # Smaller font for list items
-        y_pos -= 0.7 * cm
+        if y_pos < MARGIN + 2*cm: c.showPage(); c.setFont("Helvetica-Bold", 12); y_pos = height - MARGIN # New page if needed
+        c.drawString(MARGIN, y_pos, f"Emission by Category:")
+        c.setFont("Helvetica", 9.5)
+        y_pos -= 0.6 * cm
 
         if isinstance(category_data, dict) and category_data:
             for category, emission in category_data.items():
-                if y_pos < margin: c.showPage(); c.setFont("Helvetica", 10); y_pos = height - margin
+                if y_pos < MARGIN + 1*cm: c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
                 emission_val = emission if isinstance(emission, (int, float)) else 0
-                c.drawString(margin + 0.5*cm, y_pos, f"• {category}: {emission_val:.2f} kg {CO2_SUB}") # Use subscript
-                y_pos -= 0.6 * cm # Adjust spacing
+                c.drawString(MARGIN + 0.5*cm, y_pos, f"• {category}: {emission_val:.2f} kg {CO2_SUB}") # Use subscript
+                y_pos -= 0.55 * cm
         else:
-            if y_pos < margin: c.showPage(); c.setFont("Helvetica", 10); y_pos = height - margin
-            c.drawString(margin + 0.5*cm, y_pos, "Category data unavailable.")
-            y_pos -= 0.6*cm
+             if y_pos < MARGIN + 1*cm: c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
+             c.drawString(MARGIN + 0.5*cm, y_pos, "Category data unavailable.")
+             y_pos -= 0.55*cm
 
-        # --- Section 2: Top Emitting Activities ---
-        y_pos -= 0.5 * cm # Space before next section
-        if y_pos < margin + 2*cm: # Check space for title
-             c.showPage(); y_pos = height - margin
+        # --- Draw Category Graph (fig1) ---
+        y_pos -= 0.4 * cm # Space before graph
+        if fig1_img_data:
+            try:
+                graph1_img = ImageReader(fig1_img_data)
+                img_w, img_h = graph1_img.getSize()
+                aspect = img_h / float(img_w) if img_w > 0 else 1
+                draw_width = width - (2 * MARGIN)
+                draw_height = draw_width * aspect
+                max_graph_height = 7*cm # Limit height
+                if draw_height > max_graph_height:
+                    draw_height = max_graph_height
+                    draw_width = draw_height / aspect if aspect > 0 else draw_width
+
+                if y_pos - draw_height < MARGIN: # Check if graph fits
+                    c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN # Start new page
+                    y_pos -= 0.3*cm # Space at top
+
+                c.drawImage(graph1_img, MARGIN, y_pos - draw_height,
+                            width=draw_width, height=draw_height, preserveAspectRatio=True, mask='auto')
+                y_pos -= (draw_height + 0.6*cm) # Move below graph
+            except Exception as graph1_err:
+                print(f"Error drawing category graph: {graph1_err}")
+                if y_pos < MARGIN + 1*cm: c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
+                c.drawString(MARGIN, y_pos, "[Category graph could not be rendered]")
+                y_pos -= 0.6 * cm
+
+        # --- Section 2: Top Emitting Activities (Text) ---
+        if y_pos < MARGIN + 3*cm : # Check space
+             c.showPage(); y_pos = height - MARGIN
 
         c.setFont("Helvetica-Bold", 12)
-        c.drawString(margin, y_pos, "Top Emitting Activities:")
-        c.setFont("Helvetica", 10) # Smaller font for list
-        y_pos -= 0.7 * cm
+        c.drawString(MARGIN, y_pos, "Top Emitting Activities:")
+        c.setFont("Helvetica", 9.5)
+        y_pos -= 0.6 * cm
 
-        # Handle input data type for top activities
+        # Handle data format
         if isinstance(top_activities_data, pd.DataFrame):
             top_activities_dict = dict(zip(top_activities_data.iloc[:,0], top_activities_data.iloc[:,1]))
         elif isinstance(top_activities_data, dict):
@@ -65,8 +105,7 @@ def generate_pdf_report(category_data, top_activities_data):
             top_activities_dict = {}
 
         if top_activities_dict:
-            # Define or import format_activity_name function for PDF consistency
-            def format_activity_name_pdf(activity_key):
+            def format_activity_name_pdf(activity_key): # Needs access to this mapping
                  mapping = {
                     "Domestic_flight_traveled": "Domestic Flights", "International_flight_traveled": "International Flights",
                     "km_diesel_local_passenger_train_traveled": "Diesel Local Train", "km_diesel_long_distance_passenger_train_traveled": "Diesel Long-Dist Train",
@@ -84,18 +123,45 @@ def generate_pdf_report(category_data, top_activities_data):
                  return mapping.get(activity_key, activity_key.replace("_", " ").capitalize())
 
             for activity_key, emission in top_activities_dict.items():
-                if y_pos < margin: c.showPage(); c.setFont("Helvetica", 10); y_pos = height - margin
+                if y_pos < MARGIN + 1*cm:
+                    c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
                 emission_val = emission if isinstance(emission, (int, float)) else 0
                 display_name = format_activity_name_pdf(activity_key)
-                # Truncate if needed
                 display_name = (display_name[:45] + '...') if len(display_name) > 48 else display_name
-                c.drawString(margin + 0.5*cm, y_pos, f"• {display_name}: {emission_val:.2f} kg {CO2_SUB}") # Use subscript
-                y_pos -= 0.6 * cm # Adjust spacing
+                c.drawString(MARGIN + 0.5*cm, y_pos, f"• {display_name}: {emission_val:.2f} kg {CO2_SUB}") # Use subscript
+                y_pos -= 0.55 * cm
         else:
-            if y_pos < margin: c.showPage(); c.setFont("Helvetica", 10); y_pos = height - margin
-            c.drawString(margin + 0.5*cm, y_pos, "Top activities data unavailable.")
-            y_pos -= 0.6*cm
+            if y_pos < MARGIN + 1*cm: c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
+            c.drawString(MARGIN + 0.5*cm, y_pos, "Top activities data unavailable.")
+            y_pos -= 0.55*cm
 
+        # --- Draw Top Activities Graph (fig2) ---
+        y_pos -= 0.4 * cm # Space before graph
+        if fig2_img_data:
+            try:
+                graph2_img = ImageReader(fig2_img_data)
+                img_w, img_h = graph2_img.getSize()
+                aspect = img_h / float(img_w) if img_w > 0 else 1
+                draw_width = width - (2 * MARGIN)
+                draw_height = draw_width * aspect
+                max_graph_height = 7.5*cm # Limit height
+                if draw_height > max_graph_height:
+                    draw_height = max_graph_height
+                    draw_width = draw_height / aspect if aspect > 0 else draw_width
+
+                if y_pos - draw_height < MARGIN: # Check space
+                    c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
+                    y_pos -= 0.3*cm # Space at top
+
+                c.drawImage(graph2_img, MARGIN, y_pos - draw_height,
+                            width=draw_width, height=draw_height, preserveAspectRatio=True, mask='auto')
+                # No need to decrease y_pos further after the last element
+            except Exception as graph2_err:
+                print(f"Error drawing top activities graph: {graph2_err}")
+                if y_pos < MARGIN + 1*cm: c.showPage(); c.setFont("Helvetica", 9.5); y_pos = height - MARGIN
+                c.drawString(MARGIN, y_pos, "[Top Activities graph could not be rendered]")
+
+        # --- Finalize PDF ---
         c.save()
         buffer.seek(0)
         return buffer
@@ -103,14 +169,9 @@ def generate_pdf_report(category_data, top_activities_data):
     except Exception as pdf_err:
         print(f"Critical error during PDF generation: {pdf_err}")
         print(traceback.format_exc())
-        buffer = BytesIO() # Return empty on failure
-        # Optionally write error to buffer
-        # c_err = canvas.Canvas(buffer, pagesize=A4)
-        # c_err.drawString(2*cm, height/2, f"Error generating PDF: {pdf_err}")
-        # c_err.save()
+        buffer = BytesIO() # Return empty buffer on failure
         buffer.seek(0)
         return buffer
-
 
 # --- App Config ---
 st.set_page_config(page_title="GreenPrint", page_icon="🌿", layout="centered")
@@ -132,6 +193,16 @@ st.markdown("""
 
 st.title("📊 Emission Breakdown")
 st.write("Here is how your estimated carbon footprint breaks down by activity.")
+
+# --- Function to fetch logo (cached) ---
+@st.cache_data(ttl=3600)
+def get_logo_data(url):
+    try:
+        with urllib.request.urlopen(url) as response:
+            return BytesIO(response.read())
+    except Exception as e:
+        st.error(f"Failed to download logo: {e}")
+        return None
 
 # --- Check for emission data ---
 emission_values_state = st.session_state.get("emission_values", {})
@@ -172,26 +243,25 @@ else:
             st.warning("Could not calculate category totals.")
             st.stop()
 
-        category_df = pd.DataFrame(list(category_totals.items()), columns=["Category", f"Emissions (kg {CO2_SUB})"]) # Use subscript in DF column name
+        # Use CO2_SUB constant for column name
+        category_df = pd.DataFrame(list(category_totals.items()), columns=["Category", f"Emissions (kg {CO2_SUB})"])
 
         # --- Category Chart ---
         st.subheader("🔍 Emission by Category")
-        # Use the column name with subscript for x-axis data
         fig1 = px.bar(category_df.sort_values(f"Emissions (kg {CO2_SUB})", ascending=True),
                       x=f"Emissions (kg {CO2_SUB})", y="Category",
                       orientation='h', color=f"Emissions (kg {CO2_SUB})",
                       color_continuous_scale="Greens",
-                      text=f"Emissions (kg {CO2_SUB})") # Use subscript for text labels too
+                      text=f"Emissions (kg {CO2_SUB})")
         fig1.update_traces(texttemplate='%{text:.1f}', textposition='outside')
-        # Update axis title to use subscript
-        fig1.update_layout(yaxis_title=None, xaxis_title=f"Emissions (kg {CO2_SUB})")
+        fig1.update_layout(yaxis_title=None, xaxis_title=f"Emissions (kg {CO2_SUB})") # Use constant
         st.plotly_chart(fig1, use_container_width=True)
 
         # --- Top Emitting Activities ---
         activity_df = pd.DataFrame(list(emissions_filtered.items()), columns=["Activity Key", "Emissions"])
 
         # --- Format Activity Names for Display ---
-        def format_activity_name(activity_key): # Ensure this function is defined/accessible
+        def format_activity_name(activity_key): # Keep consistent formatting function
              mapping = {
                  "Domestic_flight_traveled": "Domestic Flights", "International_flight_traveled": "International Flights",
                  "km_diesel_local_passenger_train_traveled": "Diesel Local Train", "km_diesel_long_distance_passenger_train_traveled": "Diesel Long-Dist Train",
@@ -217,33 +287,64 @@ else:
         if not top_n_df.empty:
              st.subheader(f"🏆 Top {top_n} Emitting Activities")
              fig2 = px.bar(top_n_df.sort_values("Emissions", ascending=True),
-                           x="Emissions", y="Activity Name", # Use formatted name
+                           x="Emissions", y="Activity Name",
                            orientation='h', color="Emissions",
                            color_continuous_scale="Blues",
                            text="Emissions")
              fig2.update_traces(texttemplate='%{text:.1f}', textposition='outside')
-              # Update axis title to use subscript
-             fig2.update_layout(yaxis_title=None, xaxis_title=f"Emissions (kg {CO2_SUB})")
+             fig2.update_layout(yaxis_title=None, xaxis_title=f"Emissions (kg {CO2_SUB})") # Use constant
              st.plotly_chart(fig2, use_container_width=True)
 
              # --- Prepare data for PDF ---
-             # Pass the original keys and emissions for PDF
-             pdf_top_activities_data = dict(zip(top_n_df["Activity Key"], top_n_df["Emissions"]))
+             fig1_img_data = None
+             fig2_img_data = None
+             logo_data = None
+             pdf_ready = False
+
+             try:
+                 # Generate images first
+                 fig1_img_data = BytesIO(fig1.to_image(format="png", scale=2))
+                 fig2_img_data = BytesIO(fig2.to_image(format="png", scale=2))
+
+                 # Get logo data
+                 logo_url = 'https://raw.githubusercontent.com/GhazalMoradi8/Carbon_Footprint_Calculator/main/GreenPrint_logo.png'
+                 logo_data = get_logo_data(logo_url)
+
+                 # Prepare top activities data dict
+                 pdf_top_activities_data = dict(zip(top_n_df["Activity Key"], top_n_df["Emissions"]))
+
+                 # Check if all components are ready
+                 if logo_data and fig1_img_data and fig2_img_data and category_totals and pdf_top_activities_data:
+                      pdf_ready = True
+
+             except ImportError:
+                 st.error("Plotly image export failed. Please ensure 'kaleido' is installed (`pip install kaleido`). PDF generation requires it.")
+             except Exception as prep_err:
+                  st.error(f"Could not prepare data for PDF report: {prep_err}")
+                  st.error(traceback.format_exc()) # Log detailed error
 
              # --- PDF Download Button ---
              st.subheader("📄 Download Your Report")
-             # Generate PDF (only contains text data now)
-             pdf_bytes = generate_pdf_report(
-                 category_data=category_totals,
-                 top_activities_data=pdf_top_activities_data
-             )
-             st.download_button(
-                 label="⬇️ Download Report as PDF",
-                 data=pdf_bytes,
-                 file_name="GreenPrint_Carbon_Report_Text.pdf", # Changed name slightly
-                 mime="application/pdf"
-             )
+             if pdf_ready:
+                 pdf_bytes = generate_pdf_report(
+                     logo_data=logo_data,
+                     category_data=category_totals,
+                     top_activities_data=pdf_top_activities_data,
+                     fig1_img_data=fig1_img_data,
+                     fig2_img_data=fig2_img_data
+                 )
+                 st.download_button(
+                     label="⬇️ Download Report as PDF",
+                     data=pdf_bytes,
+                     file_name="GreenPrint_Carbon_Report.pdf",
+                     mime="application/pdf"
+                 )
+             else:
+                 st.warning("Could not generate PDF: Missing logo, graph images, or essential data.")
+                 # More specific feedback
+                 if not logo_data: st.caption(" - Logo failed to load.")
+                 if not fig1_img_data: st.caption(" - Category graph failed to render.")
+                 if not fig2_img_data: st.caption(" - Top Activities graph failed to render.")
+
         else:
             st.info("No activities with emissions found to display top emitters.")
-
-# --- No detailed breakdown or graph embedding in PDF in this version ---
