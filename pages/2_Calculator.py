@@ -115,18 +115,18 @@ available_countries = sorted([col for col in df.columns if col != "Activity"])
 # --- Format Activity Titles ---
 def format_activity_name(activity_key):
     mapping = {
-        "Domestic_flight_traveled": "Domestic Flights (km)", "International_flight_traveled": "International Flights (km)",
-        "km_diesel_local_passenger_train_traveled": "Diesel Local Train (km)", "km_diesel_long_distance_passenger_train_traveled": "Diesel Long-Dist Train (km)",
-        "km_electric_passenger_train_traveled": "Electric Train (km)", "km_bus_traveled": "Bus (km)",
-        "km_petrol_car_traveled": "Petrol Car (km)", "km_Motorcycle_traveled": "Motorcycle (km)",
-        "km_ev_scooter_traveled": "E-Scooter (km)", "km_ev_car_traveled": "Electric Car (km)",
-        "diesel_car_traveled": "Diesel Car (km)", "beef_products_consumed": "Beef Products (kg)",
-        "poultry_products_consumed": "Poultry Products (kg)", "pork_products_consumed": "Pork Products (kg)",
-        "fish_products_consumed": "Fish Products (kg)", "other_meat_products_consumed": "Other Meat (kg)",
-        "processed_rice_consumed": "Rice (kg)", "sugar_consumed": "Sugar (kg)",
-        "vegetable_oils_fats_consumed": "Veg Oils/Fats (kg)", "dairy_products_consumed": "Dairy Products (kg)",
-        "other_food_products_consumed": "Other Food (kg)", "water_consumed": "Water Consumed (L)",
-        "electricity_used": "Electricity Used (kWh)", "hotel_stay": "Hotel Nights",
+                  "Domestic_flight": "Domestic Flights", "International_flight": "International Flights",
+                  "Diesel_train_local": "Diesel Local Train", "Diesel_train_long": "Diesel Long-Dist Train",
+                  "Electric_train": "Electric Train", "Bus": "Bus",
+                  "Petrol_car": "Petrol Car", "Motorcycle": "Motorcycle",
+                  "Ev_scooter": "E-Scooter", "Ev_car": "Electric Car",
+                  "Diesel_car": "Diesel Car", "Beef": "Beef Products",
+                  "Poultry": "Poultry Products", "Beverages": "Beverages", "Pork": "Pork Products",
+                  "Fish_products": "Fish Products", "Other_meat": "Other Meat Products",
+                  "Rice": "Rice", "Sugar": "Sugar",
+                  "Oils_fats": "Veg Oils/Fats", "Dairy": "Dairy Products",
+                  "Other_food": "Other Food", "Water": "Water",
+                  "Electricity": "Electricity", "Hotel_stay": "Hotel Stay",
     }
     return mapping.get(activity_key, activity_key.replace("_", " ").capitalize())
 
